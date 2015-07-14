@@ -1,4 +1,4 @@
-# SimpleLanguage
+# SimpleLanguage @ DSLDI summer school
 
 A simple language built using Truffle for the GraalVM.
 
