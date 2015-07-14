@@ -17,9 +17,10 @@ your own Truffle language.
 * Clone SL repository using:
    "git clone https://github.com/grashalm/simplelanguage"
 * Download 
-   for Linux: https://www.dropbox.com/s/wdtl6dubyax4sg4/graalvm_linux.zip?dl=0 or for Mac: https://www.dropbox.com/s/evtg738slq4neas/graalvm_mac.zip?dl=0
-* Unpack the downloaded graalvm_*.zip into simplelanguage/graalvm
-   (Verify that the file "simplelanguage/graalvm/java" exists)
+   for Linux: https://www.dropbox.com/s/wdtl6dubyax4sg4/graalvm_linux.zip?dl=0 
+* Download for Mac: https://www.dropbox.com/s/evtg738slq4neas/graalvm_mac.zip?dl=0
+* Unpack the downloaded graalvm_*.zip into simplelanguage/graalvm. P
+* Verify that the file "simplelanguage/graalvm/java" exists
 * Execute "./build"
 
 ## Eclipse instructions:
