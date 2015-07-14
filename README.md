@@ -2,58 +2,49 @@
 
 A simple language built using Truffle for the GraalVM.
 
+This fork of simple language intended to be used by the audience of the DSLDI summer school in Lausanne 2015.
+
 This repository is licensed under the permissive UPL licence. Fork it to begin
 your own Truffle language.
 
-There are two branches - `master` which is compatible with the latest release of
-GraalVM, and `latest` which is compatible with the development version of
-GraalVM, which you will have to build yourself.
+## Prerequisites
+  maven3 
+  ant (for IGV)
+  eclipse (optional)
 
-## Compiling
+## Installation:
 
-    mvn package
+1) Clone this repository using:
+   "git clone https://github.com/grashalm/simplelanguage"
+2) Download 
+   Linux: https://www.dropbox.com/s/59i89031u2085kv/graalvm.zip?dl=0
+   Mac: 
+3) Unpack graalvm_*.zip into simplelanguage/graalvm
+   (Verify that the file "simplelanguage/graalvm/java" exists)
+4) Execute "./build"
 
-## Testing
+## Eclipse instructions:
 
-    mvn test
+Right click the package explorer 
+-> Import... 
+-> Existing Project into Workspace 
+-> Select simple language folder 
+-> Finish
 
 ## Running
 
-    bin/sl HelloWorld.sl
+Execute "./run Test.sl" to run a simple language source file.
+Execute "./run_igv Test.sl" to dump graphs to the igv.
+Execute "./run_assembly Test.sl" to dump compiled assembly of simple language functions.
 
-## Running With Graal
+## Debugging
 
-Download one of:
+Execute "./debug Test.sl" to debug you simpel language source file.
+Attach a Java remote debugger (like eclipse) on port 8000.
 
-* http://lafo.ssw.uni-linz.ac.at/graalvm/openjdk-8-graalvm-b132-linux-x86_64-0.7.tar.gz
-* http://lafo.ssw.uni-linz.ac.at/graalvm/openjdk-8-graalvm-b132-macosx-x86_64-0.7.tar.gz
+## IGV
 
-Then run:
-
-    JAVACMD=graalvm-jdk1.8.0/bin/java bin/sl HelloWorld.sl
-
-At the moment there is no Windows build of Graal, but you can still run
-SimpleLanguage in the interpreted mode on a standard JVM:
-
-    java -jar target/simplelanguage-complete-0.1-SNAPSHOT.jar HelloWorld.sl
-
-## Options
-
-To pass options to the JVM, prefix with `-J`. For example, `-J-Xmx1G`.
-
-## Documentation
-
-SimpleLanguage is heavily documented to explain the how and why of writing a
-Truffle language. A good way to read this documentation is to generate HTML of
-the JavaDoc comments and read that, and then read the source alongside the
-comments.
-
-    mvn javadoc:javadoc
-
-Note that this may appear to fail with Java 8, but the files are still
-accessible at `target/site/apidocs/index.html`.
-
-Start with the `SLMain` class.
+Execute "./igv" to start the ideal graph visualizer
 
 You should also have access to the [Truffle documentation
 itself](http://lafo.ssw.uni-linz.ac.at/javadoc/graalvm/all/index.html).
