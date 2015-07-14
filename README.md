@@ -5,6 +5,10 @@ A simple language built using Truffle for the GraalVM.
 This repository is licensed under the permissive UPL licence. Fork it to begin
 your own Truffle language.
 
+There are two branches - `master` which is compatible with the latest release of
+GraalVM, and `latest` which is compatible with the development version of
+GraalVM, which you will have to build yourself.
+
 ## Compiling
 
     mvn package
