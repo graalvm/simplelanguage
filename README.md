@@ -14,7 +14,7 @@ your own Truffle language.
 
 ## Installation:
 
-* Clone SL  repository using:
+* Clone SL repository using:
    "git clone https://github.com/grashalm/simplelanguage"
 * Download 
    Linux: https://www.dropbox.com/s/wdtl6dubyax4sg4/graalvm_linux.zip?dl=0
@@ -25,11 +25,8 @@ your own Truffle language.
 
 ## Eclipse instructions:
 
-* Right click the package explorer 
-* Import... 
-* Existing Project into Workspace 
-* Select simple language folder 
-* Finish
+* Create a new workspace
+* Right click on the package explorer -> Import... -> Existing Project into Workspace -> Select simple language folder -> Finish
 
 ## Running
 
