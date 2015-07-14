@@ -2,7 +2,8 @@
 
 A simple language built using Truffle for the GraalVM.
 
-Fork this repository to begin your own Truffle language.
+This repository is licensed under the permissive UPL licence. Fork it to begin
+your own Truffle language.
 
 ## Compiling
 
@@ -44,6 +45,9 @@ the JavaDoc comments and read that, and then read the source alongside the
 comments.
 
     mvn javadoc:javadoc
+
+Note that this may appear to fail with Java 8, but the files are still
+accessible at `target/site/apidocs/index.html`.
 
 Start with the `SLMain` class.
 
