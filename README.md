@@ -44,9 +44,12 @@ your own Truffle language.
 * Execute "./igv" to start the ideal graph visualizer
 
 ## Exercise
-Fork this repository and 
+Fork this repository and develop, alter or extend their own DSL using Truffle.
+Send the link to your repository to christian.humer@oracle.com.
+For questions feel free to use the same adress.
 
 
-Further information and tutorials on Truffle: 
+## Further information:
+
 * https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations
 * http://ssw.jku.at/Research/Projects/JVM/Truffle.html
