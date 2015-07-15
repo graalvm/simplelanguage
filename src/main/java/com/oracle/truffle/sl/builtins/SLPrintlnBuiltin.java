@@ -41,12 +41,13 @@
 package com.oracle.truffle.sl.builtins;
 
 import java.io.PrintStream;
-import java.util.Arrays;
 
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
+import com.oracle.truffle.api.dsl.Cached;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.source.NullSourceSection;
+import com.oracle.truffle.sl.nodes.expression.SLToStringNode;
 import com.oracle.truffle.sl.runtime.SLContext;
 
 /**
@@ -65,53 +66,10 @@ public abstract class SLPrintlnBuiltin extends SLBuiltinNode {
         super(new NullSourceSection("SL builtin", "println"));
     }
 
-    @Specialization
-    public long println(long value) {
-        doPrint(getContext().getOutput(), value);
-        return value;
-    }
-
-    @TruffleBoundary
-    private static void doPrint(PrintStream out, long value) {
-        out.println(value);
-    }
-
-    @Specialization
-    public boolean println(boolean value) {
-        doPrint(getContext().getOutput(), value);
-        return value;
-    }
-
-    @TruffleBoundary
-    private static void doPrint(PrintStream out, boolean value) {
-        out.println(value);
-    }
-
-    @Specialization
-    public String println(String value) {
-        doPrint(getContext().getOutput(), value);
-        return value;
-    }
-
-    @TruffleBoundary
-    private static void doPrint(PrintStream out, String value) {
-        out.println(value);
-    }
     
     @Specialization
-    public Object[] println(Object[] value) {
-        doPrint(getContext().getOutput(), value);
-        return value;
-    }
-
-    @TruffleBoundary
-    private static void doPrint(PrintStream out, Object[] value) {
-        out.println(Arrays.toString(value));
-    }
-
-    @Specialization
-    public Object println(Object value) {
-        doPrint(getContext().getOutput(), value);
+    public Object println(Object value, @Cached("create()") SLToStringNode toString) {
+        doPrint(getContext().getOutput(), toString.execute(value));
         return value;
     }
 
@@ -119,4 +77,6 @@ public abstract class SLPrintlnBuiltin extends SLBuiltinNode {
     private static void doPrint(PrintStream out, Object value) {
         out.println(value);
     }
+
+    
 }
