@@ -40,13 +40,14 @@
  */
 package com.oracle.truffle.sl.builtins;
 
-import java.io.*;
+import java.io.PrintStream;
+import java.util.Arrays;
 
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-import com.oracle.truffle.api.dsl.*;
-import com.oracle.truffle.api.nodes.*;
-import com.oracle.truffle.api.source.*;
-import com.oracle.truffle.sl.runtime.*;
+import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.nodes.NodeInfo;
+import com.oracle.truffle.api.source.NullSourceSection;
+import com.oracle.truffle.sl.runtime.SLContext;
 
 /**
  * Builtin function to write a value to the {@link SLContext#getOutput() standard output}. The
@@ -95,6 +96,17 @@ public abstract class SLPrintlnBuiltin extends SLBuiltinNode {
     @TruffleBoundary
     private static void doPrint(PrintStream out, String value) {
         out.println(value);
+    }
+    
+    @Specialization
+    public Object[] println(Object[] value) {
+        doPrint(getContext().getOutput(), value);
+        return value;
+    }
+
+    @TruffleBoundary
+    private static void doPrint(PrintStream out, Object[] value) {
+        out.println(Arrays.toString(value));
     }
 
     @Specialization
