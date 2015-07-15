@@ -43,4 +43,10 @@ your own Truffle language.
 
 * Execute "./igv" to start the ideal graph visualizer
 
-Further information and tutorials on Graal and Truffle: (https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations)
+## Exercise
+Fork this repository and 
+
+
+Further information and tutorials on Truffle: 
+* https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations
+* http://ssw.jku.at/Research/Projects/JVM/Truffle.html
