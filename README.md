@@ -52,20 +52,6 @@ If you want to play with the can we fold it yet examples yourself please follow 
 * `$ jt build`
 * `$ jt run --graal test/truffle/can-we-fold-yet.rb`
 
-```
-$ jt run --graal test/truffle/can-we-fold-yet.rb test/truffle/can-we-fold-yet.rb
-Can Truffle constant fold yet?
-> 14
-Yes! Truffle can constant fold this to 14
-> 14 + 2
-Yes! Truffle can constant fold this to 16
-> eval([1, 2, 3].inspect).sort[1] * 2
-Yes! Truffle can constant fold this to 4
-> eval(rand < 0.5 ? '14 - 2' : '10 + 2')
-Yes! Truffle can constant fold this to 12
-> eval('rand')
-No :( Truffle can't constant fold that
-```
 ## Exercise
 Fork this repository and develop, alter or extend their own DSL using Truffle.
 Send the link to your repository to christian.humer@oracle.com.
