@@ -13,8 +13,8 @@ function main() {
   value = 0;
   while (iteration < 20) {
     time = nanoTime();
-    value = test(value, 1);
-    diff = (nanoTime() - time); 
+    value = test(value, iteration % 2);
+    diff = (nanoTime() - time);
     iteration = iteration + 1;
     println("iteration: " + iteration + " time:" + (diff / 1000000) + "ms");
   }
