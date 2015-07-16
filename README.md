@@ -28,20 +28,21 @@ your own Truffle language.
 * Create a new workspace
 * Right click on the package explorer -> Import... -> Existing Project into Workspace -> Select simple language folder -> Finish
 
-## Running
-
-* Execute "./run Test.sl" to run a simple language source file.
-* Execute "./run_igv Test.sl" to dump graphs to the igv.
-* Execute "./run_assembly Test.sl" to dump compiled assembly of simple language functions.
-
-## Debugging
-
-* Execute "./debug Test.sl" to debug you simpel language source file.
-* Attach a Java remote debugger (like eclipse) on port 8000.
-
 ## IGV
 
 * Execute "./igv" to start the ideal graph visualizer
+
+## Running
+
+* Execute "./run example_*.sl" to run a simple language source file.
+* Execute "./run_dump example_*.sl" to dump graphs to the igv.
+* Execute "./run_assembly example_*.sl" to dump compiled assembly of simple language functions.
+
+## Debugging
+
+* Execute "./debug example_*.sl" to debug you simpel language source file.
+* Attach a Java remote debugger (like eclipse) on port 8000.
+
 
 ## Instructions for "Can we fold it yet"?
 If you want to play with the can we fold it yet examples yourself please follow these instructions:
@@ -53,7 +54,7 @@ If you want to play with the can we fold it yet examples yourself please follow 
 * `$ jt run --graal test/truffle/can-we-fold-yet.rb`
 
 ## Exercise
-Fork this repository and develop, alter or extend their own DSL using Truffle.
+Fork this repository and develop, alter or extend something some part of SimpleLanguage.
 Send the link to your repository to christian.humer@oracle.com.
 For questions feel free to use the same adress.
 
