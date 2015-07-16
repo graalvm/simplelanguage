@@ -43,6 +43,15 @@ your own Truffle language.
 
 * Execute "./igv" to start the ideal graph visualizer
 
+## Instructions for "Can we fold it yet"?
+If you want to play with the can we fold it yet examples yourself please follow these instructions:
+
+* Clone JRuby 9k master
+* Extract downloaded graalvm (see installation) into $JRuby/graalvm-jdk1.8.0 directory.
+* `$ function jt { ruby tool/jt.rb $@; }`
+* `$ jt build`
+* `$ jt run --graal test/truffle/can-we-fold-yet.rb`
+
 ## Exercise
 Fork this repository and develop, alter or extend their own DSL using Truffle.
 Send the link to your repository to christian.humer@oracle.com.
