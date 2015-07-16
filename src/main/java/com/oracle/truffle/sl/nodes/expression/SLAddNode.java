@@ -47,6 +47,8 @@ import com.oracle.truffle.api.CompilerDirectives.*;
 import com.oracle.truffle.api.dsl.*;
 import com.oracle.truffle.api.nodes.*;
 import com.oracle.truffle.api.source.*;
+import com.oracle.truffle.api.utilities.BranchProfile;
+import com.oracle.truffle.sl.builtins.SLEnableTracingBuiltin;
 import com.oracle.truffle.sl.nodes.*;
 
 /**
@@ -81,10 +83,20 @@ public abstract class SLAddNode extends SLBinaryNode {
      * This specialization is automatically selected by the Truffle DSL if both the left and right
      * operand are {@code long} values.
      */
+    
     @Specialization(rewriteOn = ArithmeticException.class)
     protected long add(long left, long right) {
-        return ExactMath.addExact(left, right);
+        long result = ExactMath.addExact(left, right);
+        return result;
     }
+
+	private void trace(long result) {
+		if (result % 1000000 == 0) {
+			System.out.println("Bingo!");
+		}
+	}
+    
+    
 
     /**
      * This is the slow path of the arbitrary-precision arithmetic. The {@link BigInteger} type of

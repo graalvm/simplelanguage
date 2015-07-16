@@ -123,7 +123,7 @@ public final class SLContext extends ExecutionContext {
         installBuiltin(SLAssertTrueBuiltinFactory.getInstance());
         installBuiltin(SLAssertFalseBuiltinFactory.getInstance());
         installBuiltin(SLNewObjectBuiltinFactory.getInstance());
-        installBuiltin(SLSetTracingBuiltinFactory.getInstance());
+        installBuiltin(SLEnableTracingBuiltinFactory.getInstance());
     }
 
     public void installBuiltin(NodeFactory<? extends SLBuiltinNode> factory) {
