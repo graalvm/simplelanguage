@@ -43,14 +43,14 @@ your own Truffle language.
 
 * Execute "./igv" to start the ideal graph visualizer
 
-## JRuby: Can we fold it yet?
+## Instructions for Can we fold it yet? (optional)
 * Clone JRuby 9k master
-* Download http://lafo.ssw.uni-linz.ac.at/graalvm/openjdk-8-graalvm-b132-macosx-x86_64-0.7.tar.gz and untar into JRuby directory
-* or http://lafo.ssw.uni-linz.ac.at/graalvm/openjdk-8-graalvm-b132-linux-x86_64-0.7.tar.gz
+* Extract downloaded graalvm (see installation) into $JRuby/graalvm-jdk1.8.0 directory.
 * `$ function jt { ruby tool/jt.rb $@; }`
 * `$ jt build`
 * `$ jt run --graal test/truffle/can-we-fold-yet.rb`
 
+```
 $ jt run --graal test/truffle/can-we-fold-yet.rb test/truffle/can-we-fold-yet.rb
 Can Truffle constant fold yet?
 > 14
@@ -63,7 +63,7 @@ Yes! Truffle can constant fold this to 4
 Yes! Truffle can constant fold this to 12
 > eval('rand')
 No :( Truffle can't constant fold that
-
+```
 ## Exercise
 Fork this repository and develop, alter or extend their own DSL using Truffle.
 Send the link to your repository to christian.humer@oracle.com.
