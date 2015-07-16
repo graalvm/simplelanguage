@@ -43,7 +43,9 @@ your own Truffle language.
 
 * Execute "./igv" to start the ideal graph visualizer
 
-## Instructions for Can we fold it yet? (optional)
+## Instructions for "Can we fold it yet"?
+If you want to play with the can we fold it yet examples yourself please follow these instructions:
+
 * Clone JRuby 9k master
 * Extract downloaded graalvm (see installation) into $JRuby/graalvm-jdk1.8.0 directory.
 * `$ function jt { ruby tool/jt.rb $@; }`
