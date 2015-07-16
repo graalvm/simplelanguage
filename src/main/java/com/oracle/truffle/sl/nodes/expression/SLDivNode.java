@@ -58,10 +58,9 @@ public abstract class SLDivNode extends SLBinaryNode {
     public SLDivNode(SourceSection src) {
         super(src);
     }
-
+    
     @Specialization
     protected long div(long left, long right) {
-        /* No overflow is possible on a division. */
         return left / right;
     }
 
