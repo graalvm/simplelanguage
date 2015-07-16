@@ -262,6 +262,8 @@ public class SLNodeFactory {
                 return SLAddNodeGen.create(src, leftNode, rightNode);
             case "*":
                 return SLMulNodeGen.create(src, leftNode, rightNode);
+            case "%":
+                return SLModNodeGen.create(src, leftNode, rightNode);
             case "/":
                 return SLDivNodeGen.create(src, leftNode, rightNode);
             case "-":

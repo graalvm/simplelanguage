@@ -211,7 +211,7 @@ Term<out SLExpressionNode result>
 =
 Factor<out result>
 {
-    ("*" | "/")                                 (. Token op = t; .)
+    ("*" | "/" | "%")                           (. Token op = t; .)
     Factor<out SLExpressionNode right>          (. result = factory.createBinary(op, result, right); .)
 }
 .
