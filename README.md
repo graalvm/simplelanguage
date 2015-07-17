@@ -8,6 +8,7 @@ This repository is licensed under the permissive UPL licence. Fork it to begin
 your own Truffle language.
 
 ## Prerequisites
+* JDK 8
 * maven3 
 * ant (for IGV)
 * eclipse (optional)
