@@ -20,7 +20,7 @@ your own Truffle language.
    for Linux: http://chara.epfl.ch/summer-school/graalvm_linux.zip
 * Download for Mac: http://chara.epfl.ch/summer-school/graalvm_mac.zip
 * Unpack the downloaded graalvm_*.zip into simplelanguage/graalvm. 
-* Verify that the file "simplelanguage/graalvm/java" exists
+* Verify that the file "simplelanguage/graalvm/bin/java" exists
 * Execute "./build"
 
 ## Eclipse instructions:
