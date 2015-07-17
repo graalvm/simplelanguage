@@ -100,9 +100,13 @@ eval(rand < 0.5 ? '14 - 2' : '10 + 2')
 rand * 2
 'foo' + 'bar'
 ```
+###4) Fix a bug
+* Add a test case to src/test/sl that fails and fix it. (its easy to break SimpleLanguage). 
+* You can build and run the tests using the "mvn package" command.
 
-###4) Your change to Simple Language
+###5) Your change to Simple Language
 * Implement a change to SimpleLanguage of your choice. 
+
   - Introduce floating point values (SL just supports fixed point values at the moment)
   - Implement a builtin printf that takes a String and an Object array and produces a formatted result. (Hint: you need to register the builtin in SLContext#installBuiltins). Try to think of ways how you could optimize the operation using nodes that it could constant fold the full operation.
   - Add support for counted loops (for (i = 0; i < 100; i++) {}
