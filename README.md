@@ -62,7 +62,7 @@ The following exercises are suggestions for things to try in the exercise track.
 * Optimize the division implementation (SLDivNode) to cache for the identity of the second double division argument. 
 * Identify the main loop in the output if you run the example with ./run_assembly and ensure that the idiv instruction is gone. 
 * Open igv by running ./igv and dump the compiler graph by running "./run_dump example_divion.sl". Inspect the graph and ensure that the division operation is gone.
-* If you run the example_division_polymorphic.sl with an inline cache for the second division argument of size 2, how many loops does the compiled machine code contain? Identify the Graal compiler phase that is responsible for generating multiple loops.
+* If you run the example_division_polymorphic.sl with an inline cache for the second division argument of size 2, how many loops does the compiled machine code contain? Identify the Graal compiler phase that is responsible for the unswitching of the loops.
 
 ###2) Zero overhead tracing (example_trace.sl)
 * Implement tracing for SLAddNode like below, but with zero overhead for the isTracingEnabled() check.
@@ -81,7 +81,7 @@ The following exercises are suggestions for things to try in the exercise track.
 * Verify by running example_trace.sl and inspecting the compiler graph in the IGV tool that there is no check for SLEnableTracingBuiltin#isTracingEnabled left in compiled code. 
 
 ###3) Try to run the "can we fold it yet" demo 
-* ... and find out which of these Ruby examples Truffle Ruby can fold. Here are some examples that you could try:
+* ... with the instructions from above and find out which of these Ruby examples Truffle Ruby can fold. Here are some examples that you could try:
 ```ruby
 14
 14 + 2
