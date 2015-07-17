@@ -19,7 +19,7 @@ your own Truffle language.
 * Download 
    for Linux: http://chara.epfl.ch/summer-school/graalvm_linux.zip
 * Download for Mac: http://chara.epfl.ch/summer-school/graalvm_mac.zip
-* Unpack the downloaded graalvm_*.zip into simplelanguage/graalvm. P
+* Unpack the downloaded graalvm_*.zip into simplelanguage/graalvm. 
 * Verify that the file "simplelanguage/graalvm/java" exists
 * Execute "./build"
 
@@ -60,6 +60,6 @@ For questions feel free to use the same adress.
 
 
 ## Further information:
-
+* Truffle JavaDoc: http://lafo.ssw.jku.at/javadoc/truffle/all/
 * https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations
 * http://ssw.jku.at/Research/Projects/JVM/Truffle.html
