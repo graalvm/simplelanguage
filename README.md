@@ -55,10 +55,59 @@ If you want to play with the can we fold it yet examples yourself please follow 
 * `$ jt run --graal test/truffle/can-we-fold-yet.rb`
 
 ## Exercise
-Fork this repository and develop, alter or extend something some part of SimpleLanguage.
-Send the link to your repository to christian.humer@oracle.com.
-For questions feel free to use the same adress.
 
+The following exercises are suggestions for things to try in the exercise track. Please see the slideset from today as reference: https://github.com/Grashalm/simplelanguage/blob/master/Truffle-API-Introduction.pdf.
+
+###1) Division speculation
+* Optimize the division implementation (SLDivNode) to cache for the identity of the second double division argument. 
+* Identify the main loop in the output if you run the example with ./run_assembly and ensure that the idiv instruction is gone. 
+* Open igv by running ./igv and dump the compiler graph by running "./run_dump example_divion.sl". Inspect the graph and ensure that the division operation is gone.
+* If you run the example_division_polymorphic.sl with an inline cache for the second division argument of size 2, how many loops does the compiled machine code contain? Identify the Graal compiler phase that is responsible for generating multiple loops.
+
+###2) Zero overhead tracing (example_trace.sl)
+* Implement tracing for SLAddNode like below, but with zero overhead for the isTracingEnabled() check.
+```java
+    @Specialization(rewriteOn = ArithmeticException.class)
+    protected long add(long left, long right) {
+        long result = ExactMath.addExact(left, right);
+        if (SLEnableTracingBuiltin.isTracingEnabled()) {
+        	trace(result);
+        }
+        return result;
+    }
+    
+```
+	
+* Verify by running example_trace.sl and inspecting the compiler graph in the IGV tool that there is no check for SLEnableTracingBuiltin#isTracingEnabled left in compiled code. 
+
+###3) Try to run the "can we fold it yet" demo 
+* ... and find out which of these Ruby examples Truffle Ruby can fold. Here are some examples that you could try:
+```ruby
+14
+14 + 2
+eval([1, 2, 3].inspect).sort[1] * 2
+eval(rand < 0.5 ? '14 - 2' : '10 + 2')
+eval('rand')
+x = 14; p = Proc.new { }; p.binding.local_variable_get(:x)
+eval(rand < 0.5 ? '14 - 2' : '10 + 2')
+({x: 1, y: 2, z: 3})[:y]
+({x: 1, y: 2, z: 3}).map { |k, v| v } [1]
+14.5.object_id
+14.send(:*, 2)
+14.send('*', 2)
+14.send((')'.ord + 1).chr, 2)
+14.object_id
+rand * 2
+'foo' + 'bar'
+```
+
+###4) Your change to Simple Language
+* Implement a change to SimpleLanguage of your choice. 
+  - Introduce floating point values (SL just supports fixed point values at the moment)
+  - Implement a builtin printf that takes a String and an Object array and produces a formatted result. (Hint: you need to register the builtin in SLContext#installBuiltins). Try to think of ways how you could optimize the operation using nodes that it could constant fold the full operation.
+  - Add support for counted loops (for (i = 0; i < 100; i++) {}
+  - ... your idea?
+  
 
 ## Further information:
 * Truffle JavaDoc: http://lafo.ssw.jku.at/javadoc/truffle/all/
