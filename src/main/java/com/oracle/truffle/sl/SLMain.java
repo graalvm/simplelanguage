@@ -42,6 +42,7 @@ package com.oracle.truffle.sl;
 
 import java.io.*;
 import java.math.*;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import com.oracle.truffle.api.*;
@@ -235,7 +236,13 @@ public class SLMain {
                 try {
                     Object result = main.getCallTarget().call();
                     if (result != SLNull.SINGLETON) {
-                        context.getOutput().println(result);
+                    	SLFunction function = context.getFunctionRegistry().lookup("println");
+                        
+                    	if (function != null) {
+                    		function.getCallTarget().call(result);
+                    	} else {
+                    		context.getOutput().println(result);
+                    	}
                     }
                 } catch (UnsupportedSpecializationException ex) {
                     context.getOutput().println(formatTypeError(ex));

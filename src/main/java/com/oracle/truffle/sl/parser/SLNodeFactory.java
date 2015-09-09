@@ -192,6 +192,12 @@ public class SLNodeFactory {
         final SLContinueNode continueNode = new SLContinueNode(srcFromToken(continueToken));
         return continueNode;
     }
+    
+    public SLExpressionNode createArray(Token startToken, Token endToken, List<SLExpressionNode> expressions) {
+    	final int start = startToken.charPos;
+        final int end = endToken.charPos;
+    	return SLArrayLiteralNode.create(source.createSection("[]", start, end - start), expressions.toArray(new SLExpressionNode[expressions.size()]));
+    }
 
     /**
      * Returns an {@link SLWhileNode} for the given parameters.
@@ -256,6 +262,8 @@ public class SLNodeFactory {
                 return SLAddNodeGen.create(src, leftNode, rightNode);
             case "*":
                 return SLMulNodeGen.create(src, leftNode, rightNode);
+            case "%":
+                return SLModNodeGen.create(src, leftNode, rightNode);
             case "/":
                 return SLDivNodeGen.create(src, leftNode, rightNode);
             case "-":

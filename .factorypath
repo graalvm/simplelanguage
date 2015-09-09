@@ -1,0 +1,4 @@
+<factorypath>
+    <factorypathentry kind="WKSPJAR" id="/simplelanguage/graalvm/truffle-dsl-processor-0.7.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="WKSPJAR" id="/simplelanguage/graalvm/truffle-0.7.jar" enabled="true" runInBatchMode="false"/>
+</factorypath>

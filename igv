@@ -1,0 +1,1 @@
+ant -q -S -f ./graalvm/IdealGraphVisualizer/build.xml run > igv_out.txt

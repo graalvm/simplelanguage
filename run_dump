@@ -1,0 +1,1 @@
+./run -J-G:Dump=:1 -J-G:MethodFilter=Truffle.* $*

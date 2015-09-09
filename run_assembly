@@ -1,0 +1,1 @@
+./run -J-XX:CompileCommand=print,*OptimizedCallTarget.callRoot -J-XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot $*

@@ -211,7 +211,7 @@ Term<out SLExpressionNode result>
 =
 Factor<out result>
 {
-    ("*" | "/")                                 (. Token op = t; .)
+    ("*" | "/" | "%")                           (. Token op = t; .)
     Factor<out SLExpressionNode right>          (. result = factory.createBinary(op, result, right); .)
 }
 .
@@ -235,6 +235,17 @@ Factor<out SLExpressionNode result>
     Expression<out result>                      (. SLExpressionNode expr = result; .)
     ")"                                         (. int length = (t.charPos + t.val.length()) - start; .)
                                                 (. result = factory.createParenExpression(expr, start, length); .)
+|  "["                                          (. List<SLExpressionNode> parameters = new ArrayList<>(); .)
+                                                (. Token startToken = t; .)
+                                                (. SLExpressionNode parameter; .)
+    [
+       Expression<out parameter>                (. parameters.add(parameter); .)
+        {
+            ","
+            Expression<out parameter>           (. parameters.add(parameter); .)
+        }
+    ]
+    "]"                                         (. result = factory.createArray(startToken, t, parameters); .)
 )
 .
 

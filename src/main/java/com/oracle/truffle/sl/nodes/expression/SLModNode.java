@@ -52,20 +52,21 @@ import com.oracle.truffle.sl.nodes.*;
  * same {@link ArithmeticException exception} as in Java, SL has no special handling for it to keep
  * the code simple.
  */
-@NodeInfo(shortName = "/")
-public abstract class SLDivNode extends SLBinaryNode {
+@NodeInfo(shortName = "%")
+public abstract class SLModNode extends SLBinaryNode {
 
-    public SLDivNode(SourceSection src) {
+    public SLModNode(SourceSection src) {
         super(src);
     }
     
     @Specialization
-    protected long div(long left, long right) {
-        return left / right;
+    protected long div(long left, long right ) {
+        return left % right;
     }
+
 
     @Specialization
     protected BigInteger div(BigInteger left, BigInteger right) {
-        return left.divide(right);
+        return left.mod(right);
     }
 }

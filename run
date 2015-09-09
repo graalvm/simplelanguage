@@ -1,0 +1,1 @@
+JAVACMD=graalvm/bin/java bin/sl -J-G:-TruffleOSR -J-G:-TruffleBackgroundCompilation -J-G:+TraceTruffleCompilation $*
