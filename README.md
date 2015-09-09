@@ -16,7 +16,7 @@ your own Truffle language.
 * ant (for IGV)
 * eclipse (optional)
 
-## Installation:
+## Installation
 
 * Clone SL repository using: "git clone https://github.com/grashalm/simplelanguage"
 * Download for Linux: http://chara.epfl.ch/summer-school/graalvm_linux.zip
@@ -25,7 +25,7 @@ your own Truffle language.
 * Verify that the file "simplelanguage/graalvm/bin/java" exists
 * Execute "./build"
 
-## Eclipse instructions:
+## Eclipse instructions
 
 * Create a new workspace
 * Right click on the package explorer -> Import... -> Existing Project into Workspace -> Select simple language folder -> Finish
@@ -45,7 +45,7 @@ your own Truffle language.
 * Execute "./debug example_*.sl" to debug you simpel language source file.
 * Attach a Java remote debugger (like eclipse) on port 8000.
 
-## Further information:
+## Further information
 * Truffle JavaDoc: http://lafo.ssw.jku.at/javadoc/truffle/all/
 * https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations
 * http://ssw.jku.at/Research/Projects/JVM/Truffle.html
