@@ -22,7 +22,7 @@ your own Truffle language.
 * Download for Linux: https://lafo.ssw.uni-linz.ac.at/pub/graalvm_linux.zip 
 * Download for Mac: https://lafo.ssw.uni-linz.ac.at/pub/graalvm_mac.zip
 * Unpack the downloaded graalvm_*.zip into simplelanguage/graalvm. 
-* Verify that the file "simplelanguage/graalvm/bin/java" exists
+* Verify that the file "simplelanguage/graalvm/bin/java" exists and is executable.
 * Execute "./build"
 
 ## Eclipse instructions
@@ -42,7 +42,7 @@ your own Truffle language.
 
 ## Debugging
 
-* Execute "./debug example_*.sl" to debug you simpel language source file.
+* Execute "./debug example_*.sl" to debug you simple language source file.
 * Attach a Java remote debugger (like eclipse) on port 8000.
 
 ## Further information
