@@ -26,15 +26,21 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>truffle</artifactId>
-			<version>0.7</version>
+			<groupId>com.oracle.truffle</groupId>
+			<artifactId>truffle-api</artifactId>
+			<version>0.11</version>
 		</dependency>
 		<dependency>
-			<groupId>com.oracle</groupId>
+			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-dsl-processor</artifactId>
-			<version>0.7</version>
+			<version>0.11</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.truffle</groupId>
+			<artifactId>truffle-tck</artifactId>
+			<version>0.11</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 				<groupId>junit</groupId>
@@ -76,6 +82,7 @@
             <include>**/SLSimpleTestSuite.java</include>
             <include>**/SLSimpleInstrumentTestSuite.java</include>
           </includes>
+          <argLine>-Xbootclasspath/p:${project.build.directory}/simplelanguage-complete-${project.version}.jar</argLine>
         </configuration>
       </plugin>
 		</plugins>
@@ -88,21 +95,6 @@
 						<source>1.8</source>
 						<target>1.8</target>
 					</configuration>
-					<executions>
-						<execution>
-							<id>anno</id>
-							<phase>process-resources</phase>
-							<goals>
-								<goal>compile</goal>
-							</goals>
-							<configuration>
-								<annotationProcessors>
-									<annotationProcessor>com.oracle.truffle.dsl.processor.TruffleProcessor</annotationProcessor>
-								</annotationProcessors>
-								<generatedSourcesDirectory>target/generated-sources</generatedSourcesDirectory>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
