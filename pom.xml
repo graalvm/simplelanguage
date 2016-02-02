@@ -82,6 +82,7 @@
             <include>**/SLSimpleTestSuite.java</include>
             <include>**/SLSimpleInstrumentTestSuite.java</include>
           </includes>
+          <argLine>-Xbootclasspath/p:${project.build.directory}/simplelanguage-complete-${project.version}.jar</argLine>
         </configuration>
       </plugin>
 		</plugins>
