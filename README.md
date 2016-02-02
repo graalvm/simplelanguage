@@ -18,7 +18,7 @@ your own Truffle language.
 
 ## Installation
 
-* Clone SL repository using: "git clone https://github.com/grashalm/simplelanguage"
+* Clone SL repository using: "git clone https://github.com/graalvm/simplelanguage"
 * Download for Linux: https://lafo.ssw.uni-linz.ac.at/pub/graalvm_linux.zip 
 * Download for Mac: https://lafo.ssw.uni-linz.ac.at/pub/graalvm_mac.zip
 * Unpack the downloaded graalvm_*.zip into simplelanguage/graalvm. 
