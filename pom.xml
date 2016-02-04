@@ -26,15 +26,21 @@
 
 	<dependencies>
 		<dependency>
-			<groupId>com.oracle</groupId>
-			<artifactId>truffle</artifactId>
-			<version>0.7</version>
+			<groupId>com.oracle.truffle</groupId>
+			<artifactId>truffle-api</artifactId>
+			<version>0.11</version>
 		</dependency>
 		<dependency>
-			<groupId>com.oracle</groupId>
+			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-dsl-processor</artifactId>
-			<version>0.7</version>
+			<version>0.11</version>
 			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.truffle</groupId>
+			<artifactId>truffle-tck</artifactId>
+			<version>0.11</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 				<groupId>junit</groupId>
@@ -60,7 +66,7 @@
 							<finalName>${project.artifactId}-complete-${project.version}</finalName>
 							<transformers>
 								<transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-									<mainClass>com.oracle.truffle.sl.SLMain</mainClass>
+									<mainClass>com.oracle.truffle.sl.SLLanguage</mainClass>
 								</transformer>
 							</transformers>
 						</configuration>
@@ -97,7 +103,9 @@
 							</goals>
 							<configuration>
 								<annotationProcessors>
+									<annotationProcessor>com.oracle.truffle.dsl.processor.InteropProcessor</annotationProcessor>
 									<annotationProcessor>com.oracle.truffle.dsl.processor.TruffleProcessor</annotationProcessor>
+									<annotationProcessor>com.oracle.truffle.dsl.processor.LanguageRegistrationProcessor</annotationProcessor>
 								</annotationProcessors>
 								<generatedSourcesDirectory>target/generated-sources</generatedSourcesDirectory>
 							</configuration>

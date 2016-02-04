@@ -3,7 +3,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
- * 
+ *
  * Subject to the condition set forth below, permission is hereby granted to any
  * person obtaining a copy of this software, associated documentation and/or
  * data (collectively the "Software"), free of charge and under any and all
@@ -11,25 +11,25 @@
  * freely licensable by each licensor hereunder covering either (i) the
  * unmodified Software as contributed to or provided by such licensor, or (ii)
  * the Larger Works (as defined below), to deal in both
- * 
+ *
  * (a) the Software, and
- * 
+ *
  * (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
  * one is included with the Software each a "Larger Work" to which the Software
  * is contributed by such licensors),
- * 
+ *
  * without restriction, including without limitation the rights to copy, create
  * derivative works of, display, perform, and distribute the Software and make,
  * use, sell, offer for sale, import, export, have made, and have sold the
  * Software and the Larger Work(s), and to sublicense the foregoing rights on
  * either these or other terms.
- * 
+ *
  * This license is subject to the following condition:
- * 
+ *
  * The above copyright notice and either this complete permission notice or at a
  * minimum a reference to the UPL must be included in all copies or substantial
  * portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,27 +40,85 @@
  */
 package com.oracle.truffle.sl;
 
-import java.io.*;
-import java.math.*;
-import java.util.Arrays;
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.math.BigInteger;
+import java.nio.file.Path;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
-import com.oracle.truffle.api.*;
-import com.oracle.truffle.api.dsl.*;
-import com.oracle.truffle.api.instrument.*;
-import com.oracle.truffle.api.nodes.*;
-import com.oracle.truffle.api.source.*;
-import com.oracle.truffle.api.tools.*;
-import com.oracle.truffle.sl.builtins.*;
-import com.oracle.truffle.sl.factory.*;
-import com.oracle.truffle.sl.nodes.*;
-import com.oracle.truffle.sl.nodes.call.*;
-import com.oracle.truffle.sl.nodes.controlflow.*;
-import com.oracle.truffle.sl.nodes.expression.*;
-import com.oracle.truffle.sl.nodes.instrument.*;
-import com.oracle.truffle.sl.nodes.local.*;
-import com.oracle.truffle.sl.parser.*;
-import com.oracle.truffle.sl.runtime.*;
+import com.oracle.truffle.api.CallTarget;
+import com.oracle.truffle.api.CompilerDirectives;
+import com.oracle.truffle.api.RootCallTarget;
+import com.oracle.truffle.api.Truffle;
+import com.oracle.truffle.api.TruffleLanguage;
+import com.oracle.truffle.api.dsl.NodeFactory;
+import com.oracle.truffle.api.dsl.UnsupportedSpecializationException;
+import com.oracle.truffle.api.frame.MaterializedFrame;
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.instrument.Visualizer;
+import com.oracle.truffle.api.instrument.WrapperNode;
+import com.oracle.truffle.api.interop.ArityException;
+import com.oracle.truffle.api.interop.ForeignAccess;
+import com.oracle.truffle.api.interop.Message;
+import com.oracle.truffle.api.interop.UnsupportedMessageException;
+import com.oracle.truffle.api.interop.UnsupportedTypeException;
+import com.oracle.truffle.api.nodes.GraphPrintVisitor;
+import com.oracle.truffle.api.nodes.Node;
+import com.oracle.truffle.api.nodes.NodeInfo;
+import com.oracle.truffle.api.nodes.NodeUtil;
+import com.oracle.truffle.api.nodes.RootNode;
+import com.oracle.truffle.api.source.Source;
+import com.oracle.truffle.api.source.SourceSection;
+import com.oracle.truffle.api.vm.PolyglotEngine;
+import com.oracle.truffle.api.vm.PolyglotEngine.Value;
+import com.oracle.truffle.sl.builtins.SLBuiltinNode;
+import com.oracle.truffle.sl.builtins.SLDefineFunctionBuiltin;
+import com.oracle.truffle.sl.builtins.SLNanoTimeBuiltin;
+import com.oracle.truffle.sl.builtins.SLPrintlnBuiltin;
+import com.oracle.truffle.sl.builtins.SLReadlnBuiltin;
+import com.oracle.truffle.sl.nodes.SLExpressionNode;
+import com.oracle.truffle.sl.nodes.SLRootNode;
+import com.oracle.truffle.sl.nodes.SLStatementNode;
+import com.oracle.truffle.sl.nodes.SLTypes;
+import com.oracle.truffle.sl.nodes.call.SLDispatchNode;
+import com.oracle.truffle.sl.nodes.call.SLInvokeNode;
+import com.oracle.truffle.sl.nodes.call.SLUndefinedFunctionException;
+import com.oracle.truffle.sl.nodes.controlflow.SLBlockNode;
+import com.oracle.truffle.sl.nodes.controlflow.SLBreakNode;
+import com.oracle.truffle.sl.nodes.controlflow.SLContinueNode;
+import com.oracle.truffle.sl.nodes.controlflow.SLIfNode;
+import com.oracle.truffle.sl.nodes.controlflow.SLReturnNode;
+import com.oracle.truffle.sl.nodes.controlflow.SLWhileNode;
+import com.oracle.truffle.sl.nodes.expression.SLAddNode;
+import com.oracle.truffle.sl.nodes.expression.SLBigIntegerLiteralNode;
+import com.oracle.truffle.sl.nodes.expression.SLDivNode;
+import com.oracle.truffle.sl.nodes.expression.SLEqualNode;
+import com.oracle.truffle.sl.nodes.expression.SLFunctionLiteralNode;
+import com.oracle.truffle.sl.nodes.expression.SLLessOrEqualNode;
+import com.oracle.truffle.sl.nodes.expression.SLLessThanNode;
+import com.oracle.truffle.sl.nodes.expression.SLLogicalAndNode;
+import com.oracle.truffle.sl.nodes.expression.SLLogicalOrNode;
+import com.oracle.truffle.sl.nodes.expression.SLMulNode;
+import com.oracle.truffle.sl.nodes.expression.SLStringLiteralNode;
+import com.oracle.truffle.sl.nodes.expression.SLSubNode;
+import com.oracle.truffle.sl.nodes.instrument.SLDefaultVisualizer;
+import com.oracle.truffle.sl.nodes.instrument.SLExpressionWrapperNode;
+import com.oracle.truffle.sl.nodes.instrument.SLStandardASTProber;
+import com.oracle.truffle.sl.nodes.instrument.SLStatementWrapperNode;
+import com.oracle.truffle.sl.nodes.local.SLReadLocalVariableNode;
+import com.oracle.truffle.sl.nodes.local.SLWriteLocalVariableNode;
+import com.oracle.truffle.sl.parser.Parser;
+import com.oracle.truffle.sl.parser.SLNodeFactory;
+import com.oracle.truffle.sl.parser.Scanner;
+import com.oracle.truffle.sl.runtime.SLContext;
+import com.oracle.truffle.sl.runtime.SLFunction;
+import com.oracle.truffle.sl.runtime.SLFunctionRegistry;
+import com.oracle.truffle.sl.runtime.SLNull;
 
 /**
  * SL is a simple language to demonstrate and showcase features of Truffle. The implementation is as
@@ -134,89 +192,88 @@ import com.oracle.truffle.sl.runtime.*;
  * argument and adds them to the function registry. Functions that are already defined are replaced
  * with the new version.
  * </ul>
- *
- * <p>
- * <b>Tools:</b><br>
- * The use of some of Truffle's support for developer tools (based on the Truffle Instrumentation
- * Framework) are demonstrated in this file, for example:
- * <ul>
- * <li>a {@linkplain NodeExecCounter counter for node executions}, tabulated by node type; and</li>
- * <li>a simple {@linkplain CoverageTracker code coverage engine}.</li>
- * </ul>
- * In each case, the tool is enabled if a corresponding local boolean variable in this file is set
- * to {@code true}. Results are printed at the end of the execution using each tool's
- * <em>default printer</em>.
- *
  */
-public class SLMain {
+@TruffleLanguage.Registration(name = "SL", version = "0.5", mimeType = "application/x-sl")
+public final class SLLanguage extends TruffleLanguage<SLContext> {
+    public static final String builtinKind = "SL builtin";
+    private static List<NodeFactory<? extends SLBuiltinNode>> builtins = Collections.emptyList();
+    private static Visualizer visualizer = new SLDefaultVisualizer();
+    private static int parsingCount;
 
-    /* Demonstrate per-type tabulation of node execution counts */
-    private static boolean nodeExecCounts = false;
-    /* Demonstrate per-line tabulation of STATEMENT node execution counts */
-    private static boolean statementCounts = false;
-    /* Demonstrate per-line tabulation of STATEMENT coverage */
-    private static boolean coverage = false;
+    private final Map<Source, CallTarget> compiled;
+
+    private SLLanguage() {
+        compiled = Collections.synchronizedMap(new WeakHashMap<Source, CallTarget>());
+    }
+
+    public static final SLLanguage INSTANCE = new SLLanguage();
+
+    @Override
+    protected SLContext createContext(Env env) {
+        final BufferedReader in = new BufferedReader(new InputStreamReader(env.in()));
+        final PrintWriter out = new PrintWriter(env.out(), true);
+        SLContext context = new SLContext(env, in, out);
+        for (NodeFactory<? extends SLBuiltinNode> builtin : builtins) {
+            context.installBuiltin(builtin, true);
+        }
+        env.instrumenter().registerASTProber(new SLStandardASTProber());
+        return context;
+    }
 
     /**
      * The main entry point. Use the mx command "mx sl" to run it with the correct class path setup.
      */
     public static void main(String[] args) throws IOException {
-
-        SLContext context = SLContextFactory.create(new BufferedReader(new InputStreamReader(System.in)), System.out);
-
-        Source source;
-        if (args.length == 0) {
-            source = Source.fromReader(new InputStreamReader(System.in), "stdin");
-        } else {
-            source = Source.fromFileName(args[0]);
-        }
+        PolyglotEngine vm = PolyglotEngine.newBuilder().build();
+        assert vm.getLanguages().containsKey("application/x-sl");
 
         int repeats = 1;
         if (args.length >= 2) {
             repeats = Integer.parseInt(args[1]);
         }
 
-        run(context, source, System.out, repeats);
+        Source source;
+        if (args.length == 0) {
+            source = Source.fromReader(new InputStreamReader(System.in), "<stdin>").withMimeType("application/x-sl");
+        } else {
+            source = Source.fromFileName(args[0]).withMimeType("application/x-sl");
+        }
+        vm.eval(source);
+        Value main = vm.findGlobalSymbol("main");
+        if (main == null) {
+            throw new SLException("No function main() defined in SL source file.");
+        }
+        while (repeats-- > 0) {
+            main.execute();
+        }
+    }
+
+    public static int parsingCount() {
+        return parsingCount;
     }
 
     /**
      * Parse and run the specified SL source. Factored out in a separate method so that it can also
      * be used by the unit test harness.
      */
-    public static long run(SLContext context, Source source, PrintStream logOutput, int repeats) {
+    public static long run(PolyglotEngine context, Path path, PrintWriter logOutput, PrintWriter out, int repeats, List<NodeFactory<? extends SLBuiltinNode>> currentBuiltins) throws IOException {
+        builtins = currentBuiltins;
+
         if (logOutput != null) {
             logOutput.println("== running on " + Truffle.getRuntime().getName());
             // logOutput.println("Source = " + source.getCode());
         }
 
-        if (statementCounts || coverage) {
-            Probe.registerASTProber(new SLStandardASTProber());
-        }
-
-        NodeExecCounter nodeExecCounter = null;
-        if (nodeExecCounts) {
-            nodeExecCounter = new NodeExecCounter();
-            nodeExecCounter.install();
-        }
-
-        NodeExecCounter statementExecCounter = null;
-        if (statementCounts) {
-            statementExecCounter = new NodeExecCounter(StandardSyntaxTag.STATEMENT);
-            statementExecCounter.install();
-        }
-
-        CoverageTracker coverageTracker = null;
-        if (coverage) {
-            coverageTracker = new CoverageTracker();
-            coverageTracker.install();
-        }
-
+        Source src = Source.fromFileName(path.toString());
         /* Parse the SL source file. */
-        Parser.parseSL(context, source);
+        Object result = context.eval(src.withMimeType("application/x-sl")).get();
+        if (result != null) {
+            out.println(result);
+        }
 
         /* Lookup our main entry point, which is per definition always named "main". */
-        SLFunction main = context.getFunctionRegistry().lookup("main");
-        if (main.getCallTarget() == null) {
+        Value main = context.findGlobalSymbol("main");
+        if (main == null) {
             throw new SLException("No function main() defined in SL source file.");
         }
 
@@ -227,25 +284,21 @@ public class SLMain {
         /* Change to dump the AST to IGV over the network. */
         boolean dumpASTToIGV = false;
 
-        printScript("before execution", context, logOutput, printASTToLog, printSourceAttributionToLog, dumpASTToIGV);
+        printScript("before execution", null, logOutput, printASTToLog, printSourceAttributionToLog, dumpASTToIGV);
         long totalRuntime = 0;
         try {
             for (int i = 0; i < repeats; i++) {
                 long start = System.nanoTime();
                 /* Call the main entry point, without any arguments. */
                 try {
-                    Object result = main.getCallTarget().call();
-                    if (result != SLNull.SINGLETON) {
-                    	SLFunction function = context.getFunctionRegistry().lookup("println");
-                        
-                    	if (function != null) {
-                    		function.getCallTarget().call(result);
-                    	} else {
-                    		context.getOutput().println(result);
-                    	}
+                    result = main.execute().get();
+                    if (result != null) {
+                        out.println(result);
                     }
                 } catch (UnsupportedSpecializationException ex) {
-                    context.getOutput().println(formatTypeError(ex));
+                    out.println(formatTypeError(ex));
+                } catch (SLUndefinedFunctionException ex) {
+                    out.println(String.format("Undefined function: %s", ex.getFunctionName()));
                 }
                 long end = System.nanoTime();
                 totalRuntime += end - start;
@@ -256,19 +309,7 @@ public class SLMain {
             }
 
         } finally {
-            printScript("after execution", context, logOutput, printASTToLog, printSourceAttributionToLog, dumpASTToIGV);
-        }
-        if (nodeExecCounter != null) {
-            nodeExecCounter.print(System.out);
-            nodeExecCounter.dispose();
-        }
-        if (statementExecCounter != null) {
-            statementExecCounter.print(System.out);
-            statementExecCounter.dispose();
-        }
-        if (coverageTracker != null) {
-            coverageTracker.print(System.out);
-            coverageTracker.dispose();
+            printScript("after execution", null, logOutput, printASTToLog, printSourceAttributionToLog, dumpASTToIGV);
         }
         return totalRuntime;
     }
@@ -279,7 +320,7 @@ public class SLMain {
      * <p>
      * When printASTToLog is true: prints the ASTs to the console.
      */
-    private static void printScript(String groupName, SLContext context, PrintStream logOutput, boolean printASTToLog, boolean printSourceAttributionToLog, boolean dumpASTToIGV) {
+    private static void printScript(String groupName, SLContext context, PrintWriter logOutput, boolean printASTToLog, boolean printSourceAttributionToLog, boolean dumpASTToIGV) {
         if (dumpASTToIGV) {
             GraphPrintVisitor graphPrinter = new GraphPrintVisitor();
             graphPrinter.beginGroup(groupName);
@@ -324,8 +365,8 @@ public class SLMain {
         result.append("Type error");
         if (ex.getNode() != null && ex.getNode().getSourceSection() != null) {
             SourceSection ss = ex.getNode().getSourceSection();
-            if (ss != null && !(ss instanceof NullSourceSection)) {
-                result.append(" at ").append(ss.getSource().getName()).append(" line ").append(ss.getStartLine()).append(" col ").append(ss.getStartColumn());
+            if (ss != null && ss.getSource() != null) {
+                result.append(" at ").append(ss.getSource().getShortName()).append(" line ").append(ss.getStartLine()).append(" col ").append(ss.getStartColumn());
             }
         }
         result.append(": operation");
@@ -366,4 +407,120 @@ public class SLMain {
         return result.toString();
     }
 
+    @Override
+    protected CallTarget parse(Source code, final Node node, String... argumentNames) throws IOException {
+        CallTarget cached = compiled.get(code);
+        if (cached != null) {
+            return cached;
+        }
+        parsingCount++;
+        final SLContext c = new SLContext();
+        final Exception[] failed = {null};
+        try {
+            c.evalSource(code);
+            failed[0] = null;
+        } catch (Exception e) {
+            failed[0] = e;
+        }
+        RootNode rootNode = new RootNode(SLLanguage.class, null, null) {
+            @Override
+            public Object execute(VirtualFrame frame) {
+                /*
+                 * We do not expect this node to be part of anything that gets compiled for
+                 * performance reason. It can be compiled though when doing compilation stress
+                 * testing. But in this case it is fine to just deoptimize. Note that we cannot
+                 * declare the method as @TruffleBoundary because it has a VirtualFrame parameter.
+                 */
+                CompilerDirectives.transferToInterpreter();
+
+                if (failed[0] instanceof RuntimeException) {
+                    throw (RuntimeException) failed[0];
+                }
+                if (failed[0] != null) {
+                    throw new IllegalStateException(failed[0]);
+                }
+                Node n = createFindContextNode();
+                SLContext fillIn = findContext(n);
+                final SLFunctionRegistry functionRegistry = fillIn.getFunctionRegistry();
+                int oneAndCnt = 0;
+                SLFunction oneAndOnly = null;
+                for (SLFunction f : c.getFunctionRegistry().getFunctions()) {
+                    RootCallTarget callTarget = f.getCallTarget();
+                    if (callTarget == null) {
+                        continue;
+                    }
+                    oneAndOnly = functionRegistry.lookup(f.getName());
+                    oneAndCnt++;
+                    functionRegistry.register(f.getName(), (SLRootNode) f.getCallTarget().getRootNode());
+                }
+                Object[] arguments = frame.getArguments();
+                if (oneAndCnt == 1 && (arguments.length > 0 || node != null)) {
+                    Node callNode = Message.createExecute(arguments.length).createNode();
+                    try {
+                        return ForeignAccess.sendExecute(callNode, frame, oneAndOnly, arguments);
+                    } catch (UnsupportedTypeException | ArityException | UnsupportedMessageException e) {
+                        return null;
+                    }
+                }
+                return null;
+            }
+        };
+        cached = Truffle.getRuntime().createCallTarget(rootNode);
+        compiled.put(code, cached);
+        return cached;
+    }
+
+    @Override
+    protected Object findExportedSymbol(SLContext context, String globalName, boolean onlyExplicit) {
+        for (SLFunction f : context.getFunctionRegistry().getFunctions()) {
+            if (globalName.equals(f.getName())) {
+                return f;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    protected Object getLanguageGlobal(SLContext context) {
+        return context;
+    }
+
+    @Override
+    protected boolean isObjectOfLanguage(Object object) {
+        return object instanceof SLFunction;
+    }
+
+    @Override
+    protected Visualizer getVisualizer() {
+        return visualizer;
+    }
+
+    @Override
+    protected boolean isInstrumentable(Node node) {
+        return node instanceof SLStatementNode;
+    }
+
+    @Override
+    protected WrapperNode createWrapperNode(Node node) {
+        if (node instanceof SLExpressionNode) {
+            return new SLExpressionWrapperNode((SLExpressionNode) node);
+        }
+        if (node instanceof SLStatementNode) {
+            return new SLStatementWrapperNode((SLStatementNode) node);
+        }
+        return null;
+    }
+
+    @Override
+    protected Object evalInContext(Source source, Node node, MaterializedFrame mFrame) throws IOException {
+        throw new IllegalStateException("evalInContext not supported in SL");
+    }
+
+    public Node createFindContextNode0() {
+        return createFindContextNode();
+    }
+
+    public SLContext findContext0(Node contextNode) {
+        return findContext(contextNode);
+    }
 }
