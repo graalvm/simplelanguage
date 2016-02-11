@@ -10,20 +10,6 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-
-	<repositories>
-		<repository>
-			<releases>
-				<enabled>true</enabled>
-			</releases>
-			<snapshots>
-				<enabled>false</enabled>
-			</snapshots>
-			<id>truffle</id>
-			<url>http://lafo.ssw.uni-linz.ac.at/nexus/content/repositories/releases/</url>
-		</repository>
-	</repositories>
-
 	<dependencies>
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
@@ -94,23 +80,6 @@
 						<source>1.8</source>
 						<target>1.8</target>
 					</configuration>
-					<executions>
-						<execution>
-							<id>anno</id>
-							<phase>process-resources</phase>
-							<goals>
-								<goal>compile</goal>
-							</goals>
-							<configuration>
-								<annotationProcessors>
-									<annotationProcessor>com.oracle.truffle.dsl.processor.InteropProcessor</annotationProcessor>
-									<annotationProcessor>com.oracle.truffle.dsl.processor.TruffleProcessor</annotationProcessor>
-									<annotationProcessor>com.oracle.truffle.dsl.processor.LanguageRegistrationProcessor</annotationProcessor>
-								</annotationProcessors>
-								<generatedSourcesDirectory>target/generated-sources</generatedSourcesDirectory>
-							</configuration>
-						</execution>
-					</executions>
 				</plugin>
 			</plugins>
 		</pluginManagement>
