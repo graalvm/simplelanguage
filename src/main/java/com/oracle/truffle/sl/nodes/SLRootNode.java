@@ -1,9 +1,9 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
- * 
+ *
  * Subject to the condition set forth below, permission is hereby granted to any
  * person obtaining a copy of this software, associated documentation and/or
  * data (collectively the "Software"), free of charge and under any and all
@@ -11,25 +11,25 @@
  * freely licensable by each licensor hereunder covering either (i) the
  * unmodified Software as contributed to or provided by such licensor, or (ii)
  * the Larger Works (as defined below), to deal in both
- * 
+ *
  * (a) the Software, and
- * 
+ *
  * (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
  * one is included with the Software each a "Larger Work" to which the Software
  * is contributed by such licensors),
- * 
+ *
  * without restriction, including without limitation the rights to copy, create
  * derivative works of, display, perform, and distribute the Software and make,
  * use, sell, offer for sale, import, export, have made, and have sold the
  * Software and the Larger Work(s), and to sublicense the foregoing rights on
  * either these or other terms.
- * 
+ *
  * This license is subject to the following condition:
- * 
+ *
  * The above copyright notice and either this complete permission notice or at a
  * minimum a reference to the UPL must be included in all copies or substantial
  * portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -41,13 +41,14 @@
 package com.oracle.truffle.sl.nodes;
 
 import com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
-import com.oracle.truffle.api.*;
-import com.oracle.truffle.api.frame.*;
-import com.oracle.truffle.api.instrument.*;
-import com.oracle.truffle.api.nodes.*;
-import com.oracle.truffle.sl.builtins.*;
-import com.oracle.truffle.sl.nodes.controlflow.*;
-import com.oracle.truffle.sl.runtime.*;
+import com.oracle.truffle.api.frame.FrameDescriptor;
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.nodes.NodeInfo;
+import com.oracle.truffle.api.nodes.RootNode;
+import com.oracle.truffle.api.source.SourceSection;
+import com.oracle.truffle.sl.SLLanguage;
+import com.oracle.truffle.sl.builtins.SLBuiltinNode;
+import com.oracle.truffle.sl.nodes.controlflow.SLFunctionBodyNode;
 
 /**
  * The root of all SL execution trees. It is a Truffle requirement that the tree root extends the
@@ -55,30 +56,30 @@ import com.oracle.truffle.sl.runtime.*;
  * builtin functions, the {@link #bodyNode} is a subclass of {@link SLBuiltinNode}. For user-defined
  * functions, the {@link #bodyNode} is a {@link SLFunctionBodyNode}.
  */
-@NodeInfo(language = "Simple Language", description = "The root of all Simple Language execution trees")
-public final class SLRootNode extends RootNode {
-
+@NodeInfo(language = "SL", description = "The root of all SL execution trees")
+public class SLRootNode extends RootNode {
     /** The function body that is executed, and specialized during execution. */
     @Child private SLExpressionNode bodyNode;
 
     /** The name of the function, for printing purposes only. */
     private final String name;
 
-    /** The Simple execution context for this tree. **/
-    private final SLContext context;
-
     @CompilationFinal private boolean isCloningAllowed;
 
-    public SLRootNode(SLContext context, FrameDescriptor frameDescriptor, SLExpressionNode bodyNode, String name) {
-        super(null, frameDescriptor);
+    public SLRootNode(FrameDescriptor frameDescriptor, SLExpressionNode bodyNode, SourceSection sourceSection, String name) {
+        super(SLLanguage.class, sourceSection, frameDescriptor);
         this.bodyNode = bodyNode;
         this.name = name;
-        this.context = context;
     }
 
     @Override
     public Object execute(VirtualFrame frame) {
+        assert SLLanguage.INSTANCE.findContext() != null;
         return bodyNode.executeGeneric(frame);
+    }
+
+    public SLExpressionNode getBodyNode() {
+        return bodyNode;
     }
 
     public String getName() {
@@ -89,31 +90,13 @@ public final class SLRootNode extends RootNode {
         this.isCloningAllowed = isCloningAllowed;
     }
 
-    public SLExpressionNode getBodyNode() {
-        return bodyNode;
-    }
-
     @Override
     public boolean isCloningAllowed() {
         return isCloningAllowed;
     }
 
     @Override
-    public void applyInstrumentation() {
-        Probe.applyASTProbers(bodyNode);
-    }
-
-    @Override
     public String toString() {
         return "root " + name;
-    }
-
-    public SLContext getSLContext() {
-        return this.context;
-    }
-
-    @Override
-    public ExecutionContext getExecutionContext() {
-        return this.context;
     }
 }

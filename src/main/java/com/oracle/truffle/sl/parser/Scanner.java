@@ -3,7 +3,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
- * 
+ *
  * Subject to the condition set forth below, permission is hereby granted to any
  * person obtaining a copy of this software, associated documentation and/or
  * data (collectively the "Software"), free of charge and under any and all
@@ -11,25 +11,25 @@
  * freely licensable by each licensor hereunder covering either (i) the
  * unmodified Software as contributed to or provided by such licensor, or (ii)
  * the Larger Works (as defined below), to deal in both
- * 
+ *
  * (a) the Software, and
- * 
+ *
  * (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
  * one is included with the Software each a "Larger Work" to which the Software
  * is contributed by such licensors),
- * 
+ *
  * without restriction, including without limitation the rights to copy, create
  * derivative works of, display, perform, and distribute the Software and make,
  * use, sell, offer for sale, import, export, have made, and have sold the
  * Software and the Larger Work(s), and to sublicense the foregoing rights on
  * either these or other terms.
- * 
+ *
  * This license is subject to the following condition:
- * 
+ *
  * The above copyright notice and either this complete permission notice or at a
  * minimum a reference to the UPL must be included in all copies or substantial
  * portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -43,11 +43,11 @@
 
 package com.oracle.truffle.sl.parser;
 
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.RandomAccessFile;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 
 // Checkstyle: stop
 // @formatter:off
@@ -324,7 +324,6 @@ class StartStates {
 // -----------------------------------------------------------------------------------
 // Scanner
 // -----------------------------------------------------------------------------------
-@SuppressWarnings({"rawtypes", "unchecked"})
 public class Scanner {
 
     static final char EOL = '\n';
@@ -343,7 +342,7 @@ public class Scanner {
     int line; // line number of current character
     int oldEols; // EOLs that appeared in a comment;
     static final StartStates start; // maps initial token character to start state
-    static final Map literals; // maps literal strings to literal kinds
+    static final Map<String, Integer> literals; // maps literal strings to literal kinds
 
     Token tokens; // list of tokens already peeked (first token is a dummy)
     Token pt; // current peek token
@@ -353,7 +352,7 @@ public class Scanner {
 
     static {
         start = new StartStates();
-        literals = new HashMap();
+        literals = new HashMap<>();
 		for (int i = 65; i <= 90; ++i) start.set(i, 1);
 		for (int i = 97; i <= 122; ++i) start.set(i, 1);
 		for (int i = 49; i <= 57; ++i) start.set(i, 4);
@@ -367,26 +366,26 @@ public class Scanner {
 		start.set(59, 11); 
 		start.set(124, 12); 
 		start.set(38, 14); 
-		start.set(60, 29); 
-		start.set(62, 30); 
-		start.set(61, 31); 
+		start.set(60, 28); 
+		start.set(62, 29); 
+		start.set(61, 30); 
 		start.set(33, 19); 
 		start.set(43, 21); 
 		start.set(45, 22); 
 		start.set(42, 23); 
 		start.set(47, 24); 
-		start.set(37, 25); 
+		start.set(46, 25); 
 		start.set(91, 26); 
 		start.set(93, 27); 
-		start.set(46, 28); 
 		start.set(Buffer.EOF, -1);
 		literals.put("function", new Integer(4));
 		literals.put("break", new Integer(10));
 		literals.put("continue", new Integer(12));
-		literals.put("while", new Integer(13));
-		literals.put("if", new Integer(14));
-		literals.put("else", new Integer(15));
-		literals.put("return", new Integer(16));
+		literals.put("debugger", new Integer(13));
+		literals.put("while", new Integer(14));
+		literals.put("if", new Integer(15));
+		literals.put("else", new Integer(16));
+		literals.put("return", new Integer(17));
 
     }
 
@@ -511,7 +510,7 @@ public class Scanner {
     }
 
     Token NextToken() {
-        while (ch == ' ' || 
+        while (ch == ' ' ||
 			ch >= 9 && ch <= 10 || ch == 13
         ) NextCh();
 		if (ch == '/' && Comment0() ||ch == '/' && Comment1()) return NextToken();
@@ -572,51 +571,49 @@ public class Scanner {
 					if (ch == '|') {AddCh(); state = 13; break;}
 					else {state = 0; break;}
 				case 13:
-					{t.kind = 17; break loop;}
+					{t.kind = 18; break loop;}
 				case 14:
 					if (ch == '&') {AddCh(); state = 15; break;}
 					else {state = 0; break;}
 				case 15:
-					{t.kind = 18; break loop;}
+					{t.kind = 19; break loop;}
 				case 16:
-					{t.kind = 20; break loop;}
+					{t.kind = 21; break loop;}
 				case 17:
-					{t.kind = 22; break loop;}
-				case 18:
 					{t.kind = 23; break loop;}
+				case 18:
+					{t.kind = 24; break loop;}
 				case 19:
 					if (ch == '=') {AddCh(); state = 20; break;}
 					else {state = 0; break;}
 				case 20:
-					{t.kind = 24; break loop;}
-				case 21:
 					{t.kind = 25; break loop;}
-				case 22:
+				case 21:
 					{t.kind = 26; break loop;}
-				case 23:
+				case 22:
 					{t.kind = 27; break loop;}
-				case 24:
+				case 23:
 					{t.kind = 28; break loop;}
-				case 25:
+				case 24:
 					{t.kind = 29; break loop;}
-				case 26:
-					{t.kind = 30; break loop;}
-				case 27:
+				case 25:
 					{t.kind = 31; break loop;}
-				case 28:
+				case 26:
+					{t.kind = 32; break loop;}
+				case 27:
 					{t.kind = 33; break loop;}
-				case 29:
-					recEnd = pos; recKind = 19;
+				case 28:
+					recEnd = pos; recKind = 20;
 					if (ch == '=') {AddCh(); state = 16; break;}
-					else {t.kind = 19; break loop;}
-				case 30:
-					recEnd = pos; recKind = 21;
+					else {t.kind = 20; break loop;}
+				case 29:
+					recEnd = pos; recKind = 22;
 					if (ch == '=') {AddCh(); state = 17; break;}
-					else {t.kind = 21; break loop;}
-				case 31:
-					recEnd = pos; recKind = 32;
+					else {t.kind = 22; break loop;}
+				case 30:
+					recEnd = pos; recKind = 30;
 					if (ch == '=') {AddCh(); state = 18; break;}
-					else {t.kind = 32; break loop;}
+					else {t.kind = 30; break loop;}
 
             }
         }
