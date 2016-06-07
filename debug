@@ -1,1 +1,0 @@
-./run -J-Xdebug -J-Xrunjdwp:server=y,transport=dt_socket,address=8000,suspend=y $*

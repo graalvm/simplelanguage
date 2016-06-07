@@ -3,7 +3,7 @@
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
- * 
+ *
  * Subject to the condition set forth below, permission is hereby granted to any
  * person obtaining a copy of this software, associated documentation and/or
  * data (collectively the "Software"), free of charge and under any and all
@@ -11,25 +11,25 @@
  * freely licensable by each licensor hereunder covering either (i) the
  * unmodified Software as contributed to or provided by such licensor, or (ii)
  * the Larger Works (as defined below), to deal in both
- * 
+ *
  * (a) the Software, and
- * 
+ *
  * (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
  * one is included with the Software each a "Larger Work" to which the Software
  * is contributed by such licensors),
- * 
+ *
  * without restriction, including without limitation the rights to copy, create
  * derivative works of, display, perform, and distribute the Software and make,
  * use, sell, offer for sale, import, export, have made, and have sold the
  * Software and the Larger Work(s), and to sublicense the foregoing rights on
  * either these or other terms.
- * 
+ *
  * This license is subject to the following condition:
- * 
+ *
  * The above copyright notice and either this complete permission notice or at a
  * minimum a reference to the UPL must be included in all copies or substantial
  * portions of the Software.
- * 
+ *
  * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
  * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
  * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -40,29 +40,38 @@
  */
 package com.oracle.truffle.sl.test.instrument;
 
-import java.io.*;
-import java.nio.charset.*;
-import java.nio.file.*;
-import java.nio.file.attribute.*;
-import java.util.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.PrintStream;
+import java.nio.charset.Charset;
+import java.nio.file.FileSystems;
+import java.nio.file.FileVisitResult;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.ArrayList;
+import java.util.List;
 
-import org.junit.*;
-import org.junit.internal.*;
-import org.junit.runner.*;
-import org.junit.runner.manipulation.*;
-import org.junit.runner.notification.*;
-import org.junit.runners.*;
-import org.junit.runners.model.*;
+import org.junit.Assert;
+import org.junit.internal.TextListener;
+import org.junit.runner.Description;
+import org.junit.runner.JUnitCore;
+import org.junit.runner.Result;
+import org.junit.runner.manipulation.Filter;
+import org.junit.runner.manipulation.NoTestsRemainException;
+import org.junit.runner.notification.Failure;
+import org.junit.runner.notification.RunNotifier;
+import org.junit.runners.ParentRunner;
+import org.junit.runners.model.InitializationError;
 
-import com.oracle.truffle.api.instrument.*;
-import com.oracle.truffle.api.instrument.impl.*;
-import com.oracle.truffle.api.source.*;
-import com.oracle.truffle.sl.factory.*;
-import com.oracle.truffle.sl.nodes.instrument.*;
-import com.oracle.truffle.sl.nodes.local.*;
-import com.oracle.truffle.sl.parser.*;
-import com.oracle.truffle.sl.runtime.*;
-import com.oracle.truffle.sl.test.instrument.SLInstrumentTestRunner.InstrumentTestCase;
+import com.oracle.truffle.api.source.Source;
+import com.oracle.truffle.api.vm.PolyglotEngine;
+import com.oracle.truffle.sl.SLLanguage;
+import com.oracle.truffle.sl.nodes.local.SLWriteLocalVariableNode;
+import com.oracle.truffle.sl.test.SLTestRunner;
 
 /**
  * This class builds and executes the tests for instrumenting SL. Although much of this class is
@@ -72,7 +81,9 @@ import com.oracle.truffle.sl.test.instrument.SLInstrumentTestRunner.InstrumentTe
  *
  * Testing is done via JUnit via comparing execution outputs with expected outputs.
  */
-public final class SLInstrumentTestRunner extends ParentRunner<InstrumentTestCase> {
+@SuppressWarnings("deprecation")
+@Deprecated
+public final class SLInstrumentTestRunner extends ParentRunner<com.oracle.truffle.sl.test.instrument.SLInstrumentTestRunner.InstrumentTestCase> {
 
     private static final String SOURCE_SUFFIX = ".sl";
     private static final String INPUT_SUFFIX = ".input";
@@ -80,9 +91,8 @@ public final class SLInstrumentTestRunner extends ParentRunner<InstrumentTestCas
     private static final String ASSIGNMENT_VALUE_SUFFIX = "_assnCount";
 
     private static final String LF = System.getProperty("line.separator");
-    private static SLContext slContext;
 
-    static class InstrumentTestCase {
+    static final class InstrumentTestCase {
         protected final Description name;
         protected final Path path;
         protected final String baseName;
@@ -103,16 +113,12 @@ public final class SLInstrumentTestRunner extends ParentRunner<InstrumentTestCas
 
     private final List<InstrumentTestCase> testCases;
 
-    public SLInstrumentTestRunner(Class<?> testClass) throws InitializationError {
+    public SLInstrumentTestRunner(Class<?> testClass) throws InitializationError, SecurityException, IllegalArgumentException {
         super(testClass);
-        final SLStandardASTProber prober = new SLStandardASTProber();
-        Probe.registerASTProber(prober);
         try {
             testCases = createTests(testClass);
         } catch (IOException e) {
             throw new InitializationError(e);
-        } finally {
-            Probe.unregisterASTProber(prober);
         }
     }
 
@@ -156,11 +162,13 @@ public final class SLInstrumentTestRunner extends ParentRunner<InstrumentTestCas
 
         String[] paths = suite.value();
 
-        Path root = null;
-        for (String path : paths) {
-            root = FileSystems.getDefault().getPath(path);
-            if (Files.exists(root)) {
-                break;
+        Path root = SLTestRunner.getRootViaResourceURL(c, paths);
+        if (root == null) {
+            for (String path : paths) {
+                root = FileSystems.getDefault().getPath(path);
+                if (Files.exists(root)) {
+                    break;
+                }
             }
         }
         if (root == null && paths.length > 0) {
@@ -220,42 +228,38 @@ public final class SLInstrumentTestRunner extends ParentRunner<InstrumentTestCas
         notifier.fireTestStarted(testCase.name);
 
         ByteArrayOutputStream out = new ByteArrayOutputStream();
-        PrintStream printer = new PrintStream(out);
-        final ASTProber prober = new SLStandardASTProber();
-        Probe.registerASTProber(prober);
+        PrintStream ps = new PrintStream(out);
+
+        PolyglotEngine vm = null;
         try {
             // We use the name of the file to determine what visitor to attach to it.
             if (testCase.baseName.endsWith(ASSIGNMENT_VALUE_SUFFIX)) {
                 // Set up the execution context for Simple and register our two listeners
-                slContext = SLContextFactory.create(new BufferedReader(new StringReader(testCase.testInput)), printer);
+                vm = PolyglotEngine.newBuilder().setIn(new ByteArrayInputStream(testCase.testInput.getBytes("UTF-8"))).setOut(out).build();
 
-                final Source source = Source.fromText(readAllLines(testCase.path), testCase.sourceName);
-                Parser.parseSL(slContext, source);
+                final String src = readAllLines(testCase.path);
+                vm.eval(Source.fromText(src, testCase.path.toString()).withMimeType(SLLanguage.MIME_TYPE));
 
-                // Attach an instrument to every probe tagged as an assignment
-                for (Probe probe : Probe.findProbesTaggedAs(StandardSyntaxTag.ASSIGNMENT)) {
-                    SLPrintAssigmentValueListener slPrintAssigmentValueListener = new SLPrintAssigmentValueListener(printer);
-                    probe.attach(Instrument.create(slPrintAssigmentValueListener, "SL print assignment value"));
-                }
-
-                SLFunction main = slContext.getFunctionRegistry().lookup("main");
-                main.getCallTarget().call();
+                PolyglotEngine.Value main = vm.findGlobalSymbol("main");
+                main.execute();
             } else {
                 notifier.fireTestFailure(new Failure(testCase.name, new UnsupportedOperationException("No instrumentation found.")));
             }
-
+            ps.flush();
             String actualOutput = new String(out.toByteArray());
             Assert.assertEquals(testCase.expectedOutput, actualOutput);
         } catch (Throwable ex) {
             notifier.fireTestFailure(new Failure(testCase.name, ex));
         } finally {
-            Probe.unregisterASTProber(prober);
+            if (vm != null) {
+                vm.dispose();
+            }
             notifier.fireTestFinished(testCase.name);
         }
 
     }
 
-    public static void runInMain(Class<?> testClass, String[] args) throws InitializationError, NoTestsRemainException {
+    public static void runInMain(Class<?> testClass, String[] args) throws InitializationError, NoTestsRemainException, SecurityException, IllegalArgumentException {
         JUnitCore core = new JUnitCore();
         core.addListener(new TextListener(System.out));
         SLInstrumentTestRunner suite = new SLInstrumentTestRunner(testClass);
@@ -292,16 +296,15 @@ public final class SLInstrumentTestRunner extends ParentRunner<InstrumentTestCas
      * attached at {@link SLWriteLocalVariableNode}, but provides no guards to protect it from being
      * attached elsewhere.
      */
-    public final class SLPrintAssigmentValueListener extends DefaultSimpleInstrumentListener {
-
-        private PrintStream output;
+    public final class SLPrintAssigmentValueListener extends com.oracle.truffle.api.instrument.impl.DefaultSimpleInstrumentListener {
+        private final PrintStream output;
 
         public SLPrintAssigmentValueListener(PrintStream output) {
             this.output = output;
         }
 
         @Override
-        public void returnValue(Probe probe, Object result) {
+        public void onReturnValue(com.oracle.truffle.api.instrument.Probe probe, Object result) {
             output.println(result);
         }
     }
