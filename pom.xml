@@ -9,6 +9,7 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
 	</properties>
 
 	<dependencies>
@@ -16,23 +17,18 @@
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-api</artifactId>
 			<version>0.14</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/graalvm/jre/lib/truffle/truffle-api.jar</systemPath>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-tck</artifactId>
 			<version>0.14</version>
-			<scope>system</scope>
-			<systemPath>${project.basedir}/graalvm/lib/truffle-tck.jar</systemPath>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-dsl-processor</artifactId>
 			<version>0.14</version>
-			<scope>system</scope>
-			<optional>true</optional>
-			<systemPath>${project.basedir}/graalvm/lib/truffle-dsl-processor.jar</systemPath>
+			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
