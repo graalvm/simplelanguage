@@ -221,19 +221,20 @@ public final class SLTestRunner extends ParentRunner<TestCase> {
                 }
             });
             jarfileDir.toFile().deleteOnExit();
-            JarFile jarfile = new JarFile(jarfilePath);
-            Enumeration<JarEntry> entries = jarfile.entries();
-            while (entries.hasMoreElements()) {
-                JarEntry e = entries.nextElement();
-                if (!e.isDirectory()) {
-                    File path = new File(jarfileDir.toFile(), e.getName().replace('/', File.separatorChar));
-                    File dir = path.getParentFile();
-                    dir.mkdirs();
-                    assert dir.exists();
-                    Files.copy(jarfile.getInputStream(e), path.toPath());
-                }
+            try (JarFile jarfile = new JarFile(jarfilePath)) {
+	            Enumeration<JarEntry> entries = jarfile.entries();
+	            while (entries.hasMoreElements()) {
+	                JarEntry e = entries.nextElement();
+	                if (!e.isDirectory()) {
+	                    File path = new File(jarfileDir.toFile(), e.getName().replace('/', File.separatorChar));
+	                    File dir = path.getParentFile();
+	                    dir.mkdirs();
+	                    assert dir.exists();
+	                    Files.copy(jarfile.getInputStream(e), path.toPath());
+	                }
+	            }
+	            return jarfileDir.toFile().getAbsolutePath();
             }
-            return jarfileDir.toFile().getAbsolutePath();
         } catch (IOException e) {
             throw new AssertionError(e);
         }

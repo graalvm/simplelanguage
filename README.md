@@ -1,6 +1,6 @@
 # SimpleLanguage
 
-A simple language built using Truffle for the GraalVM.
+A simple demonstration language built using Truffle for the GraalVM.
 
 SimpleLanguage is heavily documented to explain the how and why of writing a
 Truffle language. A good way to read this documentation is to generate HTML of
@@ -25,15 +25,28 @@ your own Truffle language.
 * Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable
 * Execute `./build` (which just runs `mvn package`)
 
-## Eclipse
+## IDE Setup 
 
-* Create a new workspace
-* File -> Import... -> Existing Project into Workspace -> Select `simplelanguage` folder -> Finish
+### Eclipse
+* Tested with Eclipse Mars SR2
+* Open Eclipse with a new workspace
+* Install `m2e` and `m2e-apt` plugins from the Eclipse marketplace (Help -> Eclipse Marketplace...)
+* File -> Import... -> Existing Maven Projects -> Select `simplelanguage` folder -> Finish
+
+### Netbeans
+* Tested with Netbeans 8.1
+* Open Netbeans
+* File -> Open Project -> Select `simplelanguage` folder -> Open Project
+
+### IntelliJ IDEA
+* Tested with IntelliJ 2016.1.3 Community Edition
+* Open IntelliJ IDEA
+* File -> New -> Project from existing Sources -> Select `simplelanguage` folder -> Click next and keep everything default on several screens -> Finish
 
 ## Running
 
 * Execute `./sl tests/HelloWorld.sl` to run a simple language source file.
-* Execute `./sl -disassemble tests/LoopSum.sl` to see assembly code for Truffle compiled functions.
+* Execute `./sl -disassemble tests/SumPrint.sl` to see assembly code for Truffle compiled functions.
 
 ## IGV
 
@@ -41,7 +54,7 @@ your own Truffle language.
   https://lafo.ssw.uni-linz.ac.at/pub/idealgraphvisualizer/
 * Unpack the downloaded `.zip` file  
 * Execute `bin/idealgraphvsiualizer` to start IGV
-* Execute `./sl -dump tests/LoopSum.sl` to dump graphs to IGV.
+* Execute `./sl -dump tests/SumPrint.sl` to dump graphs to IGV.
 
 ## Debugging
 
@@ -50,6 +63,18 @@ your own Truffle language.
 
 ## Further information
 
-* Truffle JavaDoc: http://lafo.ssw.jku.at/javadoc/truffle/all/
-* https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations
-* http://ssw.jku.at/Research/Projects/JVM/Truffle.html
+* [Truffle JavaDoc](http://lafo.ssw.jku.at/javadoc/truffle/all/)
+* [Truffle on Github](http://github.com/graalvm/truffle)
+* [Graal on Github](http://github.com/graalvm/graal-core)
+* [Truffle Tutorials and Presentations](https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations)
+* [Truffle FAQ and Guidelines](https://wiki.openjdk.java.net/display/Graal/Truffle+FAQ+and+Guidelines)
+* [Graal VM]( http://www.oracle.com/technetwork/oracle-labs/program-languages/overview) on the Oracle Technology Network
+* [Papers on Truffle](http://ssw.jku.at/Research/Projects/JVM/Truffle.html)
+* [Papers on Graal](http://ssw.jku.at/Research/Projects/JVM/Graal.html)
+
+## License
+
+The Truffle framework is licensed under the [GPL 2 with Classpath exception](http://openjdk.java.net/legal/gplv2+ce.html).
+The SimpleLanguage is licensed under the [Universal Permissive License (UPL)](http://opensource.org/licenses/UPL).
+
+

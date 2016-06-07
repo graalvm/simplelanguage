@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 JAVACMD=${JAVACMD:=./graalvm/bin/java}
-SIMPLELANGUAGE_JAR=${SIMPLELANGUAGE_JAR:=./target/simplelanguage-complete-0.12-SNAPSHOT.jar}
 
 PROGRAM_ARGS=""
 JAVA_ARGS=""
@@ -23,4 +22,4 @@ do
   esac
 done
 
-$JAVACMD $JAVA_ARGS -jar $SIMPLELANGUAGE_JAR $PROGRAM_ARGS
+$JAVACMD $JAVA_ARGS -polyglot -cp ./target/classes com.oracle.truffle.sl.SLMain $PROGRAM_ARGS

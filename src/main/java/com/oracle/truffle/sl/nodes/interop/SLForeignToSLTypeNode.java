@@ -88,7 +88,7 @@ public abstract class SLForeignToSLTypeNode extends Node {
     }
 
     @Specialization(guards = "!isBoxedPrimitive(frame, value)")
-    public Object fromTruffleObject(@SuppressWarnings("unused") VirtualFrame frame, TruffleObject value) {
+    public Object fromTruffleObject(VirtualFrame frame, TruffleObject value) {
         return value;
     }
 
