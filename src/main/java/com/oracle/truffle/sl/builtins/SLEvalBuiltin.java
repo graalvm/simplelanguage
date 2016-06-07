@@ -61,7 +61,6 @@ import com.oracle.truffle.api.source.Source;
 @NodeInfo(shortName = "eval")
 public abstract class SLEvalBuiltin extends SLBuiltinNode {
 
-    @SuppressWarnings("unused")
     @Specialization(guards = {"stringsEqual(mimeType, cachedMimeType)", "stringsEqual(code, cachedCode)"})
     public Object evalCached(VirtualFrame frame, String mimeType, String code,
                     @Cached("mimeType") String cachedMimeType,
