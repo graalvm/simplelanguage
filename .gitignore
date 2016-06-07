@@ -9,3 +9,4 @@ graalvm/
 .classpath
 .idea/
 .project
+/bin/
