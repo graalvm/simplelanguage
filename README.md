@@ -62,7 +62,7 @@ your own Truffle language.
 
 ## Further information
 
-* [Truffle JavaDoc](http://lafo.ssw.jku.at/javadoc/truffle/all/)
+* [Truffle JavaDoc](http://lafo.ssw.uni-linz.ac.at/javadoc/truffle/latest/)
 * [Truffle on Github](http://github.com/graalvm/truffle)
 * [Graal on Github](http://github.com/graalvm/graal-core)
 * [Truffle Tutorials and Presentations](https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations)
