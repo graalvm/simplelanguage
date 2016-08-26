@@ -62,6 +62,7 @@ import com.oracle.truffle.api.object.Property;
 import com.oracle.truffle.api.object.Shape;
 import com.oracle.truffle.sl.runtime.SLUndefinedNameException;
 
+@SuppressWarnings("unused")
 public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
 
     public abstract void executeWrite(VirtualFrame frame, Object receiver, Object name, Object value);

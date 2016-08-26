@@ -114,7 +114,7 @@ public abstract class SLReadLocalVariableNode extends SLExpressionNode {
         return getSlot().getKind() == FrameSlotKind.Long;
     }
 
-    protected boolean isBoolean(VirtualFrame frame) {
+    protected boolean isBoolean(@SuppressWarnings("unused") VirtualFrame frame) {
         return getSlot().getKind() == FrameSlotKind.Boolean;
     }
 }

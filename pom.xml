@@ -16,18 +16,18 @@
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-api</artifactId>
-			<version>0.14</version>
+			<version>0.16</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-tck</artifactId>
-			<version>0.14</version>
+			<version>0.16</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-dsl-processor</artifactId>
-			<version>0.14</version>
+			<version>0.16</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>

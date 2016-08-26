@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,56 +38,61 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.builtins;
+package com.oracle.truffle.sl.test;
 
-import java.io.IOException;
-
-import com.oracle.truffle.api.CallTarget;
-import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-import com.oracle.truffle.api.dsl.Cached;
-import com.oracle.truffle.api.dsl.Specialization;
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.DirectCallNode;
-import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.source.Source;
+import com.oracle.truffle.api.vm.PolyglotEngine;
+import org.junit.After;
+import static org.junit.Assert.assertEquals;
+import org.junit.Before;
+import org.junit.Test;
 
-/**
- * Builtin function to evaluate source code in any supported language.
- * <p>
- * The call target is cached against the mime type and the source code, so that if they are the same
- * each time then a direct call will be made to a cached AST, allowing it to be compiled and
- * possibly inlined.
- */
-@NodeInfo(shortName = "eval")
-@SuppressWarnings("unused")
-public abstract class SLEvalBuiltin extends SLBuiltinNode {
+public class SLFactorialTest {
 
-    @Specialization(guards = {"stringsEqual(cachedMimeType, mimeType)", "stringsEqual(cachedCode, code)"})
-    public Object evalCached(VirtualFrame frame, String mimeType, String code,
-                    @Cached("mimeType") String cachedMimeType,
-                    @Cached("code") String cachedCode,
-                    @Cached("create(parse(mimeType, code))") DirectCallNode callNode) {
-        return callNode.call(frame, new Object[]{});
+    private PolyglotEngine engine;
+    private PolyglotEngine.Value factorial;
+
+    @Before
+    public void initEngine() throws Exception {
+        engine = PolyglotEngine.newBuilder().build();
+        // @formatter:off
+        engine.eval(
+            Source.newBuilder("\n" +
+                "function fac(n) {\n" +
+                "  if (n <= 1) {\n" +
+                "    return 1;\n" +
+                "  }\n" +
+                "  prev = fac(n - 1);\n" +
+                "  return prev * n;\n" +
+                "}\n").
+            name("factorial.sl").
+            mimeType("application/x-sl").
+            build()
+        );
+        // @formatter:on
+        factorial = engine.findGlobalSymbol("fac");
     }
 
-    @TruffleBoundary
-    @Specialization(contains = "evalCached")
-    public Object evalUncached(String mimeType, String code) {
-        return parse(mimeType, code).call();
+    @After
+    public void dispose() {
+        engine.dispose();
     }
 
-    protected CallTarget parse(String mimeType, String code) {
-        final Source source = Source.newBuilder(code).name("(eval)").mimeType(mimeType).build();
-
-        try {
-            return getContext().parse(source);
-        } catch (IOException ex) {
-            throw new IllegalArgumentException(ex);
-        }
+    @Test
+    public void factorialOf5() throws Exception {
+        Number ret = factorial.execute(5).as(Number.class);
+        assertEquals(120, ret.intValue());
     }
 
-    /* Work around findbugs warning in generate code. */
-    protected static boolean stringsEqual(String a, String b) {
-        return a.equals(b);
+    @Test
+    public void factorialOf3() throws Exception {
+        Number ret = factorial.execute(3).as(Number.class);
+        assertEquals(6, ret.intValue());
+    }
+
+    @Test
+    public void factorialOf1() throws Exception {
+        Number ret = factorial.execute(1).as(Number.class);
+        assertEquals(1, ret.intValue());
     }
 }

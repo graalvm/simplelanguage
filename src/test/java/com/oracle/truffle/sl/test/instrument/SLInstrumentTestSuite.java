@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,51 +38,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.test;
+package com.oracle.truffle.sl.test.instrument;
 
-import com.oracle.truffle.api.source.Source;
-import com.oracle.truffle.api.vm.PolyglotEngine;
-import com.oracle.truffle.sl.SLLanguage;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-import java.io.IOException;
-import org.junit.After;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
-import org.junit.Before;
-import org.junit.Test;
+@Deprecated
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.TYPE)
+public @interface SLInstrumentTestSuite {
 
-public class ToStringOfEvalTest {
-    PolyglotEngine engine;
+    /**
+     * Defines the base path of the test suite. Multiple base paths can be specified. However only
+     * the first base that exists is used to lookup the test cases.
+     */
+    String[] value();
 
-    @Before
-    public void initialize() {
-        engine = PolyglotEngine.newBuilder().build();
-    }
-
-    @After
-    public void dispose() {
-        engine.dispose();
-    }
-
-    @Test
-    public void checkToStringOnAFunction() throws IOException {
-        PolyglotEngine.Language sl = engine.getLanguages().get(SLLanguage.MIME_TYPE);
-        sl.eval(Source.newBuilder("function checkName() {}").name("defineFn").mimeType("content/unknown").build());
-        PolyglotEngine.Value value1 = engine.findGlobalSymbol("checkName");
-        PolyglotEngine.Value value2 = engine.findGlobalSymbol("checkName");
-
-        assertNotNull("Symbol is not null", value1);
-        assertNotNull("Symbol is not null either", value2);
-
-        Object global1 = value1.get();
-        Object global2 = value2.get();
-
-        assertNotNull("Symbol is not null", global1);
-        assertNotNull("Symbol is not null either", global2);
-
-        assertEquals("Symbols are the same", global1, global2);
-
-        assertTrue("Contans checkName text: " + global2, global2.toString().contains("checkName"));
-    }
 }
