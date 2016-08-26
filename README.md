@@ -60,6 +60,14 @@ your own Truffle language.
 * Execute `./sl -debug tests/HelloWorld.sl`.
 * Attach a Java remote debugger (like Eclipse) on port 8000.
 
+## Tested Compatibility
+
+Simple language is compatible to:
+
+* Truffle-Version: 0.16
+* GraalVM-Version: 0.15
+
+
 ## Further information
 
 * [Truffle JavaDoc](http://lafo.ssw.uni-linz.ac.at/javadoc/truffle/latest/)

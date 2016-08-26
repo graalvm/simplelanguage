@@ -123,7 +123,7 @@ public abstract class SLWriteLocalVariableNode extends SLExpressionNode {
         return getSlot().getKind() == FrameSlotKind.Long || getSlot().getKind() == FrameSlotKind.Illegal;
     }
 
-    protected boolean isBooleanOrIllegal(VirtualFrame frame) {
+    protected boolean isBooleanOrIllegal(@SuppressWarnings("unused") VirtualFrame frame) {
         return getSlot().getKind() == FrameSlotKind.Boolean || getSlot().getKind() == FrameSlotKind.Illegal;
     }
 }

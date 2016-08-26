@@ -89,7 +89,7 @@ import com.oracle.truffle.sl.runtime.SLNull;
 import com.oracle.truffle.sl.runtime.SLUndefinedNameException;
 import com.oracle.truffle.sl.test.SLTestRunner.TestCase;
 
-public final class SLTestRunner extends ParentRunner<TestCase> {
+public class SLTestRunner extends ParentRunner<TestCase> {
 
     private static int repeats = 1;
 
@@ -145,7 +145,11 @@ public final class SLTestRunner extends ParentRunner<TestCase> {
 
         String[] paths = suite.value();
 
-        Path root = getRootViaResourceURL(c, paths);
+        Class<?> testCaseDirectory = c;
+        if (suite.testCaseDirectory() != SLTestSuite.class) {
+            testCaseDirectory = suite.testCaseDirectory();
+        }
+        Path root = getRootViaResourceURL(testCaseDirectory, paths);
 
         if (root == null) {
             for (String path : paths) {
@@ -221,20 +225,19 @@ public final class SLTestRunner extends ParentRunner<TestCase> {
                 }
             });
             jarfileDir.toFile().deleteOnExit();
-            try (JarFile jarfile = new JarFile(jarfilePath)) {
-	            Enumeration<JarEntry> entries = jarfile.entries();
-	            while (entries.hasMoreElements()) {
-	                JarEntry e = entries.nextElement();
-	                if (!e.isDirectory()) {
-	                    File path = new File(jarfileDir.toFile(), e.getName().replace('/', File.separatorChar));
-	                    File dir = path.getParentFile();
-	                    dir.mkdirs();
-	                    assert dir.exists();
-	                    Files.copy(jarfile.getInputStream(e), path.toPath());
-	                }
-	            }
-	            return jarfileDir.toFile().getAbsolutePath();
+            JarFile jarfile = new JarFile(jarfilePath);
+            Enumeration<JarEntry> entries = jarfile.entries();
+            while (entries.hasMoreElements()) {
+                JarEntry e = entries.nextElement();
+                if (!e.isDirectory()) {
+                    File path = new File(jarfileDir.toFile(), e.getName().replace('/', File.separatorChar));
+                    File dir = path.getParentFile();
+                    dir.mkdirs();
+                    assert dir.exists();
+                    Files.copy(jarfile.getInputStream(e), path.toPath());
+                }
             }
+            return jarfileDir.toFile().getAbsolutePath();
         } catch (IOException e) {
             throw new AssertionError(e);
         }
@@ -324,7 +327,7 @@ public final class SLTestRunner extends ParentRunner<TestCase> {
         }
 
         /* Parse the SL source file. */
-        Source source = Source.fromFileName(path.toString());
+        Source source = Source.newBuilder(path.toFile()).build();
         context.getFunctionRegistry().register(Parser.parseSL(source));
 
         /* Lookup our main entry point, which is per definition always named "main". */

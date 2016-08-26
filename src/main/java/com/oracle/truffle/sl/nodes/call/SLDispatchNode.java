@@ -133,7 +133,7 @@ public abstract class SLDispatchNode extends Node {
      * When no specialization fits, the receiver is not an object (which is a type error).
      */
     @Fallback
-    protected static Object unknownFunction(Object function, Object[] arguments) {
+    protected static Object unknownFunction(Object function, @SuppressWarnings("unused") Object[] arguments) {
         throw SLUndefinedNameException.undefinedFunction(function);
     }
 
