@@ -328,8 +328,8 @@ public class Scanner {
 
     static final char EOL = '\n';
     static final int eofSym = 0;
-	static final int maxT = 34;
-	static final int noSym = 34;
+	static final int maxT = 35;
+	static final int noSym = 35;
 
 
     public Buffer buffer; // scanner buffer
@@ -366,17 +366,18 @@ public class Scanner {
 		start.set(59, 11); 
 		start.set(124, 12); 
 		start.set(38, 14); 
-		start.set(60, 28); 
-		start.set(62, 29); 
-		start.set(61, 30); 
+		start.set(60, 29); 
+		start.set(62, 30); 
+		start.set(61, 31); 
 		start.set(33, 19); 
 		start.set(43, 21); 
 		start.set(45, 22); 
 		start.set(42, 23); 
 		start.set(47, 24); 
-		start.set(46, 25); 
-		start.set(91, 26); 
-		start.set(93, 27); 
+		start.set(94, 25); 
+		start.set(46, 26); 
+		start.set(91, 27); 
+		start.set(93, 28); 
 		start.set(Buffer.EOF, -1);
 		literals.put("function", new Integer(4));
 		literals.put("break", new Integer(10));
@@ -597,23 +598,25 @@ public class Scanner {
 				case 24:
 					{t.kind = 29; break loop;}
 				case 25:
-					{t.kind = 31; break loop;}
+					{t.kind = 30; break loop;}
 				case 26:
 					{t.kind = 32; break loop;}
 				case 27:
 					{t.kind = 33; break loop;}
 				case 28:
+					{t.kind = 34; break loop;}
+				case 29:
 					recEnd = pos; recKind = 20;
 					if (ch == '=') {AddCh(); state = 16; break;}
 					else {t.kind = 20; break loop;}
-				case 29:
+				case 30:
 					recEnd = pos; recKind = 22;
 					if (ch == '=') {AddCh(); state = 17; break;}
 					else {t.kind = 22; break loop;}
-				case 30:
-					recEnd = pos; recKind = 30;
+				case 31:
+					recEnd = pos; recKind = 31;
 					if (ch == '=') {AddCh(); state = 18; break;}
-					else {t.kind = 30; break loop;}
+					else {t.kind = 31; break loop;}
 
             }
         }

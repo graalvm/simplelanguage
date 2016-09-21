@@ -60,7 +60,7 @@ public class Parser {
 	public static final int _identifier = 1;
 	public static final int _stringLiteral = 2;
 	public static final int _numericLiteral = 3;
-	public static final int maxT = 34;
+	public static final int maxT = 35;
 
     static final boolean _T = true;
     static final boolean _x = false;
@@ -227,7 +227,7 @@ public class Parser {
 			Expect(11);
 			break;
 		}
-		default: SynErr(35); break;
+		default: SynErr(36); break;
 		}
 		return result;
 	}
@@ -354,8 +354,10 @@ public class Parser {
 	SLExpressionNode  Term() {
 		SLExpressionNode  result;
 		result = Factor();
-		while (la.kind == 28 || la.kind == 29) {
+		while (la.kind == 28 || la.kind == 29 || la.kind == 30) {
 			if (la.kind == 28) {
+				Get();
+			} else if (la.kind == 29) {
 				Get();
 			} else {
 				Get();
@@ -377,7 +379,7 @@ public class Parser {
 				result = MemberExpression(null, null, assignmentName);
 			} else if (StartOf(5)) {
 				result = factory.createRead(assignmentName); 
-			} else SynErr(36);
+			} else SynErr(37);
 		} else if (la.kind == 2) {
 			Get();
 			result = factory.createStringLiteral(t, true); 
@@ -392,7 +394,7 @@ public class Parser {
 			Expect(7);
 			int length = (t.charPos + t.val.length()) - start; 
 			result = factory.createParenExpression(expr, start, length); 
-		} else SynErr(37);
+		} else SynErr(38);
 		return result;
 	}
 
@@ -420,7 +422,7 @@ public class Parser {
 			Expect(7);
 			Token finalToken = t; 
 			result = factory.createCall(receiver, parameters, finalToken); 
-		} else if (la.kind == 30) {
+		} else if (la.kind == 31) {
 			Get();
 			SLExpressionNode value = Expression();
 			if (assignmentName == null) {
@@ -430,7 +432,7 @@ public class Parser {
 			} else {
 			   result = factory.createWriteProperty(assignmentReceiver, assignmentName, value);
 			} 
-		} else if (la.kind == 31) {
+		} else if (la.kind == 32) {
 			Get();
 			if (receiver == null) {
 			   receiver = factory.createRead(assignmentName); 
@@ -438,15 +440,15 @@ public class Parser {
 			Expect(1);
 			nestedAssignmentName = factory.createStringLiteral(t, false); 
 			result = factory.createReadProperty(receiver, nestedAssignmentName); 
-		} else if (la.kind == 32) {
+		} else if (la.kind == 33) {
 			Get();
 			if (receiver == null) {
 			   receiver = factory.createRead(assignmentName); 
 			} 
 			nestedAssignmentName = Expression();
 			result = factory.createReadProperty(receiver, nestedAssignmentName); 
-			Expect(33);
-		} else SynErr(38);
+			Expect(34);
+		} else SynErr(39);
 		if (StartOf(4)) {
 			result = MemberExpression(result, receiver, nestedAssignmentName);
 		}
@@ -465,12 +467,12 @@ public class Parser {
     }
 
     private static final boolean[][] set = {
-		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
-		{_x,_T,_T,_T, _x,_T,_x,_x, _x,_x,_T,_x, _T,_T,_T,_T, _x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
-		{_x,_T,_T,_T, _x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
-		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_T,_T, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x},
-		{_x,_x,_x,_x, _x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_T,_T, _T,_x,_x,_x},
-		{_x,_x,_x,_x, _x,_T,_T,_T, _x,_x,_x,_T, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_T,_T,_T, _T,_T,_T,_T, _T,_T,_x,_x}
+		{_T,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
+		{_x,_T,_T,_T, _x,_T,_x,_x, _x,_x,_T,_x, _T,_T,_T,_T, _x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
+		{_x,_T,_T,_T, _x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
+		{_x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _T,_T,_T,_T, _T,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x},
+		{_x,_x,_x,_x, _x,_T,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_x, _x,_x,_x,_T, _T,_T,_x,_x, _x},
+		{_x,_x,_x,_x, _x,_T,_T,_T, _x,_x,_x,_T, _x,_x,_x,_x, _x,_x,_T,_T, _T,_T,_T,_T, _T,_T,_T,_T, _T,_T,_T,_T, _T,_T,_T,_x, _x}
 
     };
 
@@ -544,15 +546,16 @@ class Errors {
 			case 27: s = "\"-\" expected"; break;
 			case 28: s = "\"*\" expected"; break;
 			case 29: s = "\"/\" expected"; break;
-			case 30: s = "\"=\" expected"; break;
-			case 31: s = "\".\" expected"; break;
-			case 32: s = "\"[\" expected"; break;
-			case 33: s = "\"]\" expected"; break;
-			case 34: s = "??? expected"; break;
-			case 35: s = "invalid Statement"; break;
-			case 36: s = "invalid Factor"; break;
+			case 30: s = "\"^\" expected"; break;
+			case 31: s = "\"=\" expected"; break;
+			case 32: s = "\".\" expected"; break;
+			case 33: s = "\"[\" expected"; break;
+			case 34: s = "\"]\" expected"; break;
+			case 35: s = "??? expected"; break;
+			case 36: s = "invalid Statement"; break;
 			case 37: s = "invalid Factor"; break;
-			case 38: s = "invalid MemberExpression"; break;
+			case 38: s = "invalid Factor"; break;
+			case 39: s = "invalid MemberExpression"; break;
             default:
                 s = "error " + n;
                 break;
