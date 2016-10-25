@@ -1,0 +1,207 @@
+CompilerOracle: print *OptimizedCallTarget.callRoot
+CompilerOracle: exclude *OptimizedCallTarget.callRoot == running on Graal Truffle Runtime ### Excluding compile: com.oracle.graal.truffle.OptimizedCallTarget::callRoot
+[truffle] opt queued       root add                                                    |ASTSize      11/   11 |Calls/Thres    1000/    3 |CallsAndLoop/Thres    1000/ 1000 |Inval#              0 
+[truffle] opt start        root add                                                    |ASTSize      11/   11 |Calls/Thres    1000/    3 |CallsAndLoop/Thres    1000/ 1000 |Inval#              0 
+Compiled method (JVMCI)    4082 3005       4       com.oracle.graal.truffle.OptimizedCallTarget::callRoot (43 bytes)
+ total in heap  [0x00007ff0e9854d50,0x00007ff0e9855050] = 768
+ relocation     [0x00007ff0e9854e88,0x00007ff0e9854ea0] = 24
+ main code      [0x00007ff0e9854ea0,0x00007ff0e9854fc9] = 297
+ stub code      [0x00007ff0e9854fc9,0x00007ff0e9854fd0] = 7
+ oops           [0x00007ff0e9854fd0,0x00007ff0e9854fe0] = 16
+ metadata       [0x00007ff0e9854fe0,0x00007ff0e9854ff0] = 16
+ scopes data    [0x00007ff0e9854ff0,0x00007ff0e9855008] = 24
+ scopes pcs     [0x00007ff0e9855008,0x00007ff0e9855048] = 64
+ dependencies   [0x00007ff0e9855048,0x00007ff0e9855050] = 8
+Loaded disassembler from /home/flo/NetBeansProjects/simplelanguage/graalvm/jre/lib/amd64/hsdis-amd64.so
+----------------------------------------------------------------------
+com/oracle/graal/truffle/OptimizedCallTarget.callRoot (root add)  [0x00007ff0e9854ea0, 0x00007ff0e9854fd0]  304 bytes
+[Disassembling for mach='i386:x86-64']
+[Entry Point]
+[Constants]
+  # {method} {0x00007ff0fd1452d0} 'callRoot' '([Ljava/lang/Object;)Ljava/lang/Object;' in 'com/oracle/graal/truffle/OptimizedCallTarget'
+  # this:     rsi:rsi   = 'com/oracle/graal/truffle/OptimizedCallTarget'
+  # parm0:    rdx:rdx   = '[Ljava/lang/Object;'
+  #           [sp+0x20]  (sp of caller)
+  0x00007ff0e9854ea0: mov    r10d,DWORD PTR [rsi+0x8]
+  0x00007ff0e9854ea4: shl    r10,0x3
+  0x00007ff0e9854ea8: cmp    rax,r10
+  0x00007ff0e9854eab: jne    0x00007ff0e9047e20  ;   {runtime_call}
+  0x00007ff0e9854eb1: nop
+  0x00007ff0e9854eb2: nop    DWORD PTR [rax+0x0]
+  0x00007ff0e9854eb9: nop    DWORD PTR [rax+0x0]
+[Verified Entry Point]
+  0x00007ff0e9854ec0: mov    DWORD PTR [rsp-0x14000],eax
+  0x00007ff0e9854ec7: sub    rsp,0x18
+  0x00007ff0e9854ecb: mov    QWORD PTR [rsp+0x10],rbp
+  0x00007ff0e9854ed0: mov    rbx,rdx
+  0x00007ff0e9854ed3: mov    eax,DWORD PTR [rbx+0x10]
+  0x00007ff0e9854ed6: mov    rax,QWORD PTR [rax*1+0x10]
+  0x00007ff0e9854ede: mov    esi,DWORD PTR [rbx+0x14]
+  0x00007ff0e9854ee1: mov    rsi,QWORD PTR [rsi*1+0x10]
+  0x00007ff0e9854ee9: mov    rbp,rax
+  0x00007ff0e9854eec: add    rbp,rsi
+  0x00007ff0e9854eef: jo     0x00007ff0e9854f97
+  0x00007ff0e9854ef5: cmp    rbp,0xffffffffffffff80
+  0x00007ff0e9854ef9: jl     0x00007ff0e9854f3b
+  0x00007ff0e9854eff: cmp    rbp,0x7f
+  0x00007ff0e9854f03: jg     0x00007ff0e9854f3b
+  0x00007ff0e9854f09: mov    eax,ebp
+  0x00007ff0e9854f0b: add    eax,0x80
+  0x00007ff0e9854f11: cmp    eax,0x100
+  0x00007ff0e9854f17: jae    0x00007ff0e9854fb5
+  0x00007ff0e9854f1d: movabs rsi,0x80002068     ;   {oop(a 'java/lang/Long'[256] )}
+  0x00007ff0e9854f27: mov    eax,DWORD PTR [rsi+rax*4+0x10]
+  0x00007ff0e9854f2b: mov    rbp,QWORD PTR [rsp+0x10]
+  0x00007ff0e9854f30: add    rsp,0x18
+  0x00007ff0e9854f34: test   DWORD PTR [rip+0x18dc00cc],eax        # 0x00007ff102615006
+                                                ;   {poll_return}
+  0x00007ff0e9854f3a: ret    
+  0x00007ff0e9854f3b: mov    rax,QWORD PTR [r15+0x60]
+  0x00007ff0e9854f3f: mov    rsi,rax
+  0x00007ff0e9854f42: add    rsi,0x18
+  0x00007ff0e9854f46: movabs r10,0x100011558    ;   {metadata('java/lang/Long')}
+  0x00007ff0e9854f50: cmp    rsi,QWORD PTR [r15+0x70]
+  0x00007ff0e9854f54: ja     0x00007ff0e9854f8c
+  0x00007ff0e9854f5a: mov    QWORD PTR [r15+0x60],rsi
+  0x00007ff0e9854f5e: prefetchnta BYTE PTR [rax+0xd8]
+  0x00007ff0e9854f65: mov    rsi,QWORD PTR [r10+0xa8]
+  0x00007ff0e9854f6c: mov    QWORD PTR [rax],rsi
+  0x00007ff0e9854f6f: mov    esi,0x200022ab     ;   {metadata('java/lang/Long')}
+  0x00007ff0e9854f74: mov    DWORD PTR [rax+0x8],esi
+  0x00007ff0e9854f77: mov    DWORD PTR [rax+0xc],0x0
+  0x00007ff0e9854f7e: mov    QWORD PTR [rax+0x10],0x0
+  0x00007ff0e9854f86: mov    QWORD PTR [rax+0x10],rbp
+  0x00007ff0e9854f8a: jmp    0x00007ff0e9854f2b
+  0x00007ff0e9854f8c: mov    rsi,r10
+  0x00007ff0e9854f8f: call   0x00007ff0e984cae0  ; OopMap{rbx=Oop off=244}
+                                                ;*aload_1 {reexecute=1 rethrow=0 return_oop=0}
+                                                ; - com.oracle.graal.truffle.OptimizedCallTarget::callRoot@0 (line 208)
+                                                ;   {runtime_call}
+  0x00007ff0e9854f94: nop
+  0x00007ff0e9854f95: jmp    0x00007ff0e9854f86
+  0x00007ff0e9854f97: mov    r10d,0xffffff95
+  0x00007ff0e9854f9d: mov    DWORD PTR [r15+0x29c],r10d
+  0x00007ff0e9854fa4: mov    QWORD PTR [r15+0x2a8],0x0
+  0x00007ff0e9854faf: call   0x00007ff0e90490be  ; OopMap{rbx=Oop off=276}
+                                                ;*aload_1 {reexecute=1 rethrow=0 return_oop=0}
+                                                ; - com.oracle.graal.truffle.OptimizedCallTarget::callRoot@0 (line 208)
+                                                ;   {runtime_call}
+  0x00007ff0e9854fb4: nop
+  0x00007ff0e9854fb5: mov    r10d,0xffffffe5
+  0x00007ff0e9854fbb: jmp    0x00007ff0e9854f9d
+[Exception Handler]
+  0x00007ff0e9854fbd: call   0x00007ff0e91303e0  ;   {runtime_call}
+  0x00007ff0e9854fc2: nop
+[Deopt Handler Code]
+  0x00007ff0e9854fc3: call   0x00007ff0e9048fc0  ;   {runtime_call}
+  0x00007ff0e9854fc8: nop
+[Stub Code]
+  0x00007ff0e9854fc9: hlt    
+  0x00007ff0e9854fca: hlt    
+  0x00007ff0e9854fcb: hlt    
+  0x00007ff0e9854fcc: hlt    
+  0x00007ff0e9854fcd: hlt    
+  0x00007ff0e9854fce: hlt    
+  0x00007ff0e9854fcf: hlt    
+OopMapSet contains 2 OopMaps
+
+#0 
+OopMap{rbx=Oop off=244}
+#1 
+OopMap{rbx=Oop off=276}
+[truffle] opt done         root add <opt>                                              |ASTSize      11/   11 |Time   352(  91+262 )ms |DirectCallNodes I    0/D    0 |GraalNodes    18/   93 |CodeSize          297 |Source  LoopCall.sl:1 
+[truffle] opt start        root loop                                                   |ASTSize      29/   29 |Calls/Thres       3/    3 |CallsAndLoop/Thres    2001/ 1010 |Inval#              0 
+[truffle] opt queued       root loop                                                   |ASTSize      29/   29 |Calls/Thres       3/    3 |CallsAndLoop/Thres    2001/ 1010 |Inval#              0 
+Compiled method (JVMCI)    4888 3542       4       com.oracle.graal.truffle.OptimizedCallTarget::callRoot (43 bytes)
+ total in heap  [0x00007ff0e9a08cd0,0x00007ff0e9a09090] = 960
+ relocation     [0x00007ff0e9a08e08,0x00007ff0e9a08e20] = 24
+ main code      [0x00007ff0e9a08e20,0x00007ff0e9a08f04] = 228
+ stub code      [0x00007ff0e9a08f04,0x00007ff0e9a08f08] = 4
+ oops           [0x00007ff0e9a08f08,0x00007ff0e9a08f60] = 88
+ metadata       [0x00007ff0e9a08f60,0x00007ff0e9a08fa8] = 72
+ scopes data    [0x00007ff0e9a08fa8,0x00007ff0e9a09058] = 176
+ scopes pcs     [0x00007ff0e9a09058,0x00007ff0e9a09088] = 48
+ dependencies   [0x00007ff0e9a09088,0x00007ff0e9a09090] = 8
+----------------------------------------------------------------------
+com/oracle/graal/truffle/OptimizedCallTarget.callRoot (root loop)  [0x00007ff0e9a08e20, 0x00007ff0e9a08f08]  232 bytes
+[Entry Point]
+[Constants]
+  # {method} {0x00007ff0fd1452d0} 'callRoot' '([Ljava/lang/Object;)Ljava/lang/Object;' in 'com/oracle/graal/truffle/OptimizedCallTarget'
+  # this:     rsi:rsi   = 'com/oracle/graal/truffle/OptimizedCallTarget'
+  # parm0:    rdx:rdx   = '[Ljava/lang/Object;'
+  #           [sp+0x20]  (sp of caller)
+  0x00007ff0e9a08e20: mov    r10d,DWORD PTR [rsi+0x8]
+  0x00007ff0e9a08e24: shl    r10,0x3
+  0x00007ff0e9a08e28: cmp    rax,r10
+  0x00007ff0e9a08e2b: jne    0x00007ff0e9047e20  ;   {runtime_call}
+  0x00007ff0e9a08e31: nop
+  0x00007ff0e9a08e32: nop    DWORD PTR [rax+0x0]
+  0x00007ff0e9a08e39: nop    DWORD PTR [rax+0x0]
+[Verified Entry Point]
+  0x00007ff0e9a08e40: mov    DWORD PTR [rsp-0x14000],eax
+  0x00007ff0e9a08e47: sub    rsp,0x18
+  0x00007ff0e9a08e4b: mov    QWORD PTR [rsp+0x10],rbp
+  0x00007ff0e9a08e50: mov    esi,DWORD PTR [rdx+0x10]
+  0x00007ff0e9a08e53: mov    rbx,QWORD PTR [rsi*1+0x10]
+  0x00007ff0e9a08e5b: test   rbx,rbx
+  0x00007ff0e9a08e5e: mov    rbp,0x0
+  0x00007ff0e9a08e65: cmovg  rbp,rbx
+  0x00007ff0e9a08e69: cmp    rbp,0x7f
+  0x00007ff0e9a08e6d: ja     0x00007ff0e9a08e99
+  0x00007ff0e9a08e73: movabs rax,0x80002068     ;   {oop(a 'java/lang/Long'[256] )}
+  0x00007ff0e9a08e7d: mov    esi,ebp
+  0x00007ff0e9a08e7f: add    esi,0x80
+  0x00007ff0e9a08e85: mov    eax,DWORD PTR [rax+rsi*4+0x10]
+  0x00007ff0e9a08e89: mov    rbp,QWORD PTR [rsp+0x10]
+  0x00007ff0e9a08e8e: add    rsp,0x18
+  0x00007ff0e9a08e92: test   DWORD PTR [rip+0x18c0c16e],eax        # 0x00007ff102615006
+                                                ;   {poll_return}
+  0x00007ff0e9a08e98: ret    
+  0x00007ff0e9a08e99: mov    rax,QWORD PTR [r15+0x60]
+  0x00007ff0e9a08e9d: mov    r10,rax
+  0x00007ff0e9a08ea0: add    r10,0x18
+  0x00007ff0e9a08ea4: movabs r11,0x100011558    ;   {metadata('java/lang/Long')}
+  0x00007ff0e9a08eae: cmp    r10,QWORD PTR [r15+0x70]
+  0x00007ff0e9a08eb2: ja     0x00007ff0e9a08eea
+  0x00007ff0e9a08eb8: mov    QWORD PTR [r15+0x60],r10
+  0x00007ff0e9a08ebc: prefetchnta BYTE PTR [rax+0xd8]
+  0x00007ff0e9a08ec3: mov    rsi,QWORD PTR [r11+0xa8]
+  0x00007ff0e9a08eca: mov    QWORD PTR [rax],rsi
+  0x00007ff0e9a08ecd: mov    esi,0x200022ab     ;   {metadata('java/lang/Long')}
+  0x00007ff0e9a08ed2: mov    DWORD PTR [rax+0x8],esi
+  0x00007ff0e9a08ed5: mov    DWORD PTR [rax+0xc],0x0
+  0x00007ff0e9a08edc: mov    QWORD PTR [rax+0x10],0x0
+  0x00007ff0e9a08ee4: mov    QWORD PTR [rax+0x10],rbp
+  0x00007ff0e9a08ee8: jmp    0x00007ff0e9a08e89
+  0x00007ff0e9a08eea: mov    r13d,esi
+  0x00007ff0e9a08eed: mov    rsi,r11
+  0x00007ff0e9a08ef0: call   0x00007ff0e984cae0  ; OopMap{r13=Oop off=213}
+                                                ;*aload_0 {reexecute=1 rethrow=0 return_oop=0}
+                                                ; - com.oracle.graal.truffle.OptimizedOSRLoopNode::executeLoop@56 (line 113)
+                                                ; - com.oracle.graal.enterprisegraal.t.c$b::executeLoop@48 (line 155)
+                                                ; - com.oracle.truffle.sl.nodes.controlflow.SLWhileNode::executeVoid@5 (line 69)
+                                                ; - com.oracle.truffle.sl.nodes.controlflow.SLBlockNode::executeVoid@37 (line 84)
+                                                ; - com.oracle.truffle.sl.nodes.controlflow.SLFunctionBodyNode::executeGeneric@5 (line 81)
+                                                ; - com.oracle.truffle.sl.nodes.SLRootNode::execute@28 (line 78)
+                                                ; - com.oracle.graal.truffle.OptimizedCallTarget::callProxy@9 (line 220)
+                                                ; - com.oracle.graal.truffle.OptimizedCallTarget::callRoot@29 (line 212)
+                                                ;   {runtime_call}
+  0x00007ff0e9a08ef5: nop
+  0x00007ff0e9a08ef6: jmp    0x00007ff0e9a08ee4
+[Exception Handler]
+  0x00007ff0e9a08ef8: call   0x00007ff0e91303e0  ;   {runtime_call}
+  0x00007ff0e9a08efd: nop
+[Deopt Handler Code]
+  0x00007ff0e9a08efe: call   0x00007ff0e9048fc0  ;   {runtime_call}
+  0x00007ff0e9a08f03: nop
+[Stub Code]
+  0x00007ff0e9a08f04: hlt    
+  0x00007ff0e9a08f05: hlt    
+  0x00007ff0e9a08f06: hlt    
+  0x00007ff0e9a08f07: hlt    
+OopMapSet contains 1 OopMaps
+
+#0 
+OopMap{r13=Oop off=213}
+[truffle] opt done         root loop <opt>                                             |ASTSize      29/   40 |Time   125(  89+36  )ms |DirectCallNodes I    1/D    0 |GraalNodes    52/   94 |CodeSize          228 |Source  LoopCall.sl:5 
+1000
