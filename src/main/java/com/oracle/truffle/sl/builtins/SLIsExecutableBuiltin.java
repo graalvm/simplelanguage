@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,22 +38,27 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.test.instrument;
+package com.oracle.truffle.sl.builtins;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.frame.VirtualFrame;
+import com.oracle.truffle.api.interop.ForeignAccess;
+import com.oracle.truffle.api.interop.Message;
+import com.oracle.truffle.api.interop.TruffleObject;
+import com.oracle.truffle.api.nodes.Node;
+import com.oracle.truffle.api.nodes.NodeInfo;
 
-@Deprecated
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface SLInstrumentTestSuite {
+/**
+ * Built-in function that queries if the foreign object is executable. See
+ * <link>Messages.IS_EXECUTABLE</link>.
+ */
+@NodeInfo(shortName = "isExecutable")
+public abstract class SLIsExecutableBuiltin extends SLBuiltinNode {
 
-    /**
-     * Defines the base path of the test suite. Multiple base paths can be specified. However only
-     * the first base that exists is used to lookup the test cases.
-     */
-    String[] value();
+    @Child private Node isExecutable = Message.IS_EXECUTABLE.createNode();
 
+    @Specialization
+    public Object isExecutable(VirtualFrame frame, TruffleObject obj) {
+        return ForeignAccess.sendIsExecutable(isExecutable, frame, obj);
+    }
 }

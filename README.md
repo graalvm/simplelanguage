@@ -64,8 +64,8 @@ your own Truffle language.
 
 Simple language is compatible to:
 
-* Truffle-Version: 0.16
-* GraalVM-Version: 0.15
+* Truffle-Version: 0.22
+* GraalVM-Version: 0.19
 
 
 ## Further information

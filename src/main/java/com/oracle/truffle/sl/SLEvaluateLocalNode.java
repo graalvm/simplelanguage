@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,54 +38,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.builtins;
+package com.oracle.truffle.sl;
 
-import com.oracle.truffle.api.CallTarget;
-import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-import com.oracle.truffle.api.dsl.Cached;
-import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.frame.FrameSlot;
+import com.oracle.truffle.api.frame.MaterializedFrame;
 import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.DirectCallNode;
-import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.api.source.Source;
+import com.oracle.truffle.api.nodes.RootNode;
 
-/**
- * Builtin function to evaluate source code in any supported language.
- * <p>
- * The call target is cached against the mime type and the source code, so that if they are the same
- * each time then a direct call will be made to a cached AST, allowing it to be compiled and
- * possibly inlined.
- */
-@NodeInfo(shortName = "eval")
-@SuppressWarnings("unused")
-public abstract class SLEvalBuiltin extends SLBuiltinNode {
+final class SLEvaluateLocalNode extends RootNode {
 
-    @Specialization(guards = {"stringsEqual(cachedMimeType, mimeType)", "stringsEqual(cachedCode, code)"})
-    public Object evalCached(VirtualFrame frame, String mimeType, String code,
-                    @Cached("mimeType") String cachedMimeType,
-                    @Cached("code") String cachedCode,
-                    @Cached("create(parse(mimeType, code))") DirectCallNode callNode) {
-        return callNode.call(frame, new Object[]{});
+    private final String variable;
+    private final MaterializedFrame inspectFrame;
+
+    SLEvaluateLocalNode(String variableName, MaterializedFrame frame) {
+        super(SLLanguage.class, null, null);
+        this.variable = variableName;
+        this.inspectFrame = frame;
     }
 
-    @TruffleBoundary
-    @Specialization(replaces = "evalCached")
-    public Object evalUncached(String mimeType, String code) {
-        return parse(mimeType, code).call();
-    }
-
-    protected CallTarget parse(String mimeType, String code) {
-        final Source source = Source.newBuilder(code).name("(eval)").mimeType(mimeType).build();
-
-        try {
-            return getContext().parse(source);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException(ex);
+    @Override
+    public Object execute(VirtualFrame currentFrame) {
+        for (FrameSlot slot : inspectFrame.getFrameDescriptor().getSlots()) {
+            if (variable.equals(slot.getIdentifier())) {
+                return inspectFrame.getValue(slot);
+            }
         }
-    }
-
-    /* Work around findbugs warning in generate code. */
-    protected static boolean stringsEqual(String a, String b) {
-        return a.equals(b);
+        return null;
     }
 }

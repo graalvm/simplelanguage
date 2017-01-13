@@ -40,52 +40,25 @@
  */
 package com.oracle.truffle.sl.builtins;
 
-import com.oracle.truffle.api.CallTarget;
-import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-import com.oracle.truffle.api.dsl.Cached;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.DirectCallNode;
+import com.oracle.truffle.api.interop.ForeignAccess;
+import com.oracle.truffle.api.interop.Message;
+import com.oracle.truffle.api.interop.TruffleObject;
+import com.oracle.truffle.api.nodes.Node;
 import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.api.source.Source;
 
 /**
- * Builtin function to evaluate source code in any supported language.
- * <p>
- * The call target is cached against the mime type and the source code, so that if they are the same
- * each time then a direct call will be made to a cached AST, allowing it to be compiled and
- * possibly inlined.
+ * Built-in function that queries if the foreign object has a size. See
+ * <link>Messages.HAS_SIZE</link>.
  */
-@NodeInfo(shortName = "eval")
-@SuppressWarnings("unused")
-public abstract class SLEvalBuiltin extends SLBuiltinNode {
+@NodeInfo(shortName = "hasSize")
+public abstract class SLHasSizeBuiltin extends SLBuiltinNode {
 
-    @Specialization(guards = {"stringsEqual(cachedMimeType, mimeType)", "stringsEqual(cachedCode, code)"})
-    public Object evalCached(VirtualFrame frame, String mimeType, String code,
-                    @Cached("mimeType") String cachedMimeType,
-                    @Cached("code") String cachedCode,
-                    @Cached("create(parse(mimeType, code))") DirectCallNode callNode) {
-        return callNode.call(frame, new Object[]{});
-    }
+    @Child private Node hasSize = Message.HAS_SIZE.createNode();
 
-    @TruffleBoundary
-    @Specialization(replaces = "evalCached")
-    public Object evalUncached(String mimeType, String code) {
-        return parse(mimeType, code).call();
-    }
-
-    protected CallTarget parse(String mimeType, String code) {
-        final Source source = Source.newBuilder(code).name("(eval)").mimeType(mimeType).build();
-
-        try {
-            return getContext().parse(source);
-        } catch (Exception ex) {
-            throw new IllegalArgumentException(ex);
-        }
-    }
-
-    /* Work around findbugs warning in generate code. */
-    protected static boolean stringsEqual(String a, String b) {
-        return a.equals(b);
+    @Specialization
+    public Object hasSize(VirtualFrame frame, TruffleObject obj) {
+        return ForeignAccess.sendHasSize(hasSize, frame, obj);
     }
 }
