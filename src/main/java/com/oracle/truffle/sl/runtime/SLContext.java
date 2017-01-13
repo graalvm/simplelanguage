@@ -41,7 +41,6 @@
 package com.oracle.truffle.sl.runtime;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 
@@ -63,8 +62,12 @@ import com.oracle.truffle.sl.SLLanguage;
 import com.oracle.truffle.sl.builtins.SLBuiltinNode;
 import com.oracle.truffle.sl.builtins.SLDefineFunctionBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLEvalBuiltinFactory;
+import com.oracle.truffle.sl.builtins.SLGetSizeBuiltinFactory;
+import com.oracle.truffle.sl.builtins.SLHasSizeBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLHelloEqualsWorldBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLImportBuiltinFactory;
+import com.oracle.truffle.sl.builtins.SLIsExecutableBuiltinFactory;
+import com.oracle.truffle.sl.builtins.SLIsNullBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLNanoTimeBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLNewObjectBuiltinFactory;
 import com.oracle.truffle.sl.builtins.SLPrintlnBuiltin;
@@ -85,6 +88,8 @@ import com.oracle.truffle.sl.nodes.local.SLReadArgumentNode;
  * context. Therefore, the context is not a singleton.
  */
 public final class SLContext extends ExecutionContext {
+
+    private static final Source BUILTIN_SOURCE = Source.newBuilder("").name("SL builtin").mimeType(SLLanguage.MIME_TYPE).build();
     private static final Layout LAYOUT = Layout.createLayout();
 
     private final BufferedReader input;
@@ -140,6 +145,10 @@ public final class SLContext extends ExecutionContext {
         installBuiltin(SLNewObjectBuiltinFactory.getInstance());
         installBuiltin(SLEvalBuiltinFactory.getInstance());
         installBuiltin(SLImportBuiltinFactory.getInstance());
+        installBuiltin(SLGetSizeBuiltinFactory.getInstance());
+        installBuiltin(SLHasSizeBuiltinFactory.getInstance());
+        installBuiltin(SLIsExecutableBuiltinFactory.getInstance());
+        installBuiltin(SLIsNullBuiltinFactory.getInstance());
     }
 
     public void installBuiltin(NodeFactory<? extends SLBuiltinNode> factory) {
@@ -163,7 +172,7 @@ public final class SLContext extends ExecutionContext {
         builtinBodyNode.addRootTag();
         /* The name of the builtin function is specified via an annotation on the node class. */
         String name = lookupNodeInfo(builtinBodyNode.getClass()).shortName();
-        final SourceSection srcSection = SourceSection.createUnavailable("SL builtin", name);
+        final SourceSection srcSection = BUILTIN_SOURCE.createUnavailableSection();
         builtinBodyNode.setSourceSection(srcSection);
 
         /* Wrap the builtin in a RootNode. Truffle requires all AST to start with a RootNode. */
@@ -228,7 +237,7 @@ public final class SLContext extends ExecutionContext {
         return ((Number) a).longValue();
     }
 
-    public CallTarget parse(Source source) throws IOException {
+    public CallTarget parse(Source source) throws Exception {
         return env.parse(source);
     }
 

@@ -5,7 +5,7 @@
 
 	<groupId>com.oracle</groupId>
 	<artifactId>simplelanguage</artifactId>
-	<version>0.12-SNAPSHOT</version>
+	<version>0.19-SNAPSHOT</version>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -16,18 +16,18 @@
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-api</artifactId>
-			<version>0.16</version>
+			<version>0.22</version>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-tck</artifactId>
-			<version>0.16</version>
+			<version>0.22</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
 			<groupId>com.oracle.truffle</groupId>
 			<artifactId>truffle-dsl-processor</artifactId>
-			<version>0.16</version>
+			<version>0.22</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
