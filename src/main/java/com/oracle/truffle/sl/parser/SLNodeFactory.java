@@ -79,6 +79,7 @@ import com.oracle.truffle.sl.nodes.expression.SLLogicalOrNode;
 import com.oracle.truffle.sl.nodes.expression.SLLongLiteralNode;
 import com.oracle.truffle.sl.nodes.expression.SLMulNodeGen;
 import com.oracle.truffle.sl.nodes.expression.SLParenExpressionNode;
+import com.oracle.truffle.sl.nodes.expression.SLPowNodeGen;
 import com.oracle.truffle.sl.nodes.expression.SLStringLiteralNode;
 import com.oracle.truffle.sl.nodes.expression.SLSubNodeGen;
 import com.oracle.truffle.sl.nodes.local.SLReadArgumentNode;
@@ -323,6 +324,9 @@ public class SLNodeFactory {
                 break;
             case "/":
                 result = SLDivNodeGen.create(leftNode, rightNode);
+                break;
+            case "^":
+                result = SLPowNodeGen.create(leftNode, rightNode);
                 break;
             case "-":
                 result = SLSubNodeGen.create(leftNode, rightNode);
