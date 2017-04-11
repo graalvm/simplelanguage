@@ -81,9 +81,10 @@ public abstract class SLStackTraceBuiltin extends SLBuiltinNode {
                     return null;
                 }
                 CallTarget callTarget = frameInstance.getCallTarget();
-                Frame frame = frameInstance.getFrame(FrameAccess.READ_ONLY, true);
+                Frame frame = frameInstance.getFrame(FrameAccess.READ_ONLY);
                 RootNode rn = ((RootCallTarget) callTarget).getRootNode();
-                if (rn.getClass().getName().contains("SLForeignFunctionExecute")) {
+                // ignore internal or interop stack frames
+                if (rn.getLanguageInfo() == null) {
                     return 1;
                 }
                 if (str.length() > 0) {

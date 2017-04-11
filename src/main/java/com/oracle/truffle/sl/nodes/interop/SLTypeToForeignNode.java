@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,32 +38,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.builtins;
+package com.oracle.truffle.sl.nodes.interop;
 
+import com.oracle.truffle.sl.runtime.SLBigNumber;
+import com.oracle.truffle.api.dsl.Fallback;
 import com.oracle.truffle.api.dsl.Specialization;
-import com.oracle.truffle.api.interop.ForeignAccess;
-import com.oracle.truffle.api.interop.Message;
+import com.oracle.truffle.api.dsl.TypeSystemReference;
 import com.oracle.truffle.api.interop.TruffleObject;
-import com.oracle.truffle.api.interop.UnsupportedMessageException;
 import com.oracle.truffle.api.nodes.Node;
-import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.SLException;
+import com.oracle.truffle.sl.nodes.SLTypes;
+import java.math.BigInteger;
 
 /**
- * Built-in function that queries the size property of a foreign object. See
- * <link>Messages.GET_SIZE</link>.
+ * The node for converting a foreign primitive or boxed primitive value to an SL value.
  */
-@NodeInfo(shortName = "getSize")
-public abstract class SLGetSizeBuiltin extends SLBuiltinNode {
+@TypeSystemReference(SLTypes.class)
+public abstract class SLTypeToForeignNode extends Node {
 
-    @Child private Node getSize = Message.GET_SIZE.createNode();
+    public abstract Object executeConvert(Object value);
 
     @Specialization
-    public Object getSize(TruffleObject obj) {
-        try {
-            return ForeignAccess.sendGetSize(getSize, obj);
-        } catch (UnsupportedMessageException e) {
-            throw new SLException(e.getMessage());
-        }
+    static TruffleObject fromObject(BigInteger value) {
+        return new SLBigNumber(value);
+    }
+
+    @Fallback
+    static Object identity(Object value) {
+        return value;
     }
 }
