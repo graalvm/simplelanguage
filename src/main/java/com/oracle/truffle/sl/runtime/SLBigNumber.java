@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,32 +38,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.builtins;
+package com.oracle.truffle.sl.runtime;
 
-import com.oracle.truffle.api.dsl.Specialization;
+import java.math.BigInteger;
+
 import com.oracle.truffle.api.interop.ForeignAccess;
-import com.oracle.truffle.api.interop.Message;
+import com.oracle.truffle.api.interop.MessageResolution;
+import com.oracle.truffle.api.interop.Resolve;
 import com.oracle.truffle.api.interop.TruffleObject;
-import com.oracle.truffle.api.interop.UnsupportedMessageException;
 import com.oracle.truffle.api.nodes.Node;
-import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.SLException;
 
-/**
- * Built-in function that queries the size property of a foreign object. See
- * <link>Messages.GET_SIZE</link>.
- */
-@NodeInfo(shortName = "getSize")
-public abstract class SLGetSizeBuiltin extends SLBuiltinNode {
+@MessageResolution(receiverType = SLBigNumber.class)
+public final class SLBigNumber implements TruffleObject {
 
-    @Child private Node getSize = Message.GET_SIZE.createNode();
+    private final BigInteger value;
 
-    @Specialization
-    public Object getSize(TruffleObject obj) {
-        try {
-            return ForeignAccess.sendGetSize(getSize, obj);
-        } catch (UnsupportedMessageException e) {
-            throw new SLException(e.getMessage());
+    public SLBigNumber(BigInteger value) {
+        this.value = value;
+    }
+
+    public BigInteger getValue() {
+        return value;
+    }
+
+    @Override
+    public ForeignAccess getForeignAccess() {
+        return SLBigNumberForeign.ACCESS;
+    }
+
+    static boolean isInstance(TruffleObject obj) {
+        return obj instanceof SLBigNumber;
+    }
+
+    @Resolve(message = "UNBOX")
+    abstract static class UnboxBigNode extends Node {
+        Object access(SLBigNumber obj) {
+            return obj.value.doubleValue();
+        }
+    }
+
+    @Resolve(message = "IS_BOXED")
+    abstract static class IsBoxedBigNode extends Node {
+        @SuppressWarnings("unused")
+        Object access(SLBigNumber obj) {
+            return true;
         }
     }
 }
