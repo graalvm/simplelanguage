@@ -21,17 +21,22 @@ your own Truffle language.
 * Download Graal VM Development Kit from
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
 * Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage`.
-* Verify that the file `simplelanguage/graalvm*/bin/java` exists and is executable
+* Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable.  
 * Change into the `simplelanguage` directory.
 * Execute `mvn package`
+
+## Running
+
+* Execute `./sl tests/HelloWorld.sl` to run a simple language source file.
+* Execute `./sl -disassemble tests/SumPrint.sl` to see assembly code for Truffle compiled functions.
 
 ## IDE Setup
 
 ### Eclipse
 * Tested with Eclipse Mars SR2
 * Open Eclipse with a new workspace
-* Install `m2e` and `m2e-apt` plugins from the Eclipse marketplace (Help -> Eclipse Marketplace...)
-* File -> Import... -> Existing Maven Projects -> Select `simplelanguage` folder -> Finish
+* Install `m2e` *Maven integration for Eclipse* and `m2e-apt` plugins from the Eclipse marketplace (Help -> Eclipse Marketplace...)
+* File -> Import... -> Maven -> Existing Maven Projects -> Select `simplelanguage` folder -> Finish
 
 ### Netbeans
 * Tested with Netbeans 8.1
@@ -42,11 +47,6 @@ your own Truffle language.
 * Tested with IntelliJ 2016.1.3 Community Edition
 * Open IntelliJ IDEA
 * File -> New -> Project from existing Sources -> Select `simplelanguage` folder -> Click next and keep everything default on several screens -> Finish
-
-## Running
-
-* Execute `./sl tests/HelloWorld.sl` to run a simple language source file.
-* Execute `./sl -disassemble tests/SumPrint.sl` to see assembly code for Truffle compiled functions.
 
 ## IGV
 
