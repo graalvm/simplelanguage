@@ -41,16 +41,18 @@
 package com.oracle.truffle.sl.runtime;
 
 import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
-import com.oracle.truffle.api.ExecutionContext;
 import com.oracle.truffle.api.TruffleLanguage;
+import com.oracle.truffle.api.TruffleLanguage.Env;
 import com.oracle.truffle.api.dsl.NodeFactory;
 import com.oracle.truffle.api.frame.FrameDescriptor;
+import com.oracle.truffle.api.instrumentation.AllocationReporter;
 import com.oracle.truffle.api.interop.TruffleObject;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.object.DynamicObject;
@@ -87,22 +89,26 @@ import com.oracle.truffle.sl.nodes.local.SLReadArgumentNode;
  * However, if two separate scripts run in one Java VM at the same time, they have a different
  * context. Therefore, the context is not a singleton.
  */
-public final class SLContext extends ExecutionContext {
+public final class SLContext {
 
     private static final Source BUILTIN_SOURCE = Source.newBuilder("").name("SL builtin").mimeType(SLLanguage.MIME_TYPE).build();
     private static final Layout LAYOUT = Layout.createLayout();
 
+    private final Env env;
     private final BufferedReader input;
     private final PrintWriter output;
     private final SLFunctionRegistry functionRegistry;
     private final Shape emptyShape;
-    private final TruffleLanguage.Env env;
+    private final SLLanguage language;
+    private final AllocationReporter allocationReporter;
 
-    public SLContext(TruffleLanguage.Env env, BufferedReader input, PrintWriter output) {
-        this.input = input;
-        this.output = output;
+    public SLContext(SLLanguage language, TruffleLanguage.Env env) {
         this.env = env;
-        this.functionRegistry = new SLFunctionRegistry();
+        this.input = new BufferedReader(new InputStreamReader(env.in()));
+        this.output = new PrintWriter(env.out(), true);
+        this.language = language;
+        this.allocationReporter = env.lookup(AllocationReporter.class);
+        this.functionRegistry = new SLFunctionRegistry(language);
         installBuiltins();
 
         this.emptyShape = LAYOUT.createShape(SLObjectType.SINGLETON);
@@ -168,7 +174,7 @@ public final class SLContext extends ExecutionContext {
             argumentNodes[i] = new SLReadArgumentNode(i);
         }
         /* Instantiate the builtin node. This node performs the actual functionality. */
-        SLBuiltinNode builtinBodyNode = factory.createNode(argumentNodes, this);
+        SLBuiltinNode builtinBodyNode = factory.createNode((Object) argumentNodes);
         builtinBodyNode.addRootTag();
         /* The name of the builtin function is specified via an annotation on the node class. */
         String name = lookupNodeInfo(builtinBodyNode.getClass()).shortName();
@@ -176,7 +182,7 @@ public final class SLContext extends ExecutionContext {
         builtinBodyNode.setSourceSection(srcSection);
 
         /* Wrap the builtin in a RootNode. Truffle requires all AST to start with a RootNode. */
-        SLRootNode rootNode = new SLRootNode(new FrameDescriptor(), builtinBodyNode, srcSection, name);
+        SLRootNode rootNode = new SLRootNode(language, new FrameDescriptor(), builtinBodyNode, srcSection, name);
 
         /* Register the builtin function in our function registry. */
         getFunctionRegistry().register(name, rootNode);
@@ -198,12 +204,20 @@ public final class SLContext extends ExecutionContext {
      * Methods for object creation / object property access.
      */
 
+    public AllocationReporter getAllocationReporter() {
+        return allocationReporter;
+    }
+
     /**
      * Allocate an empty object. All new objects initially have no properties. Properties are added
      * when they are first stored, i.e., the store triggers a shape change of the object.
      */
     public DynamicObject createObject() {
-        return emptyShape.newInstance();
+        DynamicObject object = null;
+        allocationReporter.onEnter(null, 0, AllocationReporter.SIZE_UNKNOWN);
+        object = emptyShape.newInstance();
+        allocationReporter.onReturnValue(object, 0, AllocationReporter.SIZE_UNKNOWN);
+        return object;
     }
 
     public static boolean isSLObject(TruffleObject value) {
@@ -219,8 +233,10 @@ public final class SLContext extends ExecutionContext {
      */
 
     public static Object fromForeignValue(Object a) {
-        if (a instanceof Long || a instanceof BigInteger || a instanceof String) {
+        if (a instanceof Long || a instanceof BigInteger || a instanceof String || a instanceof Boolean) {
             return a;
+        } else if (a instanceof Character) {
+            return String.valueOf(a);
         } else if (a instanceof Number) {
             return fromForeignNumber(a);
         } else if (a instanceof TruffleObject) {
@@ -237,7 +253,7 @@ public final class SLContext extends ExecutionContext {
         return ((Number) a).longValue();
     }
 
-    public CallTarget parse(Source source) throws Exception {
+    public CallTarget parse(Source source) {
         return env.parse(source);
     }
 
@@ -255,4 +271,9 @@ public final class SLContext extends ExecutionContext {
         Object slValue = fromForeignValue(object);
         return slValue;
     }
+
+    public static SLContext getCurrent() {
+        return SLLanguage.getCurrentContext();
+    }
+
 }

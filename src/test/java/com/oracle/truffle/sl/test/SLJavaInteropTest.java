@@ -60,6 +60,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.fail;
 
 public class SLJavaInteropTest {
 
@@ -107,6 +108,14 @@ public class SLJavaInteropTest {
         valuesIn.call("OK", "Fine");
 
         assertEquals("Called with OK and Fine\n", os.toString("UTF-8"));
+    }
+
+    private static void assertNumber(double exp, Object real) {
+        if (real instanceof Number) {
+            assertEquals(exp, ((Number) real).doubleValue(), 0.1);
+        } else {
+            fail("Expecting a number, but was " + real);
+        }
     }
 
     interface PassInValues {
@@ -196,6 +205,29 @@ public class SLJavaInteropTest {
         Source script = Source.newBuilder(scriptText).name("Test").mimeType("application/x-sl").build();
         engine.eval(script);
         Values fn = engine.findGlobalSymbol("values").as(Values.class);
+
+        Sum sum = new Sum();
+        Object ret1 = fn.values(sum, "one", 1);
+        Object ret2 = fn.values(sum, "two", 2);
+        Object ret3 = fn.values(sum, "three", 3);
+
+        assertEquals(6, sum.sum);
+        assertSame(ret1, ret2);
+        assertSame(ret3, ret2);
+        assertSame(sum, ret2);
+    }
+
+    @Test
+    public void sumPairsFunctionalRawInterface() {
+        String scriptText = "function values(sum, k, v) {\n" + //
+                        "  obj = new();\n" + //
+                        "  obj.key = k;\n" + //
+                        "  obj.value = v;\n" + //
+                        "  return sum.sum(obj);\n" + //
+                        "}\n"; //
+        Source script = Source.newBuilder(scriptText).name("Test").mimeType("application/x-sl").build();
+        engine.eval(script);
+        ValuesRaw fn = engine.findGlobalSymbol("values").as(ValuesRaw.class);
 
         Sum sum = new Sum();
         Object ret1 = fn.values(sum, "one", 1);
@@ -345,17 +377,22 @@ public class SLJavaInteropTest {
         map.put("a", 42);
 
         Object b = read.execute(map, "a").get();
-        assertEquals(42L, b);
+        assertNumber(42L, b);
 
         write.execute(map, "a", 33);
 
         Object c = read.execute(map, "a").get();
-        assertEquals(33L, c);
+        assertNumber(33L, c);
     }
 
     @FunctionalInterface
     interface Values {
-        Object values(Sum sum, String key, int value);
+        Sum values(Sum sum, String key, int value);
+    }
+
+    @FunctionalInterface
+    interface ValuesRaw {
+        Object values(Object sum, String key, int value);
     }
 
     interface DoSums {
