@@ -22,6 +22,7 @@ your own Truffle language.
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
 * Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage`.
 * Verify that the file `simplelanguage/graalvm*/bin/java` exists and is executable
+* Change into the `simplelanguage` directory.
 * Execute `mvn package`
 
 ## IDE Setup
