@@ -42,8 +42,9 @@ package com.oracle.truffle.sl.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+
+import static com.oracle.truffle.tck.DebuggerTester.getSourceImpl;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -56,76 +57,64 @@ import org.junit.Test;
 
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.Truffle;
+import com.oracle.truffle.api.debug.Breakpoint;
+import com.oracle.truffle.api.debug.DebugScope;
+import com.oracle.truffle.api.debug.DebugStackFrame;
+import com.oracle.truffle.api.debug.DebugValue;
 import com.oracle.truffle.api.debug.Debugger;
+import com.oracle.truffle.api.debug.DebuggerSession;
 import com.oracle.truffle.api.debug.SuspendedEvent;
-import com.oracle.truffle.api.frame.FrameDescriptor;
-import com.oracle.truffle.api.frame.FrameInstance;
-import com.oracle.truffle.api.frame.FrameSlot;
-import com.oracle.truffle.api.frame.MaterializedFrame;
 import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.interop.ForeignAccess;
 import com.oracle.truffle.api.interop.ForeignAccess.Factory;
-import com.oracle.truffle.api.interop.ForeignAccess.Factory18;
+import com.oracle.truffle.api.interop.ForeignAccess.Factory26;
 import com.oracle.truffle.api.interop.Message;
 import com.oracle.truffle.api.interop.TruffleObject;
 import com.oracle.truffle.api.nodes.RootNode;
-import com.oracle.truffle.api.source.Source;
 import com.oracle.truffle.api.source.SourceSection;
-import com.oracle.truffle.api.vm.PolyglotEngine;
-import com.oracle.truffle.api.vm.PolyglotEngine.Value;
-import com.oracle.truffle.sl.SLLanguage;
 
-@SuppressWarnings("deprecation")
-public class SLDebugLegacyTest {
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Engine;
+import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
 
-    /*
-     * TODO Remove when deprecated debugging API is removed.
-     */
-
+public class SLDebugDirectTest {
     private static final Object UNASSIGNED = new Object();
 
     private Debugger debugger;
     private final LinkedList<Runnable> run = new LinkedList<>();
     private SuspendedEvent suspendedEvent;
     private Throwable ex;
-    private com.oracle.truffle.api.debug.ExecutionEvent executionEvent;
-    protected PolyglotEngine engine;
+    private Engine engine;
+    private Context context;
     protected final ByteArrayOutputStream out = new ByteArrayOutputStream();
     protected final ByteArrayOutputStream err = new ByteArrayOutputStream();
+    private DebuggerSession session;
 
     @Before
     public void before() {
         suspendedEvent = null;
-        executionEvent = null;
-        engine = PolyglotEngine.newBuilder().setOut(out).setErr(err).onEvent(
-                        new com.oracle.truffle.api.vm.EventConsumer<com.oracle.truffle.api.debug.ExecutionEvent>(com.oracle.truffle.api.debug.ExecutionEvent.class) {
-                            @Override
-                            protected void on(com.oracle.truffle.api.debug.ExecutionEvent event) {
-                                executionEvent = event;
-                                debugger = executionEvent.getDebugger();
-                                performWork();
-                                executionEvent = null;
-                            }
-                        }).onEvent(new com.oracle.truffle.api.vm.EventConsumer<SuspendedEvent>(SuspendedEvent.class) {
-                            @Override
-                            protected void on(SuspendedEvent event) {
-                                suspendedEvent = event;
-                                performWork();
-                                suspendedEvent = null;
-                            }
-                        }).build();
+        engine = Engine.newBuilder().out(out).err(err).build();
+        debugger = engine.getInstruments().get("debugger").lookup(Debugger.class);
+        session = debugger.startSession((event) -> {
+            suspendedEvent = event;
+            performWork();
+            suspendedEvent = null;
+
+        });
+        context = Context.newBuilder().engine(engine).build();
         run.clear();
     }
 
     @After
     public void dispose() {
-        if (engine != null) {
-            engine.dispose();
-        }
+        session.close();
+        context.close();
+        engine.close();
     }
 
     private static Source createFactorial() {
-        return Source.newBuilder("function test() {\n" +
+        return Source.newBuilder("sl", "function test() {\n" +
                         "  res = fac(2);\n" + "  println(res);\n" +
                         "  return res;\n" +
                         "}\n" +
@@ -135,11 +124,11 @@ public class SLDebugLegacyTest {
                         "  nMinusOne = n - 1;\n" +
                         "  nMOFact = fac(nMinusOne);\n" +
                         "  res = n * nMOFact;\n" +
-                        "  return res;\n" + "}\n").name("factorial.sl").mimeType(SLLanguage.MIME_TYPE).build();
+                        "  return res;\n" + "}\n", "factorial.sl").buildLiteral();
     }
 
     private static Source createFactorialWithDebugger() {
-        return Source.newBuilder("function test() {\n" +
+        return Source.newBuilder("sl", "function test() {\n" +
                         "  res = fac(2);\n" +
                         "  println(res);\n" +
                         "  return res;\n" +
@@ -153,11 +142,11 @@ public class SLDebugLegacyTest {
                         "  debugger;\n" +
                         "  res = n * nMOFact;\n" +
                         "  return res;\n" +
-                        "}\n").name("factorial.sl").mimeType(SLLanguage.MIME_TYPE).build();
+                        "}\n", "factorial.sl").buildLiteral();
     }
 
     private static Source createInteropComputation() {
-        return Source.newBuilder("function test() {\n" +
+        return Source.newBuilder("sl", "function test() {\n" +
                         "}\n" +
                         "function interopFunction(notifyHandler) {\n" +
                         "  executing = true;\n" +
@@ -165,7 +154,7 @@ public class SLDebugLegacyTest {
                         "    executing = notifyHandler.isExecuting;\n" +
                         "  }\n" +
                         "  return executing;\n" +
-                        "}\n").name("interopComputation.sl").mimeType(SLLanguage.MIME_TYPE).build();
+                        "}\n", "interopComputation.sl").buildLiteral();
     }
 
     protected final String getOut() {
@@ -184,29 +173,10 @@ public class SLDebugLegacyTest {
     public void testBreakpoint() throws Throwable {
         final Source factorial = createFactorial();
 
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    assertNull(suspendedEvent);
-                    assertNotNull(executionEvent);
-                    com.oracle.truffle.api.source.LineLocation nMinusOne = factorial.createLineLocation(8);
-                    debugger.setLineBreakpoint(0, nMinusOne, false);
-                    executionEvent.prepareContinue();
-                } catch (IOException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        });
-        engine.eval(factorial);
+        session.install(Breakpoint.newBuilder(getSourceImpl(factorial)).lineIs(8).build());
+        context.eval(factorial);
         assertExecutedOK();
 
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-                // the breakpoint should hit instead
-            }
-        });
         assertLocation("fac", 8, true,
                         "return 1", "n",
                         "1", "nMinusOne",
@@ -214,33 +184,21 @@ public class SLDebugLegacyTest {
                         UNASSIGNED, "res", UNASSIGNED);
         continueExecution();
 
-        Value value = engine.findGlobalSymbol("test").execute();
+        Value value = context.importSymbol("test").execute();
         assertExecutedOK();
         Assert.assertEquals("2\n", getOut());
-        Number n = value.as(Number.class);
-        assertNotNull(n);
-        assertEquals("Factorial computed OK", 2, n.intValue());
+        Assert.assertTrue(value.isNumber());
+        int n = value.asInt();
+        assertEquals("Factorial computed OK", 2, n);
     }
 
     @Test
     public void testDebuggerBreakpoint() throws Throwable {
         final Source factorial = createFactorialWithDebugger();
 
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-                assertNull(suspendedEvent);
-                assertNotNull(executionEvent);
-            }
-        });
-        engine.eval(factorial);
+        context.eval(factorial);
         assertExecutedOK();
 
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-            }
-        });
         assertLocation("fac", 12, true,
                         "debugger", "n",
                         "2", "nMinusOne",
@@ -248,28 +206,20 @@ public class SLDebugLegacyTest {
                         "1", "res", UNASSIGNED);
         continueExecution();
 
-        Value value = engine.findGlobalSymbol("test").execute();
+        Value value = context.importSymbol("test").execute();
         assertExecutedOK();
         Assert.assertEquals("2\n", getOut());
-        Number n = value.as(Number.class);
-        assertNotNull(n);
-        assertEquals("Factorial computed OK", 2, n.intValue());
+        Assert.assertTrue(value.isNumber());
+        int n = value.asInt();
+        assertEquals("Factorial computed OK", 2, n);
     }
 
     @Test
     public void stepInStepOver() throws Throwable {
         final Source factorial = createFactorial();
-        engine.eval(factorial);
+        context.eval(factorial);
 
-        // @formatter:on
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-                assertNull(suspendedEvent);
-                assertNotNull(executionEvent);
-                executionEvent.prepareStepInto();
-            }
-        });
+        session.suspendNextExecution();
 
         assertLocation("test", 2, true, "res = fac(2)", "res", UNASSIGNED);
         stepInto(1);
@@ -307,110 +257,88 @@ public class SLDebugLegacyTest {
         assertLocation("test", 3, true, "println(res)", "res", "2");
         stepOut();
 
-        Value value = engine.findGlobalSymbol("test").execute();
+        Value value = context.importSymbol("test");
+        assertTrue(value.canExecute());
+        Value resultValue = value.execute();
+        String resultStr = resultValue.toString();
+        Number result = resultValue.asInt();
         assertExecutedOK();
 
-        Number n = value.as(Number.class);
-        assertNotNull(n);
-        assertEquals("Factorial computed OK", 2, n.intValue());
+        assertNotNull(result);
+        assertEquals("Factorial computed OK", 2, result.intValue());
+        assertEquals("Factorial computed OK", "2", resultStr);
     }
 
     @Test
     public void testPause() throws Throwable {
         final Source interopComp = createInteropComputation();
 
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-                assertNull(suspendedEvent);
-                assertNotNull(executionEvent);
-            }
-        });
-        engine.eval(interopComp);
+        context.eval(interopComp);
         assertExecutedOK();
 
         final ExecNotifyHandler nh = new ExecNotifyHandler();
 
-        run.addLast(new Runnable() {
+        // Do pause after execution has really started
+        new Thread() {
             @Override
             public void run() {
-                assertNull(suspendedEvent);
-                assertNotNull(executionEvent);
-                // Do pause after execution has really started
-                new Thread() {
-                    @Override
-                    public void run() {
-                        nh.waitTillCanPause();
-                        boolean paused = debugger.pause();
-                        Assert.assertTrue(paused);
-                    }
-                }.start();
+                nh.waitTillCanPause();
+                session.suspendNextExecution();
             }
+        }.start();
+
+        run.addLast(() -> {
+            // paused
+            assertNotNull(suspendedEvent);
+            int line = suspendedEvent.getSourceSection().getStartLine();
+            Assert.assertTrue("Unexpected line: " + line, 5 <= line && line <= 6);
+            final DebugStackFrame frame = suspendedEvent.getTopStackFrame();
+            DebugScope scope = frame.getScope();
+            DebugValue slot = scope.getDeclaredValue("executing");
+            if (slot == null) {
+                slot = scope.getParent().getDeclaredValue("executing");
+            }
+            Assert.assertNotNull(slot);
+            Assert.assertNotNull("Value is null", slot.toString());
+            suspendedEvent.prepareContinue();
+            nh.pauseDone();
         });
 
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-                // paused
-                assertNotNull(suspendedEvent);
-                int line = suspendedEvent.getNode().getSourceSection().getLineLocation().getLineNumber();
-                Assert.assertTrue("Unexpected line: " + line, 5 <= line && line <= 6);
-                final MaterializedFrame frame = suspendedEvent.getFrame();
-                String[] expectedIdentifiers = new String[]{"executing"};
-                for (String expectedIdentifier : expectedIdentifiers) {
-                    FrameSlot slot = frame.getFrameDescriptor().findFrameSlot(expectedIdentifier);
-                    Assert.assertNotNull(expectedIdentifier, slot);
-                }
-                // Assert.assertTrue(debugger.isExecuting());
-                suspendedEvent.prepareContinue();
-                nh.pauseDone();
-            }
-        });
-
-        Value value = engine.findGlobalSymbol("interopFunction").execute(nh);
+        Value value = context.importSymbol("interopFunction").execute(nh);
 
         assertExecutedOK();
-        // Assert.assertFalse(debugger.isExecuting());
-        Boolean n = value.as(Boolean.class);
-        assertNotNull(n);
-        assertTrue("Interop computation OK", !n.booleanValue());
+        assertTrue(value.isBoolean());
+        boolean n = value.asBoolean();
+        assertTrue("Interop computation OK", !n);
     }
 
     private static Source createNull() {
-        return Source.newBuilder("function nullTest() {\n" +
+        return Source.newBuilder("sl", "function nullTest() {\n" +
                         "  res = doNull();\n" +
                         "  return res;\n" +
                         "}\n" +
                         "function doNull() {\n" +
-                        "}\n").name("nullTest.sl").mimeType(SLLanguage.MIME_TYPE).build();
+                        "}\n", "nullTest.sl").buildLiteral();
     }
 
     @Test
     public void testNull() throws Throwable {
         final Source nullTest = createNull();
-        engine.eval(nullTest);
+        context.eval(nullTest);
 
-        // @formatter:on
-        run.addLast(new Runnable() {
-            @Override
-            public void run() {
-                assertNull(suspendedEvent);
-                assertNotNull(executionEvent);
-                executionEvent.prepareStepInto();
-            }
-        });
+        session.suspendNextExecution();
 
         assertLocation("nullTest", 2, true, "res = doNull()", "res", UNASSIGNED);
         stepInto(1);
         assertLocation("nullTest", 3, true, "return res", "res", "NULL");
         continueExecution();
 
-        Value value = engine.findGlobalSymbol("nullTest").execute();
+        Value value = context.importSymbol("nullTest").execute();
         assertExecutedOK();
 
-        String val = value.as(String.class);
+        String val = value.toString();
         assertNotNull(val);
-        assertEquals("Null computed OK", "null", val);
+        assertEquals("SL displays null as NULL", "NULL", val);
     }
 
     private void performWork() {
@@ -425,68 +353,58 @@ public class SLDebugLegacyTest {
     }
 
     private void stepOver(final int size) {
-        run.addLast(new Runnable() {
-            public void run() {
-                suspendedEvent.prepareStepOver(size);
-            }
+        run.addLast(() -> {
+            suspendedEvent.prepareStepOver(size);
         });
     }
 
     private void stepOut() {
-        run.addLast(new Runnable() {
-            public void run() {
-                suspendedEvent.prepareStepOut();
-            }
+        run.addLast(() -> {
+            suspendedEvent.prepareStepOut(1);
         });
     }
 
     private void continueExecution() {
-        run.addLast(new Runnable() {
-            public void run() {
-                suspendedEvent.prepareContinue();
-            }
+        run.addLast(() -> {
+            suspendedEvent.prepareContinue();
         });
     }
 
     private void stepInto(final int size) {
-        run.addLast(new Runnable() {
-            public void run() {
-                suspendedEvent.prepareStepInto(size);
-            }
+        run.addLast(() -> {
+            suspendedEvent.prepareStepInto(size);
         });
     }
 
     private void assertLocation(final String name, final int line, final boolean isBefore, final String code, final Object... expectedFrame) {
-        run.addLast(new Runnable() {
-            public void run() {
-                assertNotNull(suspendedEvent);
+        run.addLast(() -> {
+            assertNotNull(suspendedEvent);
 
-                final String actualName = suspendedEvent.getNode().getRootNode().getName();
-                Assert.assertEquals(name, actualName);
-                final SourceSection suspendedSourceSection = suspendedEvent.getNode().getSourceSection();
-                Assert.assertEquals(line, suspendedSourceSection.getLineLocation().getLineNumber());
-                Assert.assertEquals(code, suspendedSourceSection.getCode());
+            final SourceSection suspendedSourceSection = suspendedEvent.getSourceSection();
+            Assert.assertEquals(line, suspendedSourceSection.getStartLine());
+            Assert.assertEquals(code, suspendedSourceSection.getCharacters());
 
-                Assert.assertEquals(isBefore, suspendedEvent.isHaltedBefore());
-                final MaterializedFrame frame = suspendedEvent.getFrame();
-                final FrameDescriptor frameDescriptor = frame.getFrameDescriptor();
-                final FrameInstance frameInstance = suspendedEvent.getStack().get(0);
+            Assert.assertEquals(isBefore, suspendedEvent.isHaltedBefore());
+            final DebugStackFrame frame = suspendedEvent.getTopStackFrame();
+            assertEquals(name, frame.getName());
 
-                Assert.assertEquals(expectedFrame.length / 2, frameDescriptor.getSize());
-                for (int i = 0; i < expectedFrame.length; i = i + 2) {
-                    final String expectedIdentifier = (String) expectedFrame[i];
-                    final Object expectedValue = expectedFrame[i + 1];
-                    final FrameSlot slot = frameDescriptor.findFrameSlot(expectedIdentifier);
-                    Assert.assertNotNull(slot);
-                    final Object slotValue = frame.getValue(slot);
-                    if (expectedValue == UNASSIGNED) {
-                        Assert.assertEquals(slotValue, frameDescriptor.getDefaultValue());
-                    } else {
-                        Assert.assertEquals(expectedValue, suspendedEvent.toString(slotValue, frameInstance));
-                    }
+            for (int i = 0; i < expectedFrame.length; i = i + 2) {
+                final String expectedIdentifier = (String) expectedFrame[i];
+                final Object expectedValue = expectedFrame[i + 1];
+                DebugScope scope = frame.getScope();
+                DebugValue slot = scope.getDeclaredValue(expectedIdentifier);
+                while (slot == null && (scope = scope.getParent()) != null) {
+                    slot = scope.getDeclaredValue(expectedIdentifier);
                 }
-                run.removeFirst().run();
+                if (expectedValue != UNASSIGNED) {
+                    Assert.assertNotNull(expectedIdentifier, slot);
+                    final String slotValue = slot.as(String.class);
+                    Assert.assertEquals(expectedValue, slotValue);
+                } else {
+                    Assert.assertNull(expectedIdentifier, slot);
+                }
             }
+            run.removeFirst().run();
         });
     }
 
@@ -543,7 +461,7 @@ public class SLDebugLegacyTest {
 
     }
 
-    private static class ExecNotifyHandlerForeign implements Factory18, Factory {
+    private static class ExecNotifyHandlerForeign implements Factory26, Factory {
 
         private final ExecNotifyHandler nh;
 
@@ -617,8 +535,28 @@ public class SLDebugLegacyTest {
         }
 
         @Override
+        public CallTarget accessKeyInfo() {
+            return null;
+        }
+
+        @Override
         public CallTarget accessKeys() {
             return null;
+        }
+
+        @Override
+        public CallTarget accessIsPointer() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public CallTarget accessAsPointer() {
+            throw new UnsupportedOperationException("Not supported yet.");
+        }
+
+        @Override
+        public CallTarget accessToNative() {
+            throw new UnsupportedOperationException("Not supported yet.");
         }
 
     }
@@ -628,7 +566,7 @@ public class SLDebugLegacyTest {
         private final ExecNotifyHandler nh;
 
         ExecNotifyReadNode(ExecNotifyHandler nh) {
-            super(SLLanguage.class, null, null);
+            super(null);
             this.nh = nh;
         }
 

@@ -22,4 +22,6 @@ do
   esac
 done
 
-$JAVACMD $JAVA_ARGS -polyglot -cp ./target/classes com.oracle.truffle.sl.SLMain $PROGRAM_ARGS
+TRUFFLE_LIB=./graalvm/jre/lib/truffle
+
+$JAVACMD $JAVA_ARGS -XX:-UseJVMCIClassLoader -Xbootclasspath/a:$TRUFFLE_LIB/truffle-api.jar:$TRUFFLE_LIB/locator.jar:$TRUFFLE_LIB/truffle-nfi.jar -cp ./target/classes com.oracle.truffle.sl.SLMain $PROGRAM_ARGS
