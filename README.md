@@ -12,19 +12,19 @@ your own Truffle language.
 
 ## Prerequisites
 * JDK 8
-* maven3 
+* [maven3](https://maven.apache.org/download.cgi)
 
 ## Installation
 
 * Clone SL repository using
   `git clone https://github.com/graalvm/simplelanguage`
-* Download Graal VM Development Kit from 
+* Download Graal VM Development Kit from
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
-* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm`. 
-* Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable
+* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage`.
+* Verify that the file `simplelanguage/graalvm*/bin/java` exists and is executable
 * Execute `mvn package`
 
-## IDE Setup 
+## IDE Setup
 
 ### Eclipse
 * Tested with Eclipse Mars SR2
@@ -83,5 +83,3 @@ Simple language is compatible to:
 
 The Truffle framework is licensed under the [GPL 2 with Classpath exception](http://openjdk.java.net/legal/gplv2+ce.html).
 The SimpleLanguage is licensed under the [Universal Permissive License (UPL)](http://opensource.org/licenses/UPL).
-
-
