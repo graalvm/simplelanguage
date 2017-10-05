@@ -20,15 +20,30 @@ your own Truffle language.
   `git clone https://github.com/graalvm/simplelanguage`
 * Download Graal VM Development Kit from
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
-* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage`.
-* Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable.  
-* Change into the `simplelanguage` directory.
+* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage`
+* Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable
+* Change into the `simplelanguage` directory
 * Execute `mvn package`
 
 ## Running
 
-* Execute `./sl tests/HelloWorld.sl` to run a simple language source file.
-* Execute `./sl -disassemble tests/SumPrint.sl` to see assembly code for Truffle compiled functions.
+* Execute `./sl tests/HelloWorld.sl` to run a simple language source file
+* Execute `./sl -disassemble tests/SumPrint.sl` to see assembly code for Truffle compiled functions
+
+## IGV
+
+* Download the Ideal Graph Visualizer (IGV) from
+  https://lafo.ssw.uni-linz.ac.at/pub/idealgraphvisualizer/
+* Unpack the downloaded `.zip` file
+* Change into the `idealgraphvsiualizer` directory
+* Execute `bin/idealgraphvsiualizer` to start IGV. In case IGV selects JDK9 and shows this exception `InaccessibleObjectException` , you can set `jdkhome` to JDK8 with
+`export jdkhome=/Library/Java/JavaVirtualMachines/jdk`
+* Execute `./sl -dump tests/SumPrint.sl` to dump graphs to IGVc
+
+## Debugging
+
+* Execute `./sl -debug tests/HelloWorld.sl`
+* Attach a Java remote debugger (like Eclipse) on port 8000
 
 ## IDE Setup
 
@@ -47,19 +62,6 @@ your own Truffle language.
 * Tested with IntelliJ 2016.1.3 Community Edition
 * Open IntelliJ IDEA
 * File -> New -> Project from existing Sources -> Select `simplelanguage` folder -> Click next and keep everything default on several screens -> Finish
-
-## IGV
-
-* Download the Ideal Graph Visualizer (IGV) from
-  https://lafo.ssw.uni-linz.ac.at/pub/idealgraphvisualizer/
-* Unpack the downloaded `.zip` file  
-* Execute `bin/idealgraphvsiualizer` to start IGV
-* Execute `./sl -dump tests/SumPrint.sl` to dump graphs to IGV.
-
-## Debugging
-
-* Execute `./sl -debug tests/HelloWorld.sl`.
-* Attach a Java remote debugger (like Eclipse) on port 8000.
 
 ## Tested Compatibility
 
