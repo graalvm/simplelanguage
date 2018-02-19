@@ -1,5 +1,9 @@
 #!/usr/bin/env bash
 
+LANGUAGE_PATH="./language/target/simplelanguage-0.31-SNAPSHOT.jar"
+LAUNCHER_PATH="./launcher/target/launcher-0.31-SNAPSHOT.jar"
+MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"
+
 JAVACMD=${JAVACMD:=./graalvm/bin/java}
 
 PROGRAM_ARGS=""
@@ -22,6 +26,8 @@ do
   esac
 done
 
-TRUFFLE_LIB=./graalvm/jre/lib/truffle
+JAVA_ARGS="$JAVA_ARGS -XX:+UseJVMCIClassLoader -Dtruffle.class.path.append=$LANGUAGE_PATH"
+TRUFFLE_LIB="./graalvm/jre/lib/truffle"
+BOOTCLASSPATH="-Xbootclasspath/a:$TRUFFLE_LIB/truffle-api.jar:$TRUFFLE_LIB/locator.jar:$TRUFFLE_LIB/truffle-nfi.jar"
 
-$JAVACMD $JAVA_ARGS -XX:-UseJVMCIClassLoader -Xbootclasspath/a:$TRUFFLE_LIB/truffle-api.jar:$TRUFFLE_LIB/locator.jar:$TRUFFLE_LIB/truffle-nfi.jar -cp ./target/classes com.oracle.truffle.sl.SLMain $PROGRAM_ARGS
+$JAVACMD $JAVA_ARGS $BOOTCLASSPATH -cp $LAUNCHER_PATH $MAIN_CLASS $PROGRAM_ARGS
