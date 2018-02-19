@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,31 +38,52 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.nodes.expression;
+package com.oracle.truffle.sl.test;
 
-import com.oracle.truffle.api.dsl.Fallback;
-import com.oracle.truffle.api.dsl.NodeChild;
-import com.oracle.truffle.api.dsl.Specialization;
-import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.SLException;
-import com.oracle.truffle.sl.nodes.SLExpressionNode;
+import java.io.IOException;
 
-/**
- * Example of a simple unary node that uses type specialization. See {@link SLAddNode} for
- * information on specializations.
- */
-@NodeChild("valueNode")
-@NodeInfo(shortName = "!")
-public abstract class SLLogicalNotNode extends SLExpressionNode {
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
+import org.graalvm.polyglot.proxy.ProxyPrimitive;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-    @Specialization
-    protected boolean doBoolean(boolean value) {
-        return !value;
+public class SLInteropOperatorTest {
+    private Context context;
+
+    @Before
+    public void setUp() {
+        context = Context.create("sl");
     }
 
-    @Fallback
-    protected Object typeError(Object value) {
-        throw SLException.typeError(this, value);
+    @After
+    public void tearDown() {
+        context = null;
     }
 
+    @Test
+    public void testAdd() throws IOException {
+        final Source src = Source.newBuilder("sl", "function testAdd(a,b) {return a + b;} function main() {return testAdd;}", "testAdd.sl").build();
+        final Value fnc = context.eval(src);
+        Assert.assertTrue(fnc.canExecute());
+        final ProxyPrimitive left = () -> 1;
+        final ProxyPrimitive right = () -> 2;
+        final Value res = fnc.execute(left, right);
+        Assert.assertTrue(res.isNumber());
+        Assert.assertEquals(3, res.asInt());
+    }
+
+    @Test
+    public void testSub() throws IOException {
+        final Source src = Source.newBuilder("sl", "function testSub(a,b) {return a - b;} function main() {return testSub;}", "testSub.sl").build();
+        final Value fnc = context.eval(src);
+        final ProxyPrimitive left = () -> 1;
+        final ProxyPrimitive right = () -> 2;
+        final Value res = fnc.execute(left, right);
+        Assert.assertTrue(res.isNumber());
+        Assert.assertEquals(-1, res.asInt());
+    }
 }

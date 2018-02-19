@@ -3,45 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.oracle</groupId>
-	<artifactId>simplelanguage</artifactId>
-	<version>0.28-SNAPSHOT</version>
+	<parent>
+        <groupId>com.oracle</groupId>
+        <artifactId>simplelanguage-parent</artifactId>
+        <version>0.31-SNAPSHOT</version>
+    </parent>
 
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
-	</properties>
-
-	<dependencies>
-        <dependency>
-            <groupId>org.graalvm</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>0.28</version>
-        </dependency>
-		<dependency>
-			<groupId>com.oracle.truffle</groupId>
-			<artifactId>truffle-api</artifactId>
-			<version>0.28</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.truffle</groupId>
-			<artifactId>truffle-tck</artifactId>
-			<version>0.28</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.truffle</groupId>
-			<artifactId>truffle-dsl-processor</artifactId>
-			<version>0.28</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
+ 	<artifactId>simplelanguage</artifactId>
 
 	<build>
 		<plugins>
@@ -79,15 +47,46 @@
 		</pluginManagement>
 	</build>
 
-	<reporting>
-		<plugins>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
-			</plugin>
-		</plugins>
-	</reporting>
+	<dependencies>
+		<dependency>
+			<groupId>com.oracle.truffle</groupId>
+			<artifactId>truffle-api</artifactId>
+			<version>0.31</version>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.truffle</groupId>
+			<artifactId>truffle-dsl-processor</artifactId>
+			<version>0.31</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.oracle.truffle</groupId>
+			<artifactId>truffle-tck</artifactId>
+			<version>0.31</version>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjdk.jmh</groupId>
+			<artifactId>jmh-core</artifactId>
+			<version>1.18</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.openjdk.jmh</groupId>
+			<artifactId>jmh-core</artifactId>
+			<version>1.18</version>
+		</dependency>
+	</dependencies>
 
 </project>

@@ -40,14 +40,13 @@
  */
 package com.oracle.truffle.sl.test;
 
+import static com.oracle.truffle.tck.DebuggerTester.getSourceImpl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
-
-import static com.oracle.truffle.tck.DebuggerTester.getSourceImpl;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,6 +56,10 @@ import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.PolyglotException;
+import org.graalvm.polyglot.Source;
+import org.graalvm.polyglot.Value;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -72,11 +75,6 @@ import com.oracle.truffle.api.debug.SuspendedCallback;
 import com.oracle.truffle.api.debug.SuspendedEvent;
 import com.oracle.truffle.api.source.SourceSection;
 import com.oracle.truffle.tck.DebuggerTester;
-
-import org.graalvm.polyglot.Context;
-import org.graalvm.polyglot.PolyglotException;
-import org.graalvm.polyglot.Source;
-import org.graalvm.polyglot.Value;
 
 public class SLDebugTest {
 
@@ -662,7 +660,7 @@ public class SLDebugTest {
             for (int i = 0; i < numStacksAt6;) {
                 assertTrue(sfIt.hasNext());
                 dsf = sfIt.next();
-                boolean inFac = dsf.getName() != null;
+                boolean inFac = dsf.getName() != null && !dsf.isInternal();
                 if (inFac) {
                     // Frame in fac function
                     assertEquals("fac", dsf.getName());
@@ -671,7 +669,6 @@ public class SLDebugTest {
                     i++;
                 } else {
                     // Frame in an interop method, internal
-                    assertEquals(null, dsf.getName());
                     assertNull(dsf.getSourceSection());
                     assertTrue(dsf.isInternal());
                     numInteropStacks++;
@@ -688,10 +685,102 @@ public class SLDebugTest {
             done[0] = true;
         })) {
             Assert.assertNotNull(session);
-            Value ret = fac.execute(new Object[]{10, multiply});
+            Value ret = fac.execute(10, multiply);
             assertNumber(ret.asLong(), 3628800L);
         }
+
         assertTrue(done[0]);
+    }
+
+    @Test
+    public void testUnwindAndReenter() {
+        final Source source = slCode("function main() {\n" +
+                        "  return fac(10);\n" +
+                        "}\n" +
+                        "function fac(n) {\n" +
+                        "  if (n <= 1) {\n" +
+                        "    return 1;\n" + // break
+                        "  }\n" +
+                        "  return n * fac(n - 1);\n" +
+                        "}\n");
+
+        try (DebuggerSession session = startSession()) {
+            session.install(Breakpoint.newBuilder(getSourceImpl(source)).lineIs(6).build());
+            startEval(source);
+
+            expectSuspended((SuspendedEvent event) -> {
+                assertEquals(6, event.getTopStackFrame().getSourceSection().getStartLine());
+                Iterator<DebugStackFrame> frames = event.getStackFrames().iterator();
+                for (int i = 0; i < 5; i++) {
+                    frames.next();
+                }
+                event.prepareUnwindFrame(frames.next());
+            });
+            expectSuspended((SuspendedEvent event) -> {
+                assertEquals(8, event.getTopStackFrame().getSourceSection().getStartLine());
+                assertEquals("7", event.getTopStackFrame().getScope().getDeclaredValue("n").as(String.class));
+                event.prepareStepInto(1);
+            });
+            expectSuspended((SuspendedEvent event) -> {
+                assertEquals(5, event.getTopStackFrame().getSourceSection().getStartLine());
+                assertEquals("6", event.getTopStackFrame().getScope().getDeclaredValue("n").as(String.class));
+                event.prepareContinue();
+            });
+            expectSuspended((SuspendedEvent event) -> {
+                // The breakpoint hit again
+                assertEquals(6, event.getTopStackFrame().getSourceSection().getStartLine());
+            });
+            expectDone();
+        }
+    }
+
+    @Test
+    public void testArgumentsAndValues() throws Throwable {
+        // Test that after a re-enter, arguments are kept and variables are cleared.
+        final Source source = slCode("function main() {\n" +
+                        "  i = 10;\n" +
+                        "  return fnc(i = i + 1, 20);\n" +
+                        "}\n" +
+                        "function fnc(n, m) {\n" +
+                        "  x = n + m;\n" +
+                        "  n = m - n;\n" +
+                        "  m = m / 2;\n" +
+                        "  x = x + n * m;\n" +
+                        "  return x;\n" +
+                        "}\n");
+
+        try (DebuggerSession session = startSession()) {
+            session.install(Breakpoint.newBuilder(getSourceImpl(source)).lineIs(6).build());
+            startEval(source);
+
+            expectSuspended((SuspendedEvent event) -> {
+                DebugStackFrame frame = event.getTopStackFrame();
+                assertEquals(6, frame.getSourceSection().getStartLine());
+                checkArgs(frame, "n", "11", "m", "20");
+                checkStack(frame, "fnc", "n", "11", "m", "20");
+                event.prepareStepOver(4);
+            });
+            expectSuspended((SuspendedEvent event) -> {
+                DebugStackFrame frame = event.getTopStackFrame();
+                assertEquals(10, frame.getSourceSection().getStartLine());
+                checkArgs(frame, "n", "11", "m", "20");
+                checkStack(frame, "fnc", "n", "9", "m", "10", "x", "121");
+                event.prepareUnwindFrame(frame);
+            });
+            expectSuspended((SuspendedEvent event) -> {
+                DebugStackFrame frame = event.getTopStackFrame();
+                assertEquals(3, frame.getSourceSection().getStartLine());
+                checkArgs(frame);
+                checkStack(frame, "main", "i", "11");
+            });
+            expectSuspended((SuspendedEvent event) -> {
+                DebugStackFrame frame = event.getTopStackFrame();
+                assertEquals(6, frame.getSourceSection().getStartLine());
+                checkArgs(frame, "n", "11", "m", "20");
+                checkStack(frame, "fnc", "n", "11", "m", "20");
+            });
+            assertEquals("121", expectDone());
+        }
     }
 
     private static void assertNumber(Object real, double expected) {
@@ -708,6 +797,7 @@ public class SLDebugTest {
         }
     }
 
+    @FunctionalInterface
     public interface Fac {
         long fac(long n, Multiply multiply);
     }

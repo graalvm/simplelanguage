@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,31 +38,59 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.nodes.expression;
+package com.oracle.truffle.sl.test;
 
-import com.oracle.truffle.api.dsl.Fallback;
-import com.oracle.truffle.api.dsl.NodeChild;
-import com.oracle.truffle.api.dsl.Specialization;
-import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.SLException;
-import com.oracle.truffle.sl.nodes.SLExpressionNode;
+import java.util.concurrent.TimeUnit;
 
-/**
- * Example of a simple unary node that uses type specialization. See {@link SLAddNode} for
- * information on specializations.
- */
-@NodeChild("valueNode")
-@NodeInfo(shortName = "!")
-public abstract class SLLogicalNotNode extends SLExpressionNode {
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.Setup;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
 
-    @Specialization
-    protected boolean doBoolean(boolean value) {
-        return !value;
+import com.oracle.truffle.api.source.Source;
+import com.oracle.truffle.api.vm.PolyglotEngine;
+import com.oracle.truffle.sl.SLLanguage;
+import com.oracle.truffle.sl.runtime.SLFunction;
+
+@State(value = Scope.Benchmark)
+@Warmup(iterations = 15)
+@Measurement(iterations = 10)
+@Fork(1)
+public class SLPolyglotEngineValueExecuteBenchmark {
+
+    private PolyglotEngine vm;
+    private PolyglotEngine.Value plus;
+    private SLFunction slFunction;
+
+    @Setup
+    public void prepare() {
+        vm = PolyglotEngine.newBuilder().build();
+        vm.eval(Source.newBuilder("function plus(x, y) { return x + y; }").name("plus.sl").mimeType(SLLanguage.MIME_TYPE).build());
+        plus = vm.findGlobalSymbol("plus");
+        slFunction = plus.as(SLFunction.class);
     }
 
-    @Fallback
-    protected Object typeError(Object value) {
-        throw SLException.typeError(this, value);
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.SECONDS)
+    public long executePlus() {
+        long res = plus.execute(1L, 2L).as(Number.class).longValue();
+        if (res != 3) {
+            throw new AssertionError();
+        }
+        return res;
     }
 
+    @Benchmark
+    @OutputTimeUnit(TimeUnit.SECONDS)
+    public long executePlusDirectly() {
+        long res = ((Number) slFunction.getCallTarget().call(new Object[]{1L, 2L})).longValue();
+        if (res != 3) {
+            throw new AssertionError();
+        }
+        return res;
+    }
 }

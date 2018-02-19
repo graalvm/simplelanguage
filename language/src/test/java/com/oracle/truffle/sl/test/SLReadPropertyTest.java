@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,31 +38,46 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.nodes.expression;
+package com.oracle.truffle.sl.test;
 
-import com.oracle.truffle.api.dsl.Fallback;
-import com.oracle.truffle.api.dsl.NodeChild;
-import com.oracle.truffle.api.dsl.Specialization;
-import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.sl.SLException;
-import com.oracle.truffle.sl.nodes.SLExpressionNode;
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Value;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-/**
- * Example of a simple unary node that uses type specialization. See {@link SLAddNode} for
- * information on specializations.
- */
-@NodeChild("valueNode")
-@NodeInfo(shortName = "!")
-public abstract class SLLogicalNotNode extends SLExpressionNode {
+public class SLReadPropertyTest {
 
-    @Specialization
-    protected boolean doBoolean(boolean value) {
-        return !value;
+    private Context ctx;
+    private Value slObject;
+
+    @Before
+    public void setUp() {
+        this.ctx = Context.create("sl");
+        this.slObject = ctx.eval("sl", "function createObject() {\n" +
+                        "obj1 = new();\n" +
+                        "obj1.number = 42;\n" +
+                        "return obj1;\n" +
+                        "}\n" +
+                        "function main() {\n" +
+                        "return createObject;\n" +
+                        "}").execute();
     }
 
-    @Fallback
-    protected Object typeError(Object value) {
-        throw SLException.typeError(this, value);
+    @After
+    public void tearDown() {
+        this.ctx.close();
     }
 
+    @Test
+    public void testRead() {
+        Assert.assertEquals(42, slObject.getMember("number").asInt());
+        try {
+            slObject.getMember("nonexistent");
+            Assert.fail("Should not reach here for a non existent field.");
+        } catch (IllegalArgumentException e) {
+            // Expected exception
+        }
+    }
 }
