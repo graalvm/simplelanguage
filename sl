@@ -72,12 +72,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
           PROGRAM_ARGS="$PROGRAM_ARGS $opt" ;;
       esac
     done
-
-    JAVA_ARGS="$JAVA_ARGS -XX:+UseJVMCIClassLoader -Dtruffle.class.path.append=$LANGUAGE_PATH"
-    TRUFFLE_LIB="./graalvm/jre/lib/truffle"
-    BOOTCLASSPATH="-Xbootclasspath/a:$TRUFFLE_LIB/truffle-api.jar:$TRUFFLE_LIB/locator.jar:$TRUFFLE_LIB/truffle-nfi.jar"
-
-    $JAVACMD $JAVA_ARGS $BOOTCLASSPATH -cp $LAUNCHER_PATH $MAIN_CLASS $PROGRAM_ARGS
+    $JAVACMD $JAVA_ARGS -Dtruffle.class.path.append=$LANGUAGE_PATH -cp $LAUNCHER_PATH $MAIN_CLASS $PROGRAM_ARGS
 else
     echo "NOTE: Could not find GraalVM, using $JAVA_HOME"
     echo
