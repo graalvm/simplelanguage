@@ -30,6 +30,7 @@
 						<include>**/*TestSuite.java</include>
 						<include>**/*Test.java</include>
 					</includes>
+                    <argLine>-XX:-UseJVMCIClassLoader -Xbootclasspath/a:../graalvm/jre/lib/truffle/truffle-api.jar:../graalvm/jre/lib/truffle/locator.jar:../graalvm/jre/lib/truffle/truffle-nfi.jar</argLine>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -41,6 +42,7 @@
 					<configuration>
 						<source>1.8</source>
 						<target>1.8</target>
+                        <executable>./graalvm/bin/javac</executable>
 					</configuration>
 				</plugin>
 			</plugins>
