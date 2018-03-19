@@ -12,20 +12,20 @@ your own Truffle language.
 
 ## Prerequisites
 * JDK 8
-* maven3 
+* maven3
 
 ## Installation
 
 * Clone SL repository using
   `git clone https://github.com/graalvm/simplelanguage`
-* Download Graal VM Development Kit (verson 0.31) from 
+* Download Graal VM Development Kit from
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
-* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm`. 
+* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm`.
 * Set enviroment variable `JAVA_HOME` to the path of the graalvm folder.
 * Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable
 * Execute `mvn package`
 
-## IDE Setup 
+## IDE Setup
 
 ### Eclipse
 * Tested with Eclipse Neon.2 Release (4.6.2)
@@ -52,7 +52,7 @@ your own Truffle language.
 
 * Download the Ideal Graph Visualizer (IGV) from
   https://lafo.ssw.uni-linz.ac.at/pub/idealgraphvisualizer/
-* Unpack the downloaded `.zip` file  
+* Unpack the downloaded `.zip` file
 * Execute `bin/idealgraphvsiualizer` to start IGV
 * Execute `./sl -dump tests/SumPrint.sl` to dump graphs to IGV.
 
