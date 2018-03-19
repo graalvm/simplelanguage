@@ -12,35 +12,36 @@ your own Truffle language.
 
 ## Prerequisites
 * JDK 8
-* maven3 
+* maven3
 
 ## Installation
 
 * Clone SL repository using
   `git clone https://github.com/graalvm/simplelanguage`
-* Download Graal VM Development Kit from 
+* Download Graal VM Development Kit from
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
-* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm`. 
+* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm`.
+* Set enviroment variable `JAVA_HOME` to the path of the graalvm folder.
 * Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable
 * Execute `mvn package`
 
-## IDE Setup 
+## IDE Setup
 
 ### Eclipse
-* Tested with Eclipse Mars SR2
+* Tested with Eclipse Neon.2 Release (4.6.2)
 * Open Eclipse with a new workspace
 * Install `m2e` and `m2e-apt` plugins from the Eclipse marketplace (Help -> Eclipse Marketplace...)
 * File -> Import... -> Existing Maven Projects -> Select `simplelanguage` folder -> Finish
 
 ### Netbeans
-* Tested with Netbeans 8.1
+* Tested with Netbeans 8.2
 * Open Netbeans
-* File -> Open Project -> Select `simplelanguage` folder -> Open Project
+* File -> Open Project -> Select `simplelanguage` folder -> Check "Open Required Projects:" -> Open Project
 
 ### IntelliJ IDEA
-* Tested with IntelliJ 2016.1.3 Community Edition
+* Tested with IntelliJ IDEA 2016.3.4
 * Open IntelliJ IDEA
-* File -> New -> Project from existing Sources -> Select `simplelanguage` folder -> Click next and keep everything default on several screens -> Finish
+* File -> New -> Project from existing Sources -> Select `simplelanguage` folder -> Check "Create module groups for multi-module Maven projects" -> Finish
 
 ## Running
 
@@ -51,7 +52,7 @@ your own Truffle language.
 
 * Download the Ideal Graph Visualizer (IGV) from
   https://lafo.ssw.uni-linz.ac.at/pub/idealgraphvisualizer/
-* Unpack the downloaded `.zip` file  
+* Unpack the downloaded `.zip` file
 * Execute `bin/idealgraphvsiualizer` to start IGV
 * Execute `./sl -dump tests/SumPrint.sl` to dump graphs to IGV.
 
@@ -64,9 +65,8 @@ your own Truffle language.
 
 Simple language is compatible to:
 
-* Truffle-Version: 0.28
-* GraalVM-Version: 0.28
-
+* Truffle-Version: 0.31
+* GraalVM-Version: 0.31
 
 ## Further information
 

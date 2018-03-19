@@ -1,93 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-
-	<groupId>com.oracle</groupId>
-	<artifactId>simplelanguage</artifactId>
-	<version>0.28-SNAPSHOT</version>
-
-	<properties>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<m2e.apt.activation>jdt_apt</m2e.apt.activation>
-	</properties>
-
-	<dependencies>
-        <dependency>
-            <groupId>org.graalvm</groupId>
-            <artifactId>graal-sdk</artifactId>
-            <version>0.28</version>
-        </dependency>
-		<dependency>
-			<groupId>com.oracle.truffle</groupId>
-			<artifactId>truffle-api</artifactId>
-			<version>0.28</version>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.truffle</groupId>
-			<artifactId>truffle-tck</artifactId>
-			<version>0.28</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>com.oracle.truffle</groupId>
-			<artifactId>truffle-dsl-processor</artifactId>
-			<version>0.28</version>
-			<scope>provided</scope>
-		</dependency>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.11</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-eclipse-plugin</artifactId>
-				<configuration>
-					<downloadSources>true</downloadSources>
-					<downloadJavadocs>true</downloadJavadocs>
-				</configuration>
-			</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.9</version>
-				<configuration>
-					<includes>
-						<include>**/*TestSuite.java</include>
-						<include>**/*Test.java</include>
-					</includes>
-				</configuration>
-			</plugin>
-		</plugins>
-		<pluginManagement>
-			<plugins>
-				<plugin>
-					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.1</version>
-					<configuration>
-						<source>1.8</source>
-						<target>1.8</target>
-					</configuration>
-				</plugin>
-			</plugins>
-		</pluginManagement>
-	</build>
-
-	<reporting>
-		<plugins>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.3</version>
-			</plugin>
-		</plugins>
-	</reporting>
-
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.oracle</groupId>
+  <artifactId>simplelanguage-parent</artifactId>
+  <version>0.31-SNAPSHOT</version>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <m2e.apt.activation>jdt_apt</m2e.apt.activation>
+  </properties>
+  <packaging>pom</packaging>
+  <modules>
+    <module>language</module>
+    <module>launcher</module>
+  </modules>
 </project>
