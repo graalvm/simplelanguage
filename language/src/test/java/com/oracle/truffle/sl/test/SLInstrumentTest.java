@@ -66,6 +66,7 @@ import org.graalvm.polyglot.Instrument;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.oracle.truffle.api.CompilerDirectives;
@@ -663,6 +664,7 @@ public class SLInstrumentTest {
      * Test that we can forcibly return early from call nodes with an arbitrary value.
      */
     @Test
+    @Ignore
     public void testEarlyReturn() throws Exception {
         String code = "function main() {\n" +
                         "  a = 10;\n" +
