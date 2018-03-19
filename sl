@@ -74,7 +74,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
     done
     $JAVACMD $JAVA_ARGS -Dtruffle.class.path.append=$LANGUAGE_PATH -cp $LAUNCHER_PATH $MAIN_CLASS $PROGRAM_ARGS
 else
-    echo "NOTE: Could not find GraalVM, using $JAVA_HOME"
+    echo "Warning: Could not find GraalVM on $JAVA_HOME or in ./graalvm folder. Running on JDK without support for compilation."
     echo
     PROGRAM_ARGS=""
     JAVA_ARGS=""
@@ -85,7 +85,7 @@ else
         -debug)
           JAVA_ARGS="$JAVA_ARGS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y" ;;
         -dump)
-          echo "NOTE: Ignoring -dump" ;;
+          echo "NOTE: Ignoring -dump, only supported on GraalVM." ;;
         -disassemble)
           echo "NOTE: Ignoring -disassemble" ;;
         -J*)
