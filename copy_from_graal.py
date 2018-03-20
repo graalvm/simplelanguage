@@ -1,6 +1,10 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+# Since Simple Language is not developed on this repository, we need to periodically sync this repository with the developement one.
+# This scipt automates cloning the source repository and copying the SL code from there to here.
+# Requires git to be installed.
+
 import  sys
 from subprocess import call
 
@@ -50,7 +54,7 @@ def replace(source, dest):
     call(["mkdir", "-p", dest])
     call(["cp", "-RTf", source, dest])
 
-def copySL():
+def copy_sl():
     """ Copies SL from graal to simplelanguage
 
     """
@@ -61,7 +65,7 @@ def copySL():
     replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.launcher/src/com", "launcher/src/main/java/com")
     replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.tck/src/com"     , "tck/main/java/com")
 
-def updateSL(revision):
+def update_sl(revision):
     """ Updates the SL repo from the graal repo given a revision
 
     :revision: the hash of the commit in the graal repo to be used
@@ -70,7 +74,7 @@ def updateSL(revision):
     checkout(".", "sl_update_"+revision, True)
     clone(GRAAL_REPO, GRAAL_DIR)
     checkout(GRAAL_DIR, revision)
-    copySL()
+    copy_sl()
     print ""
     print "NOTE: Update the version in sl, README.md and all pom.xml files!"
     print "NOTE: Follow the instructions in README.md and make sure mvn package executes correctly!"
@@ -80,4 +84,4 @@ def updateSL(revision):
 if __name__ == "__main__":
     if (len(sys.argv) != 2):
         fail("usage: " + sys.argv[0] + " idOfGraalCommitToUseAsBase")
-    updateSL(sys.argv[1])
+    update_sl(sys.argv[1])
