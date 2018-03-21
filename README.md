@@ -20,9 +20,9 @@ your own Truffle language.
   `git clone https://github.com/graalvm/simplelanguage`
 * Download Graal VM Development Kit from
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
-* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm`.
-* Set enviroment variable `JAVA_HOME` to the path of the graalvm folder.
-* Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable
+* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm` (note: no version in folder name).
+* Set environment variable `JAVA_HOME` to the path of the `graalvm` folder (note: mac users should set `JAVA_HOME` to `/path/to/graalvm/Contents/Home`)
+* Verify that the file `$JAVA_HOME/bin/java` exists and is executable
 * Execute `mvn package`
 
 ## IDE Setup
@@ -65,16 +65,15 @@ your own Truffle language.
 
 Simple language is compatible to:
 
-* Truffle-Version: 0.31
-* GraalVM-Version: 0.31
+* Truffle-Version: 0.32
+* GraalVM-Version: 0.32
 
 ## Further information
 
-* [Truffle JavaDoc](http://lafo.ssw.uni-linz.ac.at/javadoc/truffle/latest/)
-* [Truffle on Github](http://github.com/graalvm/truffle)
-* [Graal on Github](http://github.com/graalvm/graal-core)
-* [Truffle Tutorials and Presentations](https://wiki.openjdk.java.net/display/Graal/Publications+and+Presentations)
-* [Truffle FAQ and Guidelines](https://wiki.openjdk.java.net/display/Graal/Truffle+FAQ+and+Guidelines)
+* [Truffle JavaDoc](http://www.graalvm.org/truffle/javadoc/)
+* [Truffle on Github](https://github.com/oracle/graal/tree/master/truffle)
+* [Graal on Github](https://github.com/oracle/graal/tree/master/compiler)
+* [Truffle Tutorials and Presentations](https://github.com/oracle/graal/blob/master/docs/Publications.md)
 * [Graal VM]( http://www.oracle.com/technetwork/oracle-labs/program-languages/overview) on the Oracle Technology Network
 * [Papers on Truffle](http://ssw.jku.at/Research/Projects/JVM/Truffle.html)
 * [Papers on Graal](http://ssw.jku.at/Research/Projects/JVM/Graal.html)

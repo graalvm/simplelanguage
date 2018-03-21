@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.oracle</groupId>
     <artifactId>simplelanguage-parent</artifactId>
-    <version>0.31-SNAPSHOT</version>
+    <version>0.32-SNAPSHOT</version>
   </parent>
   <artifactId>simplelanguage</artifactId>
   <build>
@@ -26,7 +26,7 @@
             <include>**/*TestSuite.java</include>
             <include>**/*Test.java</include>
           </includes>
-          <argLine>-XX:-UseJVMCIClassLoader -Xbootclasspath/a:../graalvm/jre/lib/truffle/truffle-api.jar:../graalvm/jre/lib/truffle/locator.jar:../graalvm/jre/lib/truffle/truffle-nfi.jar</argLine>
+          <argLine>-XX:-UseJVMCIClassLoader -Xbootclasspath/a:../graalvm/jre/lib/truffle/truffle-api.jar:../graalvm/jre/lib/truffle/locator.jar:../graalvm/jre/lib/truffle/truffle-nfi.jar:../graalvm/Contents/Home/jre/lib/truffle/truffle-api.jar:../graalvm/Contents/Home/jre/lib/truffle/locator.jar:../graalvm/Contents/Home/jre/lib/truffle/truffle-nfi.jar</argLine>
         </configuration>
       </plugin>
     </plugins>
@@ -38,7 +38,6 @@
           <configuration>
             <source>1.8</source>
             <target>1.8</target>
-            <executable>./graalvm/bin/javac</executable>
           </configuration>
         </plugin>
       </plugins>
@@ -48,18 +47,18 @@
     <dependency>
       <groupId>com.oracle.truffle</groupId>
       <artifactId>truffle-api</artifactId>
-      <version>0.31</version>
+      <version>0.32</version>
     </dependency>
     <dependency>
       <groupId>com.oracle.truffle</groupId>
       <artifactId>truffle-dsl-processor</artifactId>
-      <version>0.31</version>
+      <version>0.32</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.oracle.truffle</groupId>
       <artifactId>truffle-tck</artifactId>
-      <version>0.31</version>
+      <version>0.32</version>
       <scope>provided</scope>
     </dependency>
     <dependency>

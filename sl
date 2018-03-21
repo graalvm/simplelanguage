@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="0.31"
+VERSION="0.32"
 LANGUAGE_PATH="./language/target/simplelanguage-$VERSION-SNAPSHOT.jar"
 LAUNCHER_PATH="./launcher/target/launcher-$VERSION-SNAPSHOT.jar"
 MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"
@@ -19,22 +19,9 @@ if [[ ! -f $LAUNCHER_PATH ]]; then
 fi
 
 #######################################################################
-#                 Check graalvm location and version.                 #
-#      Fallback is JAVA_HOME which may or may not be a GraalVM.       #
+#               Check the GraalVM version in JAVA_HOME                #
 #######################################################################
-if [[ -d "graalvm" ]]; then
-    GRAALVM_VERSION=$(grep "GRAALVM_VERSION" ./graalvm/release)
-    if [[ "$GRAALVM_VERSION" == "" ]]; then
-       echo "Cannot find GRAALVM_VERSION entry in ./graalvm/release"
-       exit
-    fi
-    GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="\""} {print $2}')
-    if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
-        echo "Wrong version of GraalVM in ./graalvm. Expected: $VERSION, found $GRAALVM_VERSION"
-        exit
-    fi
-    JAVACMD=${JAVACMD:=./graalvm/bin/java}
-elif [[ "$JAVA_HOME" != "" ]]; then
+if [[ "$JAVA_HOME" != "" ]]; then
     GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$JAVA_HOME"/release)
     if [[ "$GRAALVM_VERSION" != "" ]]; then
         GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="\""} {print $2}')
@@ -45,7 +32,7 @@ elif [[ "$JAVA_HOME" != "" ]]; then
     fi
     JAVACMD=${JAVACMD:=$JAVA_HOME/bin/java}
 else
-    echo "The ./graalvm directory missing and JAVA_HOME not set"
+    echo "JAVA_HOME is not set"
     exit
 fi
 
@@ -74,7 +61,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
     done
     $JAVACMD $JAVA_ARGS -Dtruffle.class.path.append=$LANGUAGE_PATH -cp $LAUNCHER_PATH $MAIN_CLASS $PROGRAM_ARGS
 else
-    echo "Warning: Could not find GraalVM on $JAVA_HOME or in ./graalvm folder. Running on JDK without support for compilation."
+    echo "Warning: Could not find GraalVM on $JAVA_HOME. Running on JDK without support for compilation."
     echo
     PROGRAM_ARGS=""
     JAVA_ARGS=""
