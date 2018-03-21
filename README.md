@@ -20,9 +20,9 @@ your own Truffle language.
   `git clone https://github.com/graalvm/simplelanguage`
 * Download Graal VM Development Kit from
   http://www.oracle.com/technetwork/oracle-labs/program-languages/downloads
-* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm`.
-* Set enviroment variable `JAVA_HOME` to the path of the graalvm folder.
-* Verify that the file `simplelanguage/graalvm/bin/java` exists and is executable
+* Unpack the downloaded `graalvm_*.tar.gz` into `simplelanguage/graalvm` (note: no version in folder name).
+* Set environment variable `JAVA_HOME` to the path of the `graalvm` folder (note: mac users should set `JAVA_HOME` to `/path/to/graalvm/Contents/Home`)
+* Verify that the file `$JAVA_HOME/bin/java` exists and is executable
 * Execute `mvn package`
 
 ## IDE Setup
