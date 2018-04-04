@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="0.32"
+VERSION="0.33"
 LANGUAGE_PATH="./language/target/simplelanguage-$VERSION-SNAPSHOT.jar"
 LAUNCHER_PATH="./launcher/target/launcher-$VERSION-SNAPSHOT.jar"
 MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"

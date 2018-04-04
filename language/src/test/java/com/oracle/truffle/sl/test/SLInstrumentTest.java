@@ -66,7 +66,6 @@ import org.graalvm.polyglot.Instrument;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.Source;
 import org.graalvm.polyglot.Value;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.oracle.truffle.api.CompilerDirectives;
@@ -135,7 +134,7 @@ public class SLInstrumentTest {
             Instrument envInstr = engine.getInstruments().get("testEnvironmentHandlerInstrument");
             TruffleInstrument.Env env = envInstr.lookup(Environment.class).env;
             throwables = new ArrayList<>();
-            env.getInstrumenter().attachListener(SourceSectionFilter.newBuilder().lineIn(1, source.getLineCount()).build(), new ExecutionEventListener() {
+            env.getInstrumenter().attachExecutionEventListener(SourceSectionFilter.newBuilder().lineIn(1, source.getLineCount()).build(), new ExecutionEventListener() {
                 @Override
                 public void onEnter(EventContext context, VirtualFrame frame) {
                     Node node = context.getInstrumentedNode();
@@ -612,7 +611,7 @@ public class SLInstrumentTest {
         protected void onCreate(Env env) {
             env.registerService(env.getInstrumenter());
             env.registerService(this);
-            env.getInstrumenter().attachListener(SourceSectionFilter.ANY, new ExecutionEventListener() {
+            env.getInstrumenter().attachExecutionEventListener(SourceSectionFilter.ANY, new ExecutionEventListener() {
                 @Override
                 public void onEnter(EventContext context, VirtualFrame frame) {
                     if ("readln".equals(context.getInstrumentedSourceSection().getCharacters())) {
@@ -664,7 +663,6 @@ public class SLInstrumentTest {
      * Test that we can forcibly return early from call nodes with an arbitrary value.
      */
     @Test
-    @Ignore
     public void testEarlyReturn() throws Exception {
         String code = "function main() {\n" +
                         "  a = 10;\n" +
@@ -756,7 +754,7 @@ public class SLInstrumentTest {
         @Override
         protected void onCreate(Env env) {
             env.registerService(this);
-            env.getInstrumenter().attachListener(SourceSectionFilter.newBuilder().tagIs(CallTag.class).build(), new ExecutionEventListener() {
+            env.getInstrumenter().attachExecutionEventListener(SourceSectionFilter.newBuilder().tagIs(CallTag.class).build(), new ExecutionEventListener() {
                 @Override
                 public void onEnter(EventContext context, VirtualFrame frame) {
                 }
@@ -819,7 +817,7 @@ public class SLInstrumentTest {
         }
 
         void attachAt(SourceSection ss) {
-            env.getInstrumenter().attachListener(SourceSectionFilter.newBuilder().sourceSectionEquals(ss).build(), new ExecutionEventListener() {
+            env.getInstrumenter().attachExecutionEventListener(SourceSectionFilter.newBuilder().sourceSectionEquals(ss).build(), new ExecutionEventListener() {
                 @Override
                 public void onEnter(EventContext context, VirtualFrame frame) {
                 }
@@ -919,7 +917,7 @@ public class SLInstrumentTest {
         }
 
         void attachOn(String error) {
-            EventBinding<ExecutionEventListener> reenterBinding = env.getInstrumenter().attachListener(SourceSectionFilter.newBuilder().tagIs(StandardTags.RootTag.class).build(),
+            EventBinding<ExecutionEventListener> reenterBinding = env.getInstrumenter().attachExecutionEventListener(SourceSectionFilter.newBuilder().tagIs(StandardTags.RootTag.class).build(),
                             new ExecutionEventListener() {
                                 @Override
                                 public void onEnter(EventContext context, VirtualFrame frame) {
@@ -940,7 +938,7 @@ public class SLInstrumentTest {
                                 }
 
                             });
-            env.getInstrumenter().attachListener(SourceSectionFilter.newBuilder().tagIs(StandardTags.StatementTag.class).build(), new ExecutionEventListener() {
+            env.getInstrumenter().attachExecutionEventListener(SourceSectionFilter.newBuilder().tagIs(StandardTags.StatementTag.class).build(), new ExecutionEventListener() {
                 @Override
                 public void onEnter(EventContext context, VirtualFrame frame) {
                     SourceSection ss = context.getInstrumentedSourceSection();
