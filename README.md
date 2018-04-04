@@ -45,8 +45,8 @@ your own Truffle language.
 
 ## Running
 
-* Execute `./sl tests/HelloWorld.sl` to run a simple language source file.
-* Execute `./sl -disassemble tests/SumPrint.sl` to see assembly code for Truffle compiled functions.
+* Execute `./sl language/tests/HelloWorld.sl` to run a simple language source file.
+* Execute `./sl -disassemble language/tests/SumPrint.sl` to see assembly code for Truffle compiled functions.
 
 ## IGV
 
@@ -54,11 +54,11 @@ your own Truffle language.
   https://lafo.ssw.uni-linz.ac.at/pub/idealgraphvisualizer/
 * Unpack the downloaded `.zip` file
 * Execute `bin/idealgraphvsiualizer` to start IGV
-* Execute `./sl -dump tests/SumPrint.sl` to dump graphs to IGV.
+* Execute `./sl -dump language/tests/SumPrint.sl` to dump graphs to IGV.
 
 ## Debugging
 
-* Execute `./sl -debug tests/HelloWorld.sl`.
+* Execute `./sl -debug language/tests/HelloWorld.sl`.
 * Attach a Java remote debugger (like Eclipse) on port 8000.
 
 ## Tested Compatibility
