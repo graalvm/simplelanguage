@@ -52,18 +52,18 @@ def replace(source, dest):
     """
     call(["rm", "-rf", dest])
     call(["mkdir", "-p", dest])
-    call(["cp", "-Rf", source, dest])
+    call(["cp", "-RTf", source, dest])
 
 def copy_sl():
     """ Copies SL from graal to simplelanguage
 
     """
-    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl/src/com"         , "language/src/main/java")
-    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl/src/META-INF"    , "language/src/main/resources")
-    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.test/src/com"    , "language/src/test/java")
-    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.test/src/tests"  , "language")
-    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.launcher/src/com", "launcher/src/main/java")
-    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.tck/src/com"     , "tck/main/java")
+    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl/src/com"         , "language/src/main/java/com")
+    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl/src/META-INF"    , "language/src/main/resources/META-INF")
+    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.test/src/com"    , "language/src/test/java/com")
+    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.test/src/tests"  , "language/tests")
+    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.launcher/src/com", "launcher/src/main/java/com")
+    replace(GRAAL_DIR + "/truffle/src/com.oracle.truffle.sl.tck/src/com"     , "tck/main/java/com")
 
 def update_sl(revision):
     """ Updates the SL repo from the graal repo given a revision
