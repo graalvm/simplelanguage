@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="0.33"
+VERSION="1.0.0-rc1"
 LANGUAGE_PATH="./language/target/simplelanguage-$VERSION-SNAPSHOT.jar"
 LAUNCHER_PATH="./launcher/target/launcher-$VERSION-SNAPSHOT.jar"
 MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"
@@ -24,7 +24,7 @@ fi
 if [[ "$JAVA_HOME" != "" ]]; then
     GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$JAVA_HOME"/release)
     if [[ "$GRAALVM_VERSION" != "" ]]; then
-        GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="\""} {print $2}')
+        GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
         if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
             echo "Wrong version of GraalVM in \$JAVA_HOME. Expected: $VERSION, found $GRAALVM_VERSION"
             exit
