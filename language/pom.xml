@@ -26,7 +26,7 @@
             <include>**/*TestSuite.java</include>
             <include>**/*Test.java</include>
           </includes>
-          <argLine>-XX:-UseJVMCIClassLoader -Xbootclasspath/a:../graalvm/jre/lib/truffle/truffle-api.jar:../graalvm/jre/lib/truffle/locator.jar:../graalvm/jre/lib/truffle/truffle-nfi.jar:../graalvm/Contents/Home/jre/lib/truffle/truffle-api.jar:../graalvm/Contents/Home/jre/lib/truffle/locator.jar:../graalvm/Contents/Home/jre/lib/truffle/truffle-nfi.jar</argLine>
+          <argLine>-XX:-UseJVMCIClassLoader</argLine>
         </configuration>
       </plugin>
     </plugins>
