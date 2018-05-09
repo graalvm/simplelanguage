@@ -49,13 +49,6 @@
                   <exclude>org.graalvm:graal-sdk</exclude>
                 </excludes>
               </artifactSet>
-              <filters>
-                <filter>
-                  <excludes>
-                    <exclude>org/graalvm/**</exclude>
-                  </excludes>
-                </filter>
-              </filters>
             </configuration>
           </execution>
         </executions>
