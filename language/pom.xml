@@ -29,6 +29,38 @@
           <argLine>-XX:-UseJVMCIClassLoader</argLine>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-shade-plugin</artifactId>
+        <version>3.1.1</version>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>shade</goal>
+            </goals>
+            <configuration>
+              <finalName>simplelanguage</finalName>
+              <artifactSet>
+                <excludes>
+                  <exclude>junit:junit</exclude>
+                  <exclude>com.oracle.truffle:truffle-api</exclude>
+                  <exclude>com.oracle.truffle:truffle-dsl-processor</exclude>
+                  <exclude>com.oracle.truffle:truffle-tck</exclude>
+                  <exclude>org.graalvm:graal-sdk</exclude>
+                </excludes>
+              </artifactSet>
+              <filters>
+                <filter>
+                  <excludes>
+                    <exclude>org/graalvm/**</exclude>
+                  </excludes>
+                </filter>
+              </filters>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
     <pluginManagement>
       <plugins>
