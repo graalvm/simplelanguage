@@ -39,7 +39,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>launcher</finalName>
+              <finalName>sl-launcher</finalName>
               <artifactSet>
                 <excludes>
                   <exclude>junit:junit</exclude>
