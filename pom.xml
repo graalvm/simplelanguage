@@ -12,5 +12,6 @@
   <modules>
     <module>language</module>
     <module>launcher</module>
+    <module>component</module>
   </modules>
 </project>

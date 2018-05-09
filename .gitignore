@@ -11,3 +11,4 @@ graalvm/
 .project
 /bin/
 /Coco.jar
+component/sl-component.jar
