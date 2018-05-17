@@ -16,13 +16,23 @@
         <groupId>org.codehaus.mojo</groupId>
         <executions>
           <execution>
-            <id>blah</id>
+            <id>make_component</id>
             <phase>package</phase>
             <goals>
               <goal>exec</goal>
             </goals>
             <configuration>
               <executable>${basedir}/make_component.sh</executable>
+            </configuration>
+          </execution>
+          <execution>
+            <id>clean_component</id>
+            <phase>clean</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>${basedir}/clean_component.sh</executable>
             </configuration>
           </execution>
         </executions>
