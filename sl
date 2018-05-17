@@ -11,7 +11,7 @@ MY_PATH="$(cd "$(dirname "$0")" && pwd -P)"
 #######################################################################
 GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$MY_PATH/../release")
 if [[ "$GRAALVM_VERSION" != "" ]]; then
-    LANGUAGE_PATH="$MY_PATH/../jre/languages/sl/simplelanguage.jar"
+    LANGUAGE_PATH=""
     LAUNCHER_PATH="$MY_PATH/../jre/lib/graalvm/sl-launcher.jar"
     JAVACMD="$MY_PATH/java"
     GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
@@ -33,25 +33,19 @@ else
             fi
         fi
         JAVACMD=${JAVACMD:=$JAVA_HOME/bin/java}
+        if [[ ! -f $LANGUAGE_PATH ]]; then
+            echo "Could not find language on $LANGUAGE_PATH. Did you run mvn package?"
+            exit
+        fi
+        if [[ ! -f $LAUNCHER_PATH ]]; then
+            echo "Could not find launcher on $LAUNCHER_PATH. Did you run mvn package?"
+            exit
+        fi
     else
         echo "JAVA_HOME is not set"
         exit
     fi
 fi
-
-#######################################################################
-# Check if the language and launcher jars exist
-#######################################################################
-if [[ ! -f $LANGUAGE_PATH ]]; then
-    echo "Could not find language on $LANGUAGE_PATH. Did you run mvn package?"
-    exit
-fi
-
-if [[ ! -f $LAUNCHER_PATH ]]; then
-    echo "Could not find launcher on $LAUNCHER_PATH. Did you run mvn package?"
-    exit
-fi
-
 
 #######################################################################
 # Parse arguments, prepare Java command and execute
