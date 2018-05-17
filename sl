@@ -12,7 +12,7 @@ SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd -P)"
 GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$SCRIPT_HOME/../release")
 if [[ "$GRAALVM_VERSION" != "" ]]; then
     LANGUAGE_PATH=""
-    LAUNCHER_PATH="$SCRIPT_HOME/../jre/lib/graalvm/sl-launcher.jar"
+    LAUNCHER_PATH="$SCRIPT_HOME/../jre/languages/sl/launcher/sl-launcher.jar"
     JAVACMD="$SCRIPT_HOME/java"
     GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
     if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then

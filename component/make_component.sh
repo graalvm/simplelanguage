@@ -2,15 +2,14 @@
 
 COMPONENT_DIR="component_temp_dir"
 LANGUAGE_PATH="$COMPONENT_DIR/jre/languages/sl"
-LAUNCHER_PATH="$COMPONENT_DIR/jre/lib/graalvm"
 
 rm -rf COMPONENT_DIR
 
 mkdir -p "$LANGUAGE_PATH"
 cp ../language/target/simplelanguage.jar "$LANGUAGE_PATH"
 
-mkdir -p "$LAUNCHER_PATH"
-cp ../launcher/target/sl-launcher.jar "$LAUNCHER_PATH"
+mkdir -p "$LANGUAGE_PATH/launcher"
+cp ../launcher/target/sl-launcher.jar "$LANGUAGE_PATH/launcher/"
 
 mkdir -p "$LANGUAGE_PATH/bin"
 cp ../sl $LANGUAGE_PATH/bin/
