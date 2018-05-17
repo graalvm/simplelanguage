@@ -1,4 +1,4 @@
-# The simple language componet for GraalVM
+# The simple language component for GraalVM
 
 Truffle languages can be packaged as components which can be installed into
 GraalVM using the [Graal
@@ -9,6 +9,6 @@ This file is the simple languages component for GraalVM and can be installed by
 running:
 
 ```
-/path/to/graalvm/bin/gu install /path/to/sl-componet.jar
+/path/to/graalvm/bin/gu install /path/to/sl-component.jar
 ```
 
