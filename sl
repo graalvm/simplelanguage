@@ -3,25 +3,25 @@
 VERSION="1.0.0-rc1"
 
 MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"
-MY_PATH="$(cd "$(dirname "$0")" && pwd -P)"
+SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd -P)"
 
 #######################################################################
 # Locations of the language and launcher jars as well as the java command are
 # different if I'm running from the repository or as a component in GraalVM
 #######################################################################
-GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$MY_PATH/../release")
+GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$SCRIPT_HOME/../release")
 if [[ "$GRAALVM_VERSION" != "" ]]; then
     LANGUAGE_PATH=""
-    LAUNCHER_PATH="$MY_PATH/../jre/lib/graalvm/sl-launcher.jar"
-    JAVACMD="$MY_PATH/java"
+    LAUNCHER_PATH="$SCRIPT_HOME/../jre/lib/graalvm/sl-launcher.jar"
+    JAVACMD="$SCRIPT_HOME/java"
     GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
     if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
         echo "Installed in wrong version of GraalVM. Expected: $VERSION, found $GRAALVM_VERSION"
         exit
     fi
 else
-    LANGUAGE_PATH="$MY_PATH/language/target/simplelanguage-$VERSION-SNAPSHOT.jar"
-    LAUNCHER_PATH="$MY_PATH/launcher/target/launcher-$VERSION-SNAPSHOT.jar"
+    LANGUAGE_PATH="$SCRIPT_HOME/language/target/simplelanguage-$VERSION-SNAPSHOT.jar"
+    LAUNCHER_PATH="$SCRIPT_HOME/launcher/target/launcher-$VERSION-SNAPSHOT.jar"
     # Check the GraalVM version in JAVA_HOME
     if [[ "$JAVA_HOME" != "" ]]; then
         GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$JAVA_HOME"/release)
