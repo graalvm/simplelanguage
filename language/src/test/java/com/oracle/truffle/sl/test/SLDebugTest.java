@@ -151,11 +151,12 @@ public class SLDebugTest {
 
     private static void checkDebugValues(String msg, DebugScope scope, String... expected) {
         Map<String, DebugValue> valMap = new HashMap<>();
-        while (scope != null) {
-            for (DebugValue value : scope.getDeclaredValues()) {
+        DebugScope currentScope = scope;
+        while (currentScope != null) {
+            for (DebugValue value : currentScope.getDeclaredValues()) {
                 valMap.put(value.getName(), value);
             }
-            scope = scope.getParent();
+            currentScope = currentScope.getParent();
         }
         checkDebugValues(msg, valMap, expected);
     }
@@ -442,6 +443,12 @@ public class SLDebugTest {
                 assertEquals("21", p21.as(String.class));
                 assertNull(p21.getScope());
                 assertFalse(propertiesIt.hasNext());
+
+                DebugValue ep1 = e.getProperty("p1");
+                assertEquals("1", ep1.as(String.class));
+                ep1.set(p21);
+                assertEquals("21", ep1.as(String.class));
+                assertNull(e.getProperty("NonExisting"));
             });
 
             expectDone();
