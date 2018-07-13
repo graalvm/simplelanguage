@@ -99,5 +99,6 @@ else
     fi
     GRAAL_SDK_PATH="$HOME/.m2/repository/org/graalvm/graal-sdk/$VERSION/graal-sdk-$VERSION.jar"
     TRUFFLE_API_PATH="$HOME/.m2/repository/com/oracle/truffle/truffle-api/$VERSION/truffle-api-$VERSION.jar"
-    $JAVACMD -cp $GRAAL_SDK_PATH:$LAUNCHER_PATH:$LANGUAGE_PATH:$TRUFFLE_API_PATH $MAIN_CLASS $PROGRAM_ARGS
+    ANTLR_PATH="$HOME/.m2/repository/org/antlr/antlr4-runtime/4.7/antlr4-runtime-4.7.jar"
+    $JAVACMD -cp $GRAAL_SDK_PATH:$LAUNCHER_PATH:$LANGUAGE_PATH:$TRUFFLE_API_PATH:$ANTLR_PATH $MAIN_CLASS $PROGRAM_ARGS
 fi
