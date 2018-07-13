@@ -1,3 +1,3 @@
 #!/usr/bin/env bash
 
-rm sl-component.jar
+[-f sl-component.jar] && rm sl-component.jar || echo "sl-component.jar not found"
