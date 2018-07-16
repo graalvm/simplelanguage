@@ -71,7 +71,7 @@
     <dependency>
       <groupId>org.graalvm</groupId>
       <artifactId>graal-sdk</artifactId>
-      <version>1.0.0-rc4</version>
+      <version>${graalvm.version}</version>
     </dependency>
   </dependencies>
 </project>
