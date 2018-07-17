@@ -13,5 +13,6 @@
     <module>language</module>
     <module>launcher</module>
     <module>component</module>
+    <module>native</module>
   </modules>
 </project>
