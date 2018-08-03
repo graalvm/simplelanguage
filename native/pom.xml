@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.oracle</groupId>
   <artifactId>simplelanguage-graalvm-native</artifactId>
-  <version>1.0.0-rc4-SNAPSHOT</version>
+  <version>1.0.0-rc5-SNAPSHOT</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <m2e.apt.activation>jdt_apt</m2e.apt.activation>
