@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -86,6 +86,11 @@ public abstract class SLReadPropertyNode extends SLExpressionNode {
     /**
      * Language interoperability: if the receiver object is a foreign value we use Truffle's interop
      * API to access the foreign data.
+     * @param receiver the foreign object to receive the read value.
+     * @param name the name of the foreign property to retrieve.
+     * @param foreignReadNode the AST node that will handle the read request.
+     * @param toSLTypeNode the node to convert the foreign value to the corresponding SL type.
+     * @return the foreign value.
      */
     @Specialization(guards = "!isSLObject(receiver)")
     protected Object readForeign(TruffleObject receiver, Object name,
@@ -109,6 +114,10 @@ public abstract class SLReadPropertyNode extends SLExpressionNode {
     /**
      * When no specialization fits, the receiver is either not an object (which is a type error), or
      * the object has a shape that has been invalidated.
+     * @param r the receiver object (unused).
+     * @param name the name of the property to read.
+     * @return nothing - always throws an exception.
+     * @throws SLUndefinedNameException denoting the value can't be read.
      */
     @Fallback
     protected Object typeError(@SuppressWarnings("unused") Object r, Object name) {

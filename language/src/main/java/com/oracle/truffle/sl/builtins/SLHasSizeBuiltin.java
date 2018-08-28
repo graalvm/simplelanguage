@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -49,7 +49,7 @@ import com.oracle.truffle.api.nodes.NodeInfo;
 
 /**
  * Built-in function that queries if the foreign object has a size. See
- * <link>Messages.HAS_SIZE</link>.
+ * {@link Message#HAS_SIZE}.
  */
 @NodeInfo(shortName = "hasSize")
 public abstract class SLHasSizeBuiltin extends SLBuiltinNode {

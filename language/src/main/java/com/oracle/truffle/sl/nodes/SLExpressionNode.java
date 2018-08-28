@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -64,12 +64,15 @@ public abstract class SLExpressionNode extends SLStatementNode {
     /**
      * The execute method when no specialization is possible. This is the most general case,
      * therefore it must be provided by all subclasses.
+     * @param frame the frame containing local variables.
+     * @return the result of executing the expression node.
      */
     public abstract Object executeGeneric(VirtualFrame frame);
 
     /**
      * When we use an expression at places where a {@link SLStatementNode statement} is already
      * sufficient, the return value is just discarded.
+     * @param frame the frame containing local variables.
      */
     @Override
     public void executeVoid(VirtualFrame frame) {

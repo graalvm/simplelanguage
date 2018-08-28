@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -60,6 +60,7 @@ public abstract class SLWriteLocalVariableNode extends SLExpressionNode {
     /**
      * Returns the descriptor of the accessed local variable. The implementation of this method is
      * created by the Truffle DSL based on the {@link NodeField} annotation on the class.
+     * @return the descriptor of the accessed local variable.
      */
     protected abstract FrameSlot getSlot();
 
@@ -67,6 +68,9 @@ public abstract class SLWriteLocalVariableNode extends SLExpressionNode {
      * Specialized method to write a primitive {@code long} value. This is only possible if the
      * local variable also has currently the type {@code long} or was never written before,
      * therefore a Truffle DSL {@link #isLongOrIllegal(VirtualFrame) custom guard} is specified.
+     * @param frame the local variable frame.
+     * @param value the long value to write.
+     * @return the written {@code long} value.
      */
     @Specialization(guards = "isLongOrIllegal(frame)")
     protected long writeLong(VirtualFrame frame, long value) {
@@ -95,6 +99,9 @@ public abstract class SLWriteLocalVariableNode extends SLExpressionNode {
      * guards, so there is no point in calling them. Since this method takes a value of type
      * {@link Object}, it is guaranteed to never fail, i.e., once we are in this specialization the
      * node will never be re-specialized.
+     * @param frame the local variable frame.
+     * @param value the value to write.
+     * @return the written value.
      */
     @Specialization(replaces = {"writeLong", "writeBoolean"})
     protected Object write(VirtualFrame frame, Object value) {
@@ -118,6 +125,7 @@ public abstract class SLWriteLocalVariableNode extends SLExpressionNode {
      *            Truffle DSL would not check the guard on every execution of the specialization.
      *            Guards without parameters are assumed to be pure, but our guard depends on the
      *            slot kind which can change.
+     * @return true if the local variable is either {@code long} or {@link FrameSlotKind#Illegal}.
      */
     protected boolean isLongOrIllegal(VirtualFrame frame) {
         final FrameSlotKind kind = frame.getFrameDescriptor().getFrameSlotKind(getSlot());

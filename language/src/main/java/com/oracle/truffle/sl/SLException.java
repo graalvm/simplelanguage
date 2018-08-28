@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -80,6 +80,9 @@ public class SLException extends RuntimeException implements TruffleException {
     /**
      * Provides a user-readable message for run-time type errors. SL is strongly typed, i.e., there
      * are no automatic type conversions of values.
+     * @param operation the node representing the failed operation.
+     * @param values the values that caused the type error.
+     * @return an exception containing a description of the run-time error.
      */
     @TruffleBoundary
     public static SLException typeError(Node operation, Object... values) {

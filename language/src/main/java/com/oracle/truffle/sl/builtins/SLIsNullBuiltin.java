@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -49,7 +49,7 @@ import com.oracle.truffle.api.nodes.NodeInfo;
 
 /**
  * Built-in function that queries if the foreign object is a null value. See
- * <link>Messages.IS_NULL</link>.
+ * {@link Message#IS_NULL}.
  */
 @NodeInfo(shortName = "isNull")
 public abstract class SLIsNullBuiltin extends SLBuiltinNode {

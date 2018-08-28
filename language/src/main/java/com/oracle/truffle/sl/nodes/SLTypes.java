@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -66,6 +66,8 @@ public abstract class SLTypes {
      * check that the Truffle DSL would generate. For {@link SLNull}, we do not need an
      * {@code instanceof} check, because we know that there is only a {@link SLNull#SINGLETON
      * singleton} instance.
+     * @param value the object to check for nullity.
+     * @return true if the object is equal to the null singleton.
      */
     @TypeCheck(SLNull.class)
     public static boolean isSLNull(Object value) {
@@ -76,6 +78,8 @@ public abstract class SLTypes {
      * Example of a manually specified type cast that replaces the automatically generated type cast
      * that the Truffle DSL would generate. For {@link SLNull}, we do not need an actual cast,
      * because we know that there is only a {@link SLNull#SINGLETON singleton} instance.
+     * @param value the object to cast to the null singleton.
+     * @return the null singleton.
      */
     @TypeCast(SLNull.class)
     public static SLNull asSLNull(Object value) {
@@ -89,6 +93,8 @@ public abstract class SLTypes {
      * only has an arbitrary precision Number type (implemented as {@link SLBigNumber}, and
      * {@code long} is only used as a performance optimization to avoid the costly
      * {@link SLBigNumber} arithmetic for values that fit into a 64-bit primitive value.
+     * @param value the long value to convert to a {@link SLBigNumber}.
+     * @return the {@link SLBigNumber} corresponding to the long value.
      */
     @ImplicitCast
     @TruffleBoundary

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2016, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -67,17 +67,19 @@ public abstract class SLPropertyCacheNode extends Node {
     }
 
     /**
-     * Property names can be arbitrary SL objects. We could call {@link Object.equals}, but that is
-     * generally a bad idea and therefore discouraged in Truffle.{@link Object.equals} is a virtual
+     * Property names can be arbitrary SL objects. We could call {@link Object#equals}, but that is
+     * generally a bad idea and therefore discouraged in Truffle.{@link Object#equals} is a virtual
      * call that can call possibly large methods that we do not want in compiled code. For example,
      * we do not want {@link SLBigNumber#equals} in compiled code but behind a
-     * {@link TruffleBoundary). Therfore, we check types individually. The checks are semantically
-     * the same as {@link SLEqualNode}.
+     * {@link com.oracle.truffle.api.CompilerDirectives.TruffleBoundary}. Therefore, we check types individually.
+     * The checks are semantically the same as {@link SLEqualNode}.
      * <p>
      * Note that the {@code cachedName} is always a constant during compilation. Therefore, compiled
      * code is always reduced to a single {@code if} that only checks whether the {@code name} has
      * the same type.
-     *
+     * @param cachedName the cached property name that we want to compare to name.
+     * @param name the value to compare against.
+     * @return true if {@code cachedName} and {@code name} are equal.
      */
     protected static boolean namesEqual(Object cachedName, Object name) {
         if (cachedName instanceof Long && name instanceof Long) {

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -96,12 +96,16 @@ public abstract class SLShortCircuitNode extends SLExpressionNode {
     /**
      * This method is called after the left child was evaluated, but before the right child is
      * evaluated. The right child is only evaluated when the return value is {code true}.
+     * @param leftValue the result of evaluating the left value of the expression.
+     * @return true if the right node needs to be evaluated.
      */
     protected abstract boolean isEvaluateRight(boolean leftValue);
 
     /**
-     * Calculates the result of the short circuit operation. If the right node is not evaluated then
-     * <code>false</code> is provided.
+     * Calculates the result of the short circuit operation.
+     * @param leftValue the result of evaluating the left node.
+     * @param rightValue the result of evaluating the right node.
+     * @return the result of the short circuit evaluation.
      */
     protected abstract boolean execute(boolean leftValue, boolean rightValue);
 

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -51,7 +51,7 @@ import com.oracle.truffle.sl.SLException;
 
 /**
  * Built-in function that queries the size property of a foreign object. See
- * <link>Messages.GET_SIZE</link>.
+ * {@link Message#GET_SIZE}
  */
 @NodeInfo(shortName = "getSize")
 public abstract class SLGetSizeBuiltin extends SLBuiltinNode {

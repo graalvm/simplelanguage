@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -65,11 +65,16 @@ public final class SLIfNode extends SLStatementNode {
     /** Statement (or {@link SLBlockNode block}) executed when the condition is false. */
     @Child private SLStatementNode elsePartNode;
 
+    /*
+     * Bug workaround below: JavaDoc fails to resolve {@link ConditionProfile.Counting} and
+     * {@link ConditionProfile.Binary} so for now just use textual references.
+     */
+
     /**
      * Profiling information, collected by the interpreter, capturing the profiling information of
      * the condition. This allows the compiler to generate better code for conditions that are
-     * always true or always false. Additionally the {@link CountingConditionProfile} implementation
-     * (as opposed to {@link BinaryConditionProfile} implementation) transmits the probability of
+     * always true or always false. Additionally the {@code ConditionProfile.Counting} implementation
+     * (as opposed to {@code ConditionProfile.Binary} implementation) transmits the probability of
      * the condition to be true to the compiler.
      */
     private final ConditionProfile condition = ConditionProfile.createCountingProfile();

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -65,6 +65,7 @@ public abstract class SLReadLocalVariableNode extends SLExpressionNode {
     /**
      * Returns the descriptor of the accessed local variable. The implementation of this method is
      * created by the Truffle DSL based on the {@link NodeField} annotation on the class.
+     * @return the slot describing the local variable.
      */
     protected abstract FrameSlot getSlot();
 
@@ -109,6 +110,7 @@ public abstract class SLReadLocalVariableNode extends SLExpressionNode {
      *            Truffle DSL would not check the guard on every execution of the specialization.
      *            Guards without parameters are assumed to be pure, but our guard depends on the
      *            slot kind which can change.
+     * @return true if the local variable has type {@code Long}.
      */
     protected boolean isLong(VirtualFrame frame) {
         return frame.getFrameDescriptor().getFrameSlotKind(getSlot()) == FrameSlotKind.Long;

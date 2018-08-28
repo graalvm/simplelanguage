@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -57,6 +57,12 @@ public abstract class SLReadPropertyCacheNode extends SLPropertyCacheNode {
 
     /**
      * Polymorphic inline cache for a limited number of distinct property names and shapes.
+     * @param receiver the object to receive the read value.
+     * @param name the name of the required property.
+     * @param cachedName the cache object to store the name in.
+     * @param shape the shape of {@code receiver}.
+     * @param location the location of the property.
+     * @return the read object.
      */
     @Specialization(limit = "CACHE_LIMIT", //
                     guards = {
@@ -90,6 +96,10 @@ public abstract class SLReadPropertyCacheNode extends SLPropertyCacheNode {
     /**
      * The generic case is used if the number of shapes accessed overflows the limit of the
      * polymorphic inline cache.
+     * @param receiver the object to receive the read value.
+     * @param name the name of the required property.
+     * @return the requested property.
+     * @throws SLUndefinedNameException if the property does not exist.
      */
     @TruffleBoundary
     @Specialization(replaces = {"readCached"}, guards = "receiver.getShape().isValid()")
