@@ -16,4 +16,21 @@
     <module>component</module>
     <module>native</module>
   </modules>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <!-- A bug in the 3.0.x versions of the plugin generates bogus "no module descriptor" errors -->
+        <version>2.10.4</version>
+        <configuration>
+          <show>private</show>
+          <splitindex>true</splitindex>
+          <additionalparam>-Xdoclint:all</additionalparam>
+          <doctitle>Truffle SimpleLanguage Demonstration - ${project.version}</doctitle>
+          <windowtitle>Truffle SimpleLanguage Demonstration - ${project.version}</windowtitle>
+          <bottom>Copyright 2012, {currentYear} Oracle and/or its affiliates. All rights reserved.</bottom>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>

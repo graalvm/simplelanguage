@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -89,6 +89,10 @@ public abstract class SLWritePropertyNode extends SLExpressionNode {
     /**
      * Language interoperability: If the receiver object is a foreign value we use Truffle's interop
      * API to access the foreign data.
+     * @param receiver the object to receive the property.
+     * @param name the property name.
+     * @param value the property value.
+     * @param foreignWriteNode the foreign value node that the value will be written to.
      */
     @Specialization(guards = "!isSLObject(receiver)")
     protected void writeForeign(TruffleObject receiver, Object name, Object value,
@@ -107,6 +111,10 @@ public abstract class SLWritePropertyNode extends SLExpressionNode {
 
     /**
      * When no specialization fits, the receiver is not an object (which is a type error).
+     * @param r the receiver (unused).
+     * @param name the name of the property.
+     * @param value the value of the property (unused).
+     * @throws SLUndefinedNameException always.
      */
     @Fallback
     @SuppressWarnings("unused")

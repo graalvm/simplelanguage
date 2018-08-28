@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -101,7 +101,10 @@ public abstract class SLEqualNode extends SLBinaryNode {
     }
 
     /**
-     * Specialization for foreign {@link TruffleObject}s.
+     * Specialization for foreign {@link TruffleObject}s. This tests for object rather than value equality.
+     * @param left the left operand of the comparison.
+     * @param right the right operand of the comparison.
+     * @return true if the two objects are the same.
      */
     @Specialization
     protected boolean equal(TruffleObject left, TruffleObject right) {
@@ -120,6 +123,9 @@ public abstract class SLEqualNode extends SLBinaryNode {
      * long) and the right value "42" (type long). Since this specialization is already present, and
      * (without the guard) also matches (long values can be boxed to Object), it is executed. The
      * wrong return value is "false".
+     * @param left the left operand of the comparison.
+     * @param right the right operand of the comparison.
+     * @return false as we know the result is always false.
      */
     @Specialization(guards = "differentClasses(left, right)")
     protected boolean equal(Object left, Object right) {

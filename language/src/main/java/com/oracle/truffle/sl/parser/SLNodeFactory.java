@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2016, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -333,7 +333,7 @@ public class SLNodeFactory {
     }
 
     /**
-     * Returns the corresponding subclass of {@link SLExpressionNode} for binary expressions. </br>
+     * Returns the corresponding subclass of {@link SLExpressionNode} for binary expressions.
      * These nodes are currently not instrumented.
      *
      * @param opToken The operator of the binary expression
@@ -580,13 +580,17 @@ public class SLNodeFactory {
 
     /**
      * Creates source description of a single token.
+     * @param node the node to annotate with the source.
+     * @param token the parser token containing the source.
      */
     private static void srcFromToken(SLStatementNode node, Token token) {
         node.setSourceSection(token.getStartIndex(), token.getText().length());
     }
 
     /**
-     * Checks whether a list contains a null.
+     * Checks whether a list contains a {@code null}.
+     * @param list the list to scan for {@code null}s.
+     * @return true if the list contains a {@code null}.
      */
     private static boolean containsNull(List<?> list) {
         for (Object e : list) {

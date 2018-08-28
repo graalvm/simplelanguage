@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -65,8 +65,12 @@ public final class SLFunctionRegistry {
     }
 
     /**
-     * Returns the canonical {@link SLFunction} object for the given name. If it does not exist yet,
-     * it is created.
+     * Returns the canonical {@link SLFunction} object for the given name.
+     * If it does not exist yet and {@code createIfNotPresent} is set, it is created.
+     * Otherwise {@code null} is returned.
+     * @param name the name of the function object.
+     * @param createIfNotPresent true if the object is to be created if it doesn't exist.
+     * @return the requested object.
      */
     public SLFunction lookup(String name, boolean createIfNotPresent) {
         SLFunction result = functionsObject.functions.get(name);
@@ -81,6 +85,9 @@ public final class SLFunctionRegistry {
      * Associates the {@link SLFunction} with the given name with the given implementation root
      * node. If the function did not exist before, it defines the function. If the function existed
      * before, it redefines the function and the old implementation is discarded.
+     * @param name the name of the function.
+     * @param callTarget the call target of the function.
+     * @return the registered function.
      */
     public SLFunction register(String name, RootCallTarget callTarget) {
         SLFunction function = lookup(name, true);
@@ -104,6 +111,7 @@ public final class SLFunctionRegistry {
 
     /**
      * Returns the sorted list of all functions, for printing purposes only.
+     * @return a list of all functions, sorted by name.
      */
     public List<SLFunction> getFunctions() {
         List<SLFunction> result = new ArrayList<>(functionsObject.functions.values());

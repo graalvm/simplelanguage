@@ -154,7 +154,7 @@ import com.oracle.truffle.sl.runtime.SLNull;
  * {@link SLWhileNode while} with {@link SLBreakNode break} and {@link SLContinueNode continue},
  * {@link SLReturnNode return}.
  * <li>Debugging control: {@link SLDebuggerNode debugger} statement uses
- * {@link DebuggerTags#AlwaysHalt} tag to halt the execution when run under the debugger.
+ * {@link DebuggerTags.AlwaysHalt} tag to halt the execution when run under the debugger.
  * <li>Function calls: {@link SLInvokeNode invocations} are efficiently implemented with
  * {@link SLDispatchNode polymorphic inline caches}.
  * <li>Object access: {@link SLReadPropertyNode} uses {@link SLReadPropertyCacheNode} as the

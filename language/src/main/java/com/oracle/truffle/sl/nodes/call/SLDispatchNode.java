@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -103,10 +103,13 @@ public abstract class SLDispatchNode extends Node {
      * @see Cached
      * @see Specialization
      *
-     * @param function the dynamically provided function
-     * @param cachedFunction the cached function of the specialization instance
+     * @param function the dynamically provided function.
+     * @param arguments the function arguments.
+     * @param callTargetStable true if the the function has not been redefined.
+     * @param cachedTarget cached function call target root node.
      * @param callNode the {@link DirectCallNode} specifically created for the {@link CallTarget} in
      *            cachedFunction.
+     * @return the result of the cached call.
      */
     @Specialization(limit = "INLINE_CACHE_SIZE", //
                     guards = "function.getCallTarget() == cachedTarget", //
@@ -125,6 +128,10 @@ public abstract class SLDispatchNode extends Node {
      * Slow-path code for a call, used when the polymorphic inline cache exceeded its maximum size
      * specified in <code>INLINE_CACHE_SIZE</code>. Such calls are not optimized any further, e.g.,
      * no method inlining is performed.
+     * @param function the dynamically provided function.
+     * @param arguments the function arguments.
+     * @param callNode the function node to call.
+     * @return the result of the call.
      */
     @Specialization(replaces = "doDirect")
     protected static Object doIndirect(SLFunction function, Object[] arguments,
@@ -138,6 +145,9 @@ public abstract class SLDispatchNode extends Node {
 
     /**
      * When no specialization fits, the receiver is not an object (which is a type error).
+     * @param function the dynamically provided function.
+     * @param arguments the function arguments.
+     * @return always throws a {@link SLUndefinedNameException}
      */
     @Fallback
     protected Object unknownFunction(Object function, @SuppressWarnings("unused") Object[] arguments) {
@@ -147,6 +157,12 @@ public abstract class SLDispatchNode extends Node {
     /**
      * Language interoperability: If the function is a foreign value, i.e., not a SLFunction, we use
      * Truffle's interop API to execute the foreign function.
+     * @param function the dynamically provided foreign function.
+     * @param arguments the function arguments.
+     * @param crossLanguageCallNode the child node to call the foreign function.
+     * @param toSLTypeNode the child node to convert the result of the foreign call to a SL value.
+     * @return the result of the call.
+     * @throws SLUndefinedNameException if the foreign function call fails.
      */
     @Specialization(guards = "isForeignFunction(function)")
     protected Object doForeign(TruffleObject function, Object[] arguments,

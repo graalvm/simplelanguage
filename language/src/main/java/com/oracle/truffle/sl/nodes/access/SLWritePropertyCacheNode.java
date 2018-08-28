@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, 2015, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2013, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -57,8 +57,13 @@ public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
     public abstract void executeWrite(DynamicObject receiver, Object name, Object value);
 
     /**
-     * Polymorphic inline cache for writing a property that already exists (no shape change is
-     * necessary).
+     * Polymorphic inline cache for writing a property that already exists (no shape change is necessary).
+     * @param receiver the object to receive the written value.
+     * @param name the name of the property to write.
+     * @param value the value to write to the property.
+     * @param cachedName the cache for the property.
+     * @param shape the property-to-location mapping.
+     * @param location the location for the property.
      */
     @Specialization(limit = "CACHE_LIMIT", //
                     guards = {
@@ -70,7 +75,9 @@ public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
                     assumptions = {
                                     "shape.getValidAssumption()"
                     })
-    protected static void writeExistingPropertyCached(DynamicObject receiver, @SuppressWarnings("unused") Object name, Object value,
+    protected static void writeExistingPropertyCached(DynamicObject receiver,
+                    @SuppressWarnings("unused") Object name,
+                    Object value,
                     @SuppressWarnings("unused") @Cached("name") Object cachedName,
                     @Cached("lookupShape(receiver)") Shape shape,
                     @Cached("lookupLocation(shape, name, value)") Location location) {
@@ -84,8 +91,15 @@ public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
     }
 
     /**
-     * Polymorphic inline cache for writing a property that does not exist yet (shape change is
-     * necessary).
+     * Polymorphic inline cache for writing a property that does not exist yet (shape change is necessary).
+     * @param receiver the object to receive the written value.
+     * @param name the name of the property to write.
+     * @param value the value to write to the property.
+     * @param cachedName the cache for the property.
+     * @param oldShape the old property-to-location mapping.
+     * @param oldLocation the old location for the property.
+     * @param newShape the new property-to-location mapping.
+     * @param newLocation the new location for the property.
      */
     @Specialization(limit = "CACHE_LIMIT", //
                     guards = {
@@ -114,7 +128,12 @@ public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
         }
     }
 
-    /** Try to find the given property in the shape. */
+    /**
+     * Try to find the given property in the shape.
+     * @param shape the shape to look the property up in.
+     * @param name the name of the property.
+     * @return the location of the property, or {@code null} if it does not exist.
+     */
     protected static Location lookupLocation(Shape shape, Object name) {
         CompilerAsserts.neverPartOfCompilation();
 
@@ -128,8 +147,12 @@ public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
     }
 
     /**
-     * Try to find the given property in the shape. Also returns null when the value cannot be store
-     * into the location.
+     * Try to find the given property in the shape. Also returns null when the value cannot be stored
+     * into the location. No actual assignment is done.
+     * @param shape the shape to look the property up in.
+     * @param name the name of the property.
+     * @param value the value that the property is going to be stored into the location.
+     * @return the location of the property, or null if it does not exist or the value can't be stored into it.
      */
     protected static Location lookupLocation(Shape shape, Object name, Object value) {
         Location location = lookupLocation(shape, name);
@@ -152,12 +175,20 @@ public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
      * guard of {@link SLWritePropertyCacheNode#writeNewPropertyCached} because there we perform a
      * shape transition, i.e., we are not actually setting the value of the new location - we only
      * transition to this location as part of the shape change.
+     * @param location the location to test the value against.
+     * @param value the value to check the location can be set to.
+     * @return true if the location can be set to the value.
      */
     protected static boolean canSet(Location location, Object value) {
         return location.canSet(value);
     }
 
-    /** See {@link #canSet} for the difference between the two methods. */
+    /**
+     * See {@link #canSet} for the difference between the two methods.
+     * @param location the location to test the value against.
+     * @param value the value to check can be stored in the location .
+     * @return true if the value can be stored in the location.
+     */
     protected static boolean canStore(Location location, Object value) {
         return location.canStore(value);
     }
@@ -165,6 +196,9 @@ public abstract class SLWritePropertyCacheNode extends SLPropertyCacheNode {
     /**
      * The generic case is used if the number of shapes accessed overflows the limit of the
      * polymorphic inline cache.
+     * @param receiver the object to receive the property,
+     * @param name the name of the property.
+     * @param value the value of the property.
      */
     @TruffleBoundary
     @Specialization(replaces = {"writeExistingPropertyCached", "writeNewPropertyCached"}, guards = {"receiver.getShape().isValid()"})

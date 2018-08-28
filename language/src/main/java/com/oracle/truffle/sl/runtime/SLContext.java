@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -123,14 +123,16 @@ public final class SLContext {
     /**
      * Returns the default input, i.e., the source for the {@link SLReadlnBuiltin}. To allow unit
      * testing, we do not use {@link System#in} directly.
+     * @return the default input.
      */
     public BufferedReader getInput() {
         return input;
     }
 
     /**
-     * The default default, i.e., the output for the {@link SLPrintlnBuiltin}. To allow unit
+     * The default output, i.e., the output for the {@link SLPrintlnBuiltin}. To allow unit
      * testing, we do not use {@link System#out} directly.
+     * @return the default output.
      */
     public PrintWriter getOutput() {
         return output;
@@ -138,6 +140,7 @@ public final class SLContext {
 
     /**
      * Returns the registry of all functions that are currently defined.
+     * @return the function registry.
      */
     public SLFunctionRegistry getFunctionRegistry() {
         return functionRegistry;
@@ -221,6 +224,7 @@ public final class SLContext {
     /**
      * Allocate an empty object. All new objects initially have no properties. Properties are added
      * when they are first stored, i.e., the store triggers a shape change of the object.
+     * @return an empty object.
      */
     public DynamicObject createObject() {
         DynamicObject object = null;
@@ -270,6 +274,7 @@ public final class SLContext {
     /**
      * Returns an object that contains bindings that were exported across all used languages. To
      * read or write from this object the {@link TruffleObject interop} API can be used.
+     * @return the exported bindings.
      */
     public TruffleObject getPolyglotBindings() {
         return (TruffleObject) env.getPolyglotBindings();

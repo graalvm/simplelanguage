@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2014, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -77,6 +77,11 @@ public abstract class SLAddNode extends SLBinaryNode {
      * <p>
      * This specialization is automatically selected by the Truffle DSL if both the left and right
      * operand are {@code long} values.
+     * @param left the left operand of the addition.
+     * @param right the right operand of the addition.
+     * @return the result of the addition.
+     * @throws ArithmeticException if the addition overflows.
+     *
      */
     @Specialization(rewriteOn = ArithmeticException.class)
     protected long add(long left, long right) {
@@ -94,6 +99,9 @@ public abstract class SLAddNode extends SLBinaryNode {
      * right operand is a {@code long} value. Because the {@link #add(long, long) long}
      * specialization} has the {@code rewriteOn} attribute, this specialization is also taken if
      * both input values are {@code long} values but the primitive addition overflows.
+     * @param left the left operand of the addition.
+     * @param right the right operand of the addition.
+     * @return the result of the addition.
      */
     @Specialization
     @TruffleBoundary
@@ -108,6 +116,9 @@ public abstract class SLAddNode extends SLBinaryNode {
      * <p>
      * To implement these semantics, we tell the Truffle DSL to use a custom guard. The guard
      * function is defined in {@link #isString this class}, but could also be in any superclass.
+     * @param left the left operand of the string concatenation.
+     * @param right the right operand of the string concatenation.
+     * @return the result of the string concatenation.
      */
     @Specialization(guards = "isString(left, right)")
     @TruffleBoundary
@@ -118,6 +129,9 @@ public abstract class SLAddNode extends SLBinaryNode {
     /**
      * Guard for String concatenation: returns true if either the left or the right operand is a
      * {@link String}.
+     * @param a a potential {@link String} object.
+     * @param b a potential {@link String} object.
+     * @return true if either a or b is a {@link String}
      */
     protected boolean isString(Object a, Object b) {
         return a instanceof String || b instanceof String;
