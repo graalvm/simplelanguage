@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="1.0.0-rc7"
+VERSION="1.0.0-rc8"
 
 MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"
 SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd -P)"

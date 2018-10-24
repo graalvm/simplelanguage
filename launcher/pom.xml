@@ -4,7 +4,7 @@
   <parent>
     <groupId>com.oracle</groupId>
     <artifactId>simplelanguage-parent</artifactId>
-    <version>1.0.0-rc7-SNAPSHOT</version>
+    <version>1.0.0-rc8-SNAPSHOT</version>
   </parent>
   <artifactId>launcher</artifactId>
   <build>
@@ -69,7 +69,7 @@
   </build>
   <dependencies>
     <dependency>
-      <groupId>org.graalvm</groupId>
+      <groupId>org.graalvm.sdk</groupId>
       <artifactId>graal-sdk</artifactId>
       <version>${graalvm.version}</version>
     </dependency>
