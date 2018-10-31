@@ -14,12 +14,13 @@ env:
 
 install:
     - |
-        if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="macos"; fi \
-        if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DOWNLOAD_OS_NAME="linux"; fi \
         if [[ "GRAALVM_VERSION" != "NONE" ]]; then \
+          if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="macos"; fi \
+          if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DOWNLOAD_OS_NAME="linux"; fi \
           curl -LJ "https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-$GRAALVM_VERSION-$DOWNLOAD_OS_NAME-amd64.tar.gz" --output graalvm.tar.gz \
           tar -xzf graalvm.tar.gz \
-          export JAVA_HOME="$(pwd)/graalvm-ce-$GRAALVM_VERSION" && if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"\
+          export JAVA_HOME="$(pwd)/graalvm-ce-$GRAALVM_VERSION" \
+          if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi \
         fi
 
 script:
