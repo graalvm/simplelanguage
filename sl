@@ -17,7 +17,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
     GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
     if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
         echo "Installed in wrong version of GraalVM. Expected: $VERSION, found $GRAALVM_VERSION"
-        exit
+        exit 1
     fi
 else
     LANGUAGE_PATH="$SCRIPT_HOME/language/target/simplelanguage-$VERSION-SNAPSHOT.jar"
@@ -29,21 +29,21 @@ else
             GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
             if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
                 echo "Wrong version of GraalVM in \$JAVA_HOME. Expected: $VERSION, found $GRAALVM_VERSION"
-                exit
+                exit 1
             fi
         fi
         JAVACMD=${JAVACMD:=$JAVA_HOME/bin/java}
         if [[ ! -f $LANGUAGE_PATH ]]; then
             echo "Could not find language on $LANGUAGE_PATH. Did you run mvn package?"
-            exit
+            exit 1
         fi
         if [[ ! -f $LAUNCHER_PATH ]]; then
             echo "Could not find launcher on $LAUNCHER_PATH. Did you run mvn package?"
-            exit
+            exit 1
         fi
     else
         echo "JAVA_HOME is not set"
-        exit
+        exit 1
     fi
 fi
 
@@ -95,7 +95,7 @@ else
     done
     if [[ ! -d $HOME/.m2 ]]; then
         echo "Could not find mvn cache at $HOME/.m2"
-        exit
+        exit 1
     fi
     GRAAL_SDK_PATH="$HOME/.m2/repository/org/graalvm/graal-sdk/$VERSION/graal-sdk-$VERSION.jar"
     TRUFFLE_API_PATH="$HOME/.m2/repository/com/oracle/truffle/truffle-api/$VERSION/truffle-api-$VERSION.jar"
