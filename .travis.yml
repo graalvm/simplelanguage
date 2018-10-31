@@ -10,8 +10,9 @@ env:
 install:
     - curl -LJ "https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-$GRAALVM_VERSION-linux-amd64.tar.gz" --output graalvm.tar.gz
     - tar -xzf graalvm.tar.gz
-    - export JAVA_HOME=$(pwd)/graalvm-ce-$GRAALVM_VERSION
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME=$JAVA_HOME/Contents/Home; fi
+    - export JAVA_HOME="$(pwd)/graalvm-ce-$GRAALVM_VERSION"
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi
+    - echo $JAVA_HOME
 
 script:
     - mvn package
