@@ -97,8 +97,8 @@ else
         echo "Could not find mvn cache at $HOME/.m2"
         exit 1
     fi
-    GRAAL_SDK_PATH="$HOME/.m2/repository/org/graalvm/graal-sdk/$VERSION/graal-sdk-$VERSION.jar"
-    TRUFFLE_API_PATH="$HOME/.m2/repository/com/oracle/truffle/truffle-api/$VERSION/truffle-api-$VERSION.jar"
+    GRAAL_SDK_PATH="$HOME/.m2/repository/org/graalvm/sdk/graal-sdk/$VERSION/graal-sdk-$VERSION.jar"
+    TRUFFLE_API_PATH="$HOME/.m2/repository/org/graalvm/truffle/truffle-api/$VERSION/truffle-api-$VERSION.jar"
     ANTLR_PATH="$HOME/.m2/repository/org/antlr/antlr4-runtime/4.7/antlr4-runtime-4.7.jar"
     $JAVACMD -cp $GRAAL_SDK_PATH:$LAUNCHER_PATH:$LANGUAGE_PATH:$TRUFFLE_API_PATH:$ANTLR_PATH $MAIN_CLASS $PROGRAM_ARGS
 fi
