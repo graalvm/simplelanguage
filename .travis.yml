@@ -12,6 +12,14 @@ env:
     - GRAALVM_VERSION="1.0.0-rc8"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
+matrix:
+    exclude:
+        - env: GRAALVM_VERSION="1.0.0-rc8"
+          jdk: openjdk11
+          os: linux
+        - env: GRAALVM_VERSION="1.0.0-rc8"
+          jdk: openjdk11
+          os: osx
 install:
     - |
         if [[ "$GRAALVM_VERSION" != "NONE" ]]; then
