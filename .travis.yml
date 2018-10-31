@@ -13,7 +13,6 @@ install:
     - tar -xzf graalvm.tar.gz
     - export JAVA_HOME="$(pwd)/graalvm-ce-$GRAALVM_VERSION"
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi
-    - echo $JAVA_HOME
 
 script:
     - mvn package
