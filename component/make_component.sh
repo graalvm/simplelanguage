@@ -30,8 +30,8 @@ cd $COMPONENT_DIR
 jar cfm ../sl-component.jar META-INF/MANIFEST.MF .
 
 echo "bin/sl = ../jre/languages/sl/bin/sl" > META-INF/symlinks
-if [[ -f ../native/slnative ]]; then
-    echo "bin/slnative = ../jre/languages/sl/bin/slnative" > META-INF/symlinks
+if [[ -f ../../native/slnative ]]; then
+    echo "bin/slnative = ../jre/languages/sl/bin/slnative" >> META-INF/symlinks
 fi
 jar uf ../sl-component.jar META-INF/symlinks
 
