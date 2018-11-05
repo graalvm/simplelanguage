@@ -2,6 +2,9 @@
 
 COMPONENT_DIR="component_temp_dir"
 LANGUAGE_PATH="$COMPONENT_DIR/jre/languages/sl"
+if [[ -f ../native/slnative ]]; then
+    INCLUDE_SLNATIVE="TRUE"
+fi
 
 rm -rf COMPONENT_DIR
 
@@ -13,7 +16,7 @@ cp ../launcher/target/sl-launcher.jar "$LANGUAGE_PATH/launcher/"
 
 mkdir -p "$LANGUAGE_PATH/bin"
 cp ../sl $LANGUAGE_PATH/bin/
-if [[ -f ../native/slnative ]]; then
+if [[ $INCLUDE_SLNATIVE = "TRUE" ]]; then
     cp ../native/slnative $LANGUAGE_PATH/bin/
 fi
 
@@ -30,7 +33,7 @@ cd $COMPONENT_DIR
 jar cfm ../sl-component.jar META-INF/MANIFEST.MF .
 
 echo "bin/sl = ../jre/languages/sl/bin/sl" > META-INF/symlinks
-if [[ -f ../../native/slnative ]]; then
+if [[ $INCLUDE_SLNATIVE = "TRUE" ]]; then
     echo "bin/slnative = ../jre/languages/sl/bin/slnative" >> META-INF/symlinks
 fi
 jar uf ../sl-component.jar META-INF/symlinks
