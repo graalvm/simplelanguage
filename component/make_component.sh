@@ -13,6 +13,9 @@ cp ../launcher/target/sl-launcher.jar "$LANGUAGE_PATH/launcher/"
 
 mkdir -p "$LANGUAGE_PATH/bin"
 cp ../sl $LANGUAGE_PATH/bin/
+if [[ -f ../native/slnative ]]; then
+    cp ../native/slnative $LANGUAGE_PATH/bin/
+fi
 
 mkdir -p "$COMPONENT_DIR/META-INF"
 MANIFEST="$COMPONENT_DIR/META-INF/MANIFEST.MF"
@@ -27,6 +30,9 @@ cd $COMPONENT_DIR
 jar cfm ../sl-component.jar META-INF/MANIFEST.MF .
 
 echo "bin/sl = ../jre/languages/sl/bin/sl" > META-INF/symlinks
+if [[ -f ../native/slnative ]]; then
+    echo "bin/slnative = ../jre/languages/sl/bin/slnative" > META-INF/symlinks
+fi
 jar uf ../sl-component.jar META-INF/symlinks
 
 echo "jre/languages/sl/bin/sl = rwxrwxr-x" > META-INF/permissions
