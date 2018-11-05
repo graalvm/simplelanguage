@@ -39,6 +39,7 @@ fi
 jar uf ../sl-component.jar META-INF/symlinks
 
 echo "jre/languages/sl/bin/sl = rwxrwxr-x" > META-INF/permissions
+echo "jre/languages/sl/bin/slnative = rwxrwxr-x" >> META-INF/permissions
 jar uf ../sl-component.jar META-INF/permissions
 cd ..
 rm -rf $COMPONENT_DIR
