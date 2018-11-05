@@ -37,3 +37,7 @@ script:
     - mvn package
     - ./sl language/tests/Add.sl
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then ./native/slnative language/tests/Add.sl; fi
+    - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then $JAVA_HOME/bin/gu install -F component/sl-component.jar ; fi
+    - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then $JAVA_HOME/bin/sl language/tests/Add.sl; fi
+    - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then $JAVA_HOME/bin/gu rebuild-images polyglot; fi
+    - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then $JAVA_HOME/bin/polyglot --jvm --language sl --file language/tests/Add.sl; fi
