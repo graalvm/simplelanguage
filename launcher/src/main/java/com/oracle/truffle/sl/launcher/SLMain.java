@@ -141,7 +141,7 @@ public final class SLMain {
         if (index >= 0) {
             group = group.substring(0, index);
         }
-        options.put(key, value);
+        options.put(group, value);
         return true;
     }
 
