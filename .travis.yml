@@ -9,15 +9,15 @@ jdk:
     - openjdk11
 
 env:
-    - GRAALVM_VERSION="1.0.0-rc9"
+    - GRAALVM_VERSION="1.0.0-rc10"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 matrix:
     exclude:
-        - env: GRAALVM_VERSION="1.0.0-rc9"
+        - env: GRAALVM_VERSION="1.0.0-rc10"
           jdk: openjdk11
           os: linux
-        - env: GRAALVM_VERSION="1.0.0-rc9"
+        - env: GRAALVM_VERSION="1.0.0-rc10"
           jdk: openjdk11
           os: osx
 install:
