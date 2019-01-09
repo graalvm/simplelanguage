@@ -43,3 +43,6 @@ script:
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then $JAVA_HOME/bin/sl language/tests/Add.sl; fi
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then $JAVA_HOME/bin/slnative language/tests/Add.sl; fi
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then $JAVA_HOME/bin/polyglot --jvm --language sl --file language/tests/Add.sl; fi
+    - ./generate_parser
+    - mvn package
+    - ./sl language/tests/Add.sl
