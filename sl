@@ -20,7 +20,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
         exit 1
     fi
 else
-    LANGUAGE_PATH="$SCRIPT_HOME/language/target/simplelanguage-$VERSION-SNAPSHOT.jar"
+    LANGUAGE_PATH="$SCRIPT_HOME/language/target/simplelanguage.jar"
     LAUNCHER_PATH="$SCRIPT_HOME/launcher/target/launcher-$VERSION-SNAPSHOT.jar"
     # Check the GraalVM version in JAVA_HOME
     if [[ "$JAVA_HOME" != "" ]]; then
@@ -99,6 +99,5 @@ else
     fi
     GRAAL_SDK_PATH="$HOME/.m2/repository/org/graalvm/sdk/graal-sdk/$VERSION/graal-sdk-$VERSION.jar"
     TRUFFLE_API_PATH="$HOME/.m2/repository/org/graalvm/truffle/truffle-api/$VERSION/truffle-api-$VERSION.jar"
-    ANTLR_PATH="$HOME/.m2/repository/org/antlr/antlr4-runtime/4.7/antlr4-runtime-4.7.jar"
-    $JAVACMD -cp $GRAAL_SDK_PATH:$LAUNCHER_PATH:$LANGUAGE_PATH:$TRUFFLE_API_PATH:$ANTLR_PATH $MAIN_CLASS $PROGRAM_ARGS
+    $JAVACMD -cp $GRAAL_SDK_PATH:$LAUNCHER_PATH:$LANGUAGE_PATH:$TRUFFLE_API_PATH $MAIN_CLASS $PROGRAM_ARGS
 fi
