@@ -25,8 +25,8 @@ MANIFEST="$COMPONENT_DIR/META-INF/MANIFEST.MF"
 touch "$MANIFEST"
 echo "Bundle-Name: Simple Language" >> "$MANIFEST"
 echo "Bundle-Symbolic-Name: com.oracle.truffle.sl" >> "$MANIFEST"
-echo "Bundle-Version: 1.0.0-rc12" >> "$MANIFEST"
-echo 'Bundle-RequireCapability: org.graalvm; filter:="(&(graalvm_version=1.0.0-rc12)(os_arch=amd64))"' >> "$MANIFEST"
+echo "Bundle-Version: 1.0.0-rc13" >> "$MANIFEST"
+echo 'Bundle-RequireCapability: org.graalvm; filter:="(&(graalvm_version=1.0.0-rc13)(os_arch=amd64))"' >> "$MANIFEST"
 echo "x-GraalVM-Polyglot-Part: True" >> "$MANIFEST"
 
 cd $COMPONENT_DIR
