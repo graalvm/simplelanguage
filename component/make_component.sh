@@ -29,7 +29,8 @@ mkdir -p "$COMPONENT_DIR/META-INF"
     echo "x-GraalVM-Polyglot-Part: True"
 } > "$COMPONENT_DIR/META-INF/MANIFEST.MF"
 
-cd $COMPONENT_DIR
+(
+cd $COMPONENT_DIR || exit 1
 jar cfm ../sl-component.jar META-INF/MANIFEST.MF .
 
 echo "bin/sl = ../jre/languages/sl/bin/sl" > META-INF/symlinks
@@ -43,5 +44,5 @@ jar uf ../sl-component.jar META-INF/symlinks
     echo "jre/languages/sl/bin/slnative = rwxrwxr-x"
 } > META-INF/permissions
 jar uf ../sl-component.jar META-INF/permissions
-cd ..
+)
 rm -rf $COMPONENT_DIR
