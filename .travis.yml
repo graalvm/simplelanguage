@@ -49,4 +49,4 @@ script:
     - mvn package
     - ./sl language/tests/Add.sl
     - shellcheck sl
-    - find . -name '*.sh' | xargs shellcheck
+    - find . -name '*.sh' | grep -v graalvm | xargs shellcheck
