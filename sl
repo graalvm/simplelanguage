@@ -51,46 +51,46 @@ fi
 # Parse arguments, prepare Java command and execute
 #######################################################################
 if [[ "$GRAALVM_VERSION" != "" ]]; then
-    PROGRAM_ARGS=""
-    JAVA_ARGS=""
+    PROGRAM_ARGS=()
+    JAVA_ARGS=()
 
     for opt in "$@"
     do
       case $opt in
         -debug)
-          JAVA_ARGS="$JAVA_ARGS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y" ;;
+            JAVA_ARGS+=("-Xdebug" "-Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y") ;;
         -dump)
-          JAVA_ARGS="$JAVA_ARGS -Dgraal.Dump=Truffle:1 -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true" ;;
+            JAVA_ARGS+=("-Dgraal.Dump=Truffle:1" "-Dgraal.TruffleBackgroundCompilation=false" "-Dgraal.TraceTruffleCompilation=true" "-Dgraal.TraceTruffleCompilationDetails=true") ;;
         -disassemble)
-          JAVA_ARGS="$JAVA_ARGS -XX:CompileCommand=print,*OptimizedCallTarget.callRoot -XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true" ;;
+            JAVA_ARGS+=("-XX:CompileCommand=print,*OptimizedCallTarget.callRoot -XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true") ;;
         -J*)
-          opt=${opt:2}
-          JAVA_ARGS="$JAVA_ARGS $opt" ;;
+            opt=${opt:2}
+            JAVA_ARGS+=("$opt") ;;
         *)
-          PROGRAM_ARGS="$PROGRAM_ARGS $opt" ;;
+            PROGRAM_ARGS+=("$opt") ;;
       esac
     done
     "$JAVACMD" "${JAVA_ARGS[@]}" -Dtruffle.class.path.append="$LANGUAGE_PATH" -cp "$LAUNCHER_PATH" "$MAIN_CLASS" "${PROGRAM_ARGS[@]}"
 else
     echo "Warning: Could not find GraalVM on $JAVA_HOME. Running on JDK without support for compilation."
     echo
-    PROGRAM_ARGS=""
-    JAVA_ARGS=""
+    PROGRAM_ARGS=()
+    JAVA_ARGS=()
 
     for opt in "$@"
     do
       case $opt in
         -debug)
-          JAVA_ARGS="$JAVA_ARGS -Xdebug -Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y" ;;
+            JAVA_ARGS+=("-Xdebug" "-Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y") ;;
         -dump)
-          echo "NOTE: Ignoring -dump, only supported on GraalVM." ;;
+            echo "NOTE: Ignoring -dump, only supported on GraalVM." ;;
         -disassemble)
-          echo "NOTE: Ignoring -disassemble" ;;
+            echo "NOTE: Ignoring -disassemble" ;;
         -J*)
-          opt=${opt:2}
-          JAVA_ARGS="$JAVA_ARGS $opt" ;;
+            opt=${opt:2}
+            JAVA_ARGS+=("$opt") ;;
         *)
-          PROGRAM_ARGS="$PROGRAM_ARGS $opt" ;;
+            PROGRAM_ARGS+=("$opt") ;;
       esac
     done
     if [[ ! -d $HOME/.m2 ]]; then
