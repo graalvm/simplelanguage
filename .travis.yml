@@ -49,4 +49,4 @@ script:
     - mvn package
     - ./sl language/tests/Add.sl
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then shellcheck sl; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; find . -name '*.sh' | grep -v graalvm | xargs shellcheck; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then (find . -name '*.sh' | grep -v graalvm | xargs shellcheck); fi
