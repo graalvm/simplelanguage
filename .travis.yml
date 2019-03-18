@@ -48,5 +48,5 @@ script:
     - ./generate_parser
     - mvn package
     - ./sl language/tests/Add.sl
-    - shellcheck sl
-    - find . -name '*.sh' | grep -v graalvm | xargs shellcheck
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then shellcheck sl; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; find . -name '*.sh' | grep -v graalvm | xargs shellcheck; fi
