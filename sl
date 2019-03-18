@@ -62,7 +62,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
         -dump)
             JAVA_ARGS+=("-Dgraal.Dump=Truffle:1" "-Dgraal.TruffleBackgroundCompilation=false" "-Dgraal.TraceTruffleCompilation=true" "-Dgraal.TraceTruffleCompilationDetails=true") ;;
         -disassemble)
-            JAVA_ARGS+=("-XX:CompileCommand=print,*OptimizedCallTarget.callRoot -XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot -Dgraal.TruffleBackgroundCompilation=false -Dgraal.TraceTruffleCompilation=true -Dgraal.TraceTruffleCompilationDetails=true") ;;
+            JAVA_ARGS+=("-XX:CompileCommand=print,*OptimizedCallTarget.callRoot" "-XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot" "-Dgraal.TruffleBackgroundCompilation=false" "-Dgraal.TraceTruffleCompilation=true" "-Dgraal.TraceTruffleCompilationDetails=true") ;;
         -J*)
             opt=${opt:2}
             JAVA_ARGS+=("$opt") ;;
