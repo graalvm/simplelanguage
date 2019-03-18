@@ -48,3 +48,5 @@ script:
     - ./generate_parser
     - mvn package
     - ./sl language/tests/Add.sl
+    - shellcheck sl
+    - find . -name '*.sh' | xargs shellcheck
