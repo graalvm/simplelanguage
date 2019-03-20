@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.oracle</groupId>
   <artifactId>simplelanguage-parent</artifactId>
-  <version>1.0.0-rc13-SNAPSHOT</version>
+  <version>1.0.0-rc14-SNAPSHOT</version>
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <m2e.apt.activation>jdt_apt</m2e.apt.activation>
-    <graalvm.version>1.0.0-rc13</graalvm.version>
+    <graalvm.version>1.0.0-rc14</graalvm.version>
   </properties>
   <packaging>pom</packaging>
   <modules>
