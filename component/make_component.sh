@@ -6,7 +6,7 @@ if [[ -f ../native/slnative ]]; then
     INCLUDE_SLNATIVE="TRUE"
 fi
 
-rm -rf COMPONENT_DIR
+rm -rf "$COMPONENT_DIR"
 
 mkdir -p "$LANGUAGE_PATH"
 cp ../language/target/simplelanguage.jar "$LANGUAGE_PATH"
@@ -42,4 +42,4 @@ echo "jre/languages/sl/bin/sl = rwxrwxr-x" > META-INF/permissions
 echo "jre/languages/sl/bin/slnative = rwxrwxr-x" >> META-INF/permissions
 jar uf ../sl-component.jar META-INF/permissions
 cd ..
-rm -rf $COMPONENT_DIR
+rm -rf "$COMPONENT_DIR"
