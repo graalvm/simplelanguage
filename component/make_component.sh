@@ -21,15 +21,16 @@ if [[ $INCLUDE_SLNATIVE = "TRUE" ]]; then
 fi
 
 mkdir -p "$COMPONENT_DIR/META-INF"
-MANIFEST="$COMPONENT_DIR/META-INF/MANIFEST.MF"
-touch "$MANIFEST"
-echo "Bundle-Name: Simple Language" >> "$MANIFEST"
-echo "Bundle-Symbolic-Name: com.oracle.truffle.sl" >> "$MANIFEST"
-echo "Bundle-Version: 1.0.0-rc14" >> "$MANIFEST"
-echo 'Bundle-RequireCapability: org.graalvm; filter:="(&(graalvm_version=1.0.0-rc14)(os_arch=amd64))"' >> "$MANIFEST"
-echo "x-GraalVM-Polyglot-Part: True" >> "$MANIFEST"
+{
+    echo "Bundle-Name: Simple Language";
+    echo "Bundle-Symbolic-Name: com.oracle.truffle.sl";
+    echo "Bundle-Version: 1.0.0-rc14";
+    echo 'Bundle-RequireCapability: org.graalvm; filter:="(&(graalvm_version=1.0.0-rc14)(os_arch=amd64))"';
+    echo "x-GraalVM-Polyglot-Part: True"
+} > "$COMPONENT_DIR/META-INF/MANIFEST.MF"
 
-cd $COMPONENT_DIR
+(
+cd $COMPONENT_DIR || exit 1
 jar cfm ../sl-component.jar META-INF/MANIFEST.MF .
 
 echo "bin/sl = ../jre/languages/sl/bin/sl" > META-INF/symlinks
@@ -38,8 +39,10 @@ if [[ $INCLUDE_SLNATIVE = "TRUE" ]]; then
 fi
 jar uf ../sl-component.jar META-INF/symlinks
 
-echo "jre/languages/sl/bin/sl = rwxrwxr-x" > META-INF/permissions
-echo "jre/languages/sl/bin/slnative = rwxrwxr-x" >> META-INF/permissions
+{
+    echo "jre/languages/sl/bin/sl = rwxrwxr-x"
+    echo "jre/languages/sl/bin/slnative = rwxrwxr-x"
+} > META-INF/permissions
 jar uf ../sl-component.jar META-INF/permissions
-cd ..
+)
 rm -rf $COMPONENT_DIR
