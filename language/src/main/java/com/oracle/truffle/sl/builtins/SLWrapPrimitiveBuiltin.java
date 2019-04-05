@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,38 +38,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.runtime;
+package com.oracle.truffle.sl.builtins;
 
-import com.oracle.truffle.api.interop.CanResolve;
-import com.oracle.truffle.api.interop.MessageResolution;
-import com.oracle.truffle.api.interop.Resolve;
+import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
+import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.interop.TruffleObject;
-import com.oracle.truffle.api.nodes.Node;
+import com.oracle.truffle.api.library.CachedLibrary;
+import com.oracle.truffle.api.library.ExportLibrary;
+import com.oracle.truffle.api.library.ExportMessage;
+import com.oracle.truffle.api.library.Message;
+import com.oracle.truffle.api.library.ReflectionLibrary;
+import com.oracle.truffle.api.nodes.NodeInfo;
 
 /**
- * The class containing all message resolution implementations of {@link SLNull}.
+ * Builtin function to wrap primitive values in order to increase coverage of the Truffle TCK test.
  */
-/**
- * The class containing all message resolution implementations of {@link SLNull}.
- */
-@MessageResolution(receiverType = SLNull.class)
-public class SLNullMessageResolution {
-    /*
-     * An SL function resolves the IS_NULL message.
-     */
-    @Resolve(message = "IS_NULL")
-    public abstract static class SLForeignIsNullNode extends Node {
+@NodeInfo(shortName = "wrapPrimitive")
+@SuppressWarnings("unused")
+public abstract class SLWrapPrimitiveBuiltin extends SLBuiltinNode {
 
-        public Object access(Object receiver) {
-            return SLNull.SINGLETON == receiver;
+    @TruffleBoundary
+    @Specialization
+    public Object doDefault(Object value) {
+        if (value instanceof PrimitiveValueWrapper) {
+            return value;
+        } else {
+            return new PrimitiveValueWrapper(value);
         }
     }
 
-    @CanResolve
-    public abstract static class CheckNull extends Node {
+    @ExportLibrary(ReflectionLibrary.class)
+    static final class PrimitiveValueWrapper implements TruffleObject {
 
-        protected static boolean test(TruffleObject receiver) {
-            return receiver instanceof SLNull;
+        final Object delegate;
+
+        PrimitiveValueWrapper(Object delegate) {
+            this.delegate = delegate;
         }
+
+        @ExportMessage
+        Object send(Message message, Object[] args,
+                        @CachedLibrary("this.delegate") ReflectionLibrary reflection) throws Exception {
+            return reflection.send(this.delegate, message, args);
+        }
+
     }
+
 }
