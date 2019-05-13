@@ -25,7 +25,7 @@ matrix:
 install:
     - |
         # Component installation is currently broken. Re-enable once fixed.
-        # cd .. && mv simplelanguage "simple language" && cd "simple language"
+        cd .. && mv simplelanguage "simple language" && cd "simple language"
         if [[ "$GRAALVM_VERSION" != "NONE" ]]; then
           if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="macos"; fi
           if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DOWNLOAD_OS_NAME="linux"; fi
