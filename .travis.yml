@@ -26,7 +26,7 @@ install:
     - |
         cd .. && mv simplelanguage "simple language" && cd "simple language"
         if [[ "$GRAALVM_VERSION" != "NONE" ]]; then
-          if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="macos"; fi
+          if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="darwin"; fi
           if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DOWNLOAD_OS_NAME="linux"; fi
           curl -LJ "https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-$DOWNLOAD_OS_NAME-amd64-$GRAALVM_VERSION.tar.gz" --output graalvm.tar.gz
           tar -xzf graalvm.tar.gz
