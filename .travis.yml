@@ -10,12 +10,12 @@ jdk:
     - openjdk11
 
 env:
-    - GRAALVM_VERSION="1.0.0-rc16"
+    - GRAALVM_VERSION="19.0.0"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 matrix:
     exclude:
-        - env: GRAALVM_VERSION="1.0.0-rc16"
+        - env: GRAALVM_VERSION="19.0.0"
           jdk: openjdk11
         - jdk: openjdk9
           os: linux
@@ -24,15 +24,15 @@ matrix:
 
 install:
     - |
-        # Component installation is currently broken. Re-enable once fixed.
-        # cd .. && mv simplelanguage "simple language" && cd "simple language"
+        cd .. && mv simplelanguage "simple language" && cd "simple language"
         if [[ "$GRAALVM_VERSION" != "NONE" ]]; then
-          if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="macos"; fi
+          if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="darwin"; fi
           if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DOWNLOAD_OS_NAME="linux"; fi
-          curl -LJ "https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-$GRAALVM_VERSION-$DOWNLOAD_OS_NAME-amd64.tar.gz" --output graalvm.tar.gz
+          curl -LJ "https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-$DOWNLOAD_OS_NAME-amd64-$GRAALVM_VERSION.tar.gz" --output graalvm.tar.gz
           tar -xzf graalvm.tar.gz
           export JAVA_HOME="$(pwd)/graalvm-ce-$GRAALVM_VERSION"
           if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi
+          "$JAVA_HOME/bin/gu" install native-image
         else
           if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME=$(/usr/libexec/java_home); fi
         fi
