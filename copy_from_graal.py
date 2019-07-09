@@ -5,7 +5,8 @@
 # This scipt automates cloning the source repository and copying the SL code from there to here.
 # Requires git to be installed.
 
-import  sys
+import os
+import sys
 from subprocess import call
 
 GRAAL_REPO = "https://github.com/oracle/graal"
@@ -72,7 +73,10 @@ def update_sl(revision):
 
     """
     checkout(".", "sl_update_"+revision, True)
-    clone(GRAAL_REPO, GRAAL_DIR)
+    if os.path.isdir(GRAAL_DIR):
+        call(['git', 'fetch'], cwd=GRAAL_DIR)
+    else:
+        clone(GRAAL_REPO, GRAAL_DIR)
     checkout(GRAAL_DIR, revision)
     copy_sl()
     print ""
