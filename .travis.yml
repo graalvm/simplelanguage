@@ -10,12 +10,12 @@ jdk:
     - openjdk11
 
 env:
-    - GRAALVM_VERSION="19.1.0"
+    - GRAALVM_VERSION="19.1.1"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 matrix:
     exclude:
-        - env: GRAALVM_VERSION="19.1.0"
+        - env: GRAALVM_VERSION="19.1.1"
           jdk: openjdk11
         - jdk: openjdk9
           os: linux
