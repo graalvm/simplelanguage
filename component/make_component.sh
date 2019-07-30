@@ -20,6 +20,8 @@ if [[ $INCLUDE_SLNATIVE = "TRUE" ]]; then
     cp ../native/slnative $LANGUAGE_PATH/bin/
 fi
 
+touch "$LANGUAGE_PATH/native-image.properties"
+
 mkdir -p "$COMPONENT_DIR/META-INF"
 {
     echo "Bundle-Name: Simple Language";
