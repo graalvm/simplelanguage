@@ -5,21 +5,21 @@ os:
 language: java
 
 jdk:
-    - oraclejdk8
+    - openjdk8
     - openjdk9
     - openjdk11
 
 env:
-    - GRAALVM_VERSION="19.1.1"
+    - GRAALVM_VERSION="19.2.0"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 matrix:
     exclude:
-        - env: GRAALVM_VERSION="19.1.1"
+        - env: GRAALVM_VERSION="19.2.0"
           jdk: openjdk11
         - jdk: openjdk9
           os: linux
-        - jdk: oraclejdk8
+        - jdk: openjdk8
           os: osx
 
 install:
@@ -45,6 +45,7 @@ script:
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then "$JAVA_HOME/bin/sl" language/tests/Add.sl; fi
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then "$JAVA_HOME/bin/slnative" language/tests/Add.sl; fi
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then "$JAVA_HOME/bin/polyglot" --jvm --language sl --file language/tests/Add.sl; fi
+    - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then "$JAVA_HOME/bin/gu" remove sl; fi
     - ./generate_parser
     - mvn package
     - ./sl language/tests/Add.sl
