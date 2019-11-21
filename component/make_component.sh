@@ -6,7 +6,7 @@ if [[ $JAVA_VERSION == 1.8* ]]; then
 elif [[ $JAVA_VERSION == 11* ]]; then
     JRE=""
 else
-    echo "Unkown java version."
+    echo "Unkown java version: $JAVA_VERSION"
     exit 1
 fi
 readonly COMPONENT_DIR="component_temp_dir"
