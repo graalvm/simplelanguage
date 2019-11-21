@@ -1,7 +1,16 @@
 #!/usr/bin/env bash
 
-COMPONENT_DIR="component_temp_dir"
-LANGUAGE_PATH="$COMPONENT_DIR/jre/languages/sl"
+readonly JAVA_VERSION="${1}"
+if [[ $JAVA_VERSION == 1.8* ]]; then
+    JRE="jre/"
+elif [[ $JAVA_VERSION == 11* ]]; then
+    JRE=""
+else
+    echo "Unkown java version."
+    exit 1
+fi
+readonly COMPONENT_DIR="component_temp_dir"
+readonly LANGUAGE_PATH="$COMPONENT_DIR/$JRE/languages/sl"
 if [[ -f ../native/slnative ]]; then
     INCLUDE_SLNATIVE="TRUE"
 fi
@@ -35,15 +44,15 @@ mkdir -p "$COMPONENT_DIR/META-INF"
 cd $COMPONENT_DIR || exit 1
 jar cfm ../sl-component.jar META-INF/MANIFEST.MF .
 
-echo "bin/sl = ../jre/languages/sl/bin/sl" > META-INF/symlinks
+echo "bin/sl = ../$JRE/languages/sl/bin/sl" > META-INF/symlinks
 if [[ $INCLUDE_SLNATIVE = "TRUE" ]]; then
-    echo "bin/slnative = ../jre/languages/sl/bin/slnative" >> META-INF/symlinks
+    echo "bin/slnative = ../$JRE/languages/sl/bin/slnative" >> META-INF/symlinks
 fi
 jar uf ../sl-component.jar META-INF/symlinks
 
 {
-    echo "jre/languages/sl/bin/sl = rwxrwxr-x"
-    echo "jre/languages/sl/bin/slnative = rwxrwxr-x"
+    echo "$JRE"'languages/sl/bin/sl = rwxrwxr-x'
+    echo "$JRE"'languages/sl/bin/slnative = rwxrwxr-x'
 } > META-INF/permissions
 jar uf ../sl-component.jar META-INF/permissions
 )
