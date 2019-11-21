@@ -21,8 +21,13 @@ matrix:
         - env: GRAALVM_VERSION="19.3.0" GRAALVM_JAVA_VERSION="11"
           jdk: openjdk11
           os: linux
+          # Travis does not provide an adequate jdk8 on mac (mac versioning issue)
         - jdk: openjdk8
           os: osx
+          # There seems to be an issue with this setup where maven runs on java 10
+        - jdk: openjdk11
+          os: osx
+          env: GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 install:
     - cd .. && mv simplelanguage "simple language" && cd "simple language"
