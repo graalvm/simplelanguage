@@ -15,8 +15,12 @@ env:
 
 matrix:
     exclude:
-        - env: GRAALVM_VERSION="19.3.0"
+        - env: GRAALVM_VERSION="19.3.0" GRAALVM_JAVA_VERSION="8"
           jdk: openjdk11
+          os: linux
+        - env: GRAALVM_VERSION="19.3.0" GRAALVM_JAVA_VERSION="11"
+          jdk: openjdk11
+          os: linux
         - jdk: openjdk8
           os: osx
 
