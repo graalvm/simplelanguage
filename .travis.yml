@@ -6,31 +6,38 @@ language: java
 
 jdk:
     - openjdk8
-    - openjdk9
     - openjdk11
 
 env:
-    - GRAALVM_VERSION="19.2.0"
+    - GRAALVM_VERSION="19.3.0" GRAALVM_JAVA_VERSION="8"
+    - GRAALVM_VERSION="19.3.0" GRAALVM_JAVA_VERSION="11"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 matrix:
     exclude:
-        - env: GRAALVM_VERSION="19.2.0"
+        - env: GRAALVM_VERSION="19.3.0" GRAALVM_JAVA_VERSION="8"
           jdk: openjdk11
-        - jdk: openjdk9
           os: linux
+        - env: GRAALVM_VERSION="19.3.0" GRAALVM_JAVA_VERSION="11"
+          jdk: openjdk11
+          os: linux
+          # Travis does not provide an adequate jdk8 on mac (mac versioning issue)
         - jdk: openjdk8
           os: osx
+          # There seems to be an issue with this setup where maven runs on java 10
+        - jdk: openjdk11
+          os: osx
+          env: GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 install:
+    - cd .. && mv simplelanguage "simple language" && cd "simple language"
     - |
-        cd .. && mv simplelanguage "simple language" && cd "simple language"
         if [[ "$GRAALVM_VERSION" != "NONE" ]]; then
           if [[ "$TRAVIS_OS_NAME" == "osx" ]];   then DOWNLOAD_OS_NAME="darwin"; fi
           if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then DOWNLOAD_OS_NAME="linux"; fi
-          curl -LJ "https://github.com/oracle/graal/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-$DOWNLOAD_OS_NAME-amd64-$GRAALVM_VERSION.tar.gz" --output graalvm.tar.gz
+          curl -LJ "https://github.com/graalvm/graalvm-ce-builds/releases/download/vm-$GRAALVM_VERSION/graalvm-ce-java$GRAALVM_JAVA_VERSION-$DOWNLOAD_OS_NAME-amd64-$GRAALVM_VERSION.tar.gz" --output graalvm.tar.gz
           tar -xzf graalvm.tar.gz
-          export JAVA_HOME="$(pwd)/graalvm-ce-$GRAALVM_VERSION"
+          export JAVA_HOME="$(pwd)/graalvm-ce-java$GRAALVM_JAVA_VERSION-$GRAALVM_VERSION"
           if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then export JAVA_HOME="$JAVA_HOME/Contents/Home"; fi
           "$JAVA_HOME/bin/gu" install native-image
         else

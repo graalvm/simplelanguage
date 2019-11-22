@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-VERSION="19.2.0"
+VERSION="19.3.0"
 
 MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"
 SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd -P)"
@@ -12,7 +12,8 @@ SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd -P)"
 GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$SCRIPT_HOME/../release" 2> /dev/null)
 if [[ "$GRAALVM_VERSION" != "" ]]; then
     LANGUAGE_PATH=""
-    LAUNCHER_PATH="$SCRIPT_HOME/../jre/languages/sl/launcher/sl-launcher.jar"
+    # contains paths for both jdk8 and jdk11
+    LAUNCHER_PATH="$SCRIPT_HOME/../jre/languages/sl/launcher/sl-launcher.jar:$SCRIPT_HOME/../languages/sl/launcher/sl-launcher.jar"
     JAVACMD="$SCRIPT_HOME/java"
     GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
     if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
