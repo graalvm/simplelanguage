@@ -13,6 +13,7 @@
         <plugins>
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
+                <version>1.6.0</version>
                 <groupId>org.codehaus.mojo</groupId>
                 <executions>
                     <execution>
