@@ -27,7 +27,7 @@ else
     if [[ "$JAVA_HOME" != "" ]]; then
         GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$JAVA_HOME"/release)
         if [[ "$GRAALVM_VERSION" != "" ]]; then
-            GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
+            GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}' | sed 's/"//g')
             if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
                 echo "Wrong version of GraalVM in \$JAVA_HOME. Expected: $VERSION, found $GRAALVM_VERSION"
                 exit 1
