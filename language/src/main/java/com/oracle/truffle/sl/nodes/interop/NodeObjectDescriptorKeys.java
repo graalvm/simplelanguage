@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, 2019, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,36 +38,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.test;
+package com.oracle.truffle.sl.nodes.interop;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import com.oracle.truffle.api.dsl.Cached;
+import com.oracle.truffle.api.interop.InteropLibrary;
+import com.oracle.truffle.api.interop.InvalidArrayIndexException;
+import com.oracle.truffle.api.interop.TruffleObject;
+import com.oracle.truffle.api.library.ExportLibrary;
+import com.oracle.truffle.api.library.ExportMessage;
+import com.oracle.truffle.api.profiles.BranchProfile;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface SLTestSuite {
+@ExportLibrary(InteropLibrary.class)
+public final class NodeObjectDescriptorKeys implements TruffleObject {
 
-    /**
-     * Defines the base path of the test suite. Multiple base paths can be specified. However only
-     * the first base that exists is used to lookup the test cases.
-     */
-    String[] value();
+    private final String keyName;
 
-    /**
-     * A class in the same project (or .jar file) that contains the {@link #value test case
-     * directory}. If the property is not specified, the class that declares the annotation is used,
-     * i.e., the test cases must be in the same project as the test class.
-     */
-    Class<?> testCaseDirectory() default SLTestSuite.class;
+    NodeObjectDescriptorKeys(String keyName) {
+        this.keyName = keyName;
+    }
 
-    /**
-     * The options passed to {@code Context.Builder} to configure the {@code Context} executing the
-     * tests. The options are given as an string array containing an option name followed by an
-     * option value.
-     *
-     * @since 20.0.0
-     */
-    String[] options() default {};
+    @ExportMessage
+    @SuppressWarnings("static-method")
+    boolean hasArrayElements() {
+        return true;
+    }
+
+    @ExportMessage
+    @SuppressWarnings("static-method")
+    boolean isArrayElementReadable(long index) {
+        return index >= 0 && index < 1;
+    }
+
+    @ExportMessage
+    @SuppressWarnings("static-method")
+    long getArraySize() {
+        return 1;
+    }
+
+    @ExportMessage
+    Object readArrayElement(long index, @Cached BranchProfile exception) throws InvalidArrayIndexException {
+        if (!isArrayElementReadable(index)) {
+            exception.enter();
+            throw InvalidArrayIndexException.create(index);
+        }
+        return keyName;
+    }
+
 }
