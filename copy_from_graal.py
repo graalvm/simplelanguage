@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 
 # Since Simple Language is not developed on this repository, we need to periodically sync this repository with the developement one.
@@ -16,7 +16,7 @@ def fail(message):
     """ Print message to stderr and exit script
 
     """
-    print >> sys.stderr, message
+    print(message, file=sys.stderr)
     sys.exit(1)
 
 def clone(repo, path = ""):
@@ -79,11 +79,11 @@ def update_sl(revision):
         clone(GRAAL_REPO, GRAAL_DIR)
     checkout(GRAAL_DIR, revision)
     copy_sl()
-    print ""
-    print "NOTE: Update the version in sl, README.md and all pom.xml files!"
-    print "NOTE: Follow the instructions in README.md and make sure mvn package executes correctly!"
-    print "NOTE: Make sure project open correctly on the supported IDEs!"
-    print ""
+    print("")
+    print("NOTE: Update the version in sl, README.md and all pom.xml files!")
+    print("NOTE: Follow the instructions in README.md and make sure mvn package executes correctly!")
+    print("NOTE: Make sure project open correctly on the supported IDEs!")
+    print("")
 
 if __name__ == "__main__":
     if (len(sys.argv) != 2):
