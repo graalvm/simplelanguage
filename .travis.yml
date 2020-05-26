@@ -9,8 +9,8 @@ jdk:
     - openjdk11
 
 env:
-    - GRAALVM_VERSION="20.0.0" GRAALVM_JAVA_VERSION="8"
-    - GRAALVM_VERSION="20.0.0" GRAALVM_JAVA_VERSION="11"
+    - GRAALVM_VERSION="20.1.0" GRAALVM_JAVA_VERSION="8"
+    - GRAALVM_VERSION="20.1.0" GRAALVM_JAVA_VERSION="11"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 matrix:
@@ -53,7 +53,7 @@ script:
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then "$JAVA_HOME/bin/slnative" language/tests/Add.sl; fi
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then "$JAVA_HOME/bin/polyglot" --jvm --language sl --file language/tests/Add.sl; fi
     - if [[ "$GRAALVM_VERSION" != "NONE" ]]; then "$JAVA_HOME/bin/gu" remove sl; fi
-    - ./generate_parser
+    - ./generate_parser.sh
     - mvn package
     - ./sl language/tests/Add.sl
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then shellcheck sl; fi
