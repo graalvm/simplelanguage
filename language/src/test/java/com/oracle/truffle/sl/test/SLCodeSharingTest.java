@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2020, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -40,34 +40,45 @@
  */
 package com.oracle.truffle.sl.test;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.TYPE)
-public @interface SLTestSuite {
+import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.Engine;
+import org.graalvm.polyglot.Source;
+import org.junit.Test;
 
-    /**
-     * Defines the base path of the test suite. Multiple base paths can be specified. However only
-     * the first base that exists is used to lookup the test cases.
-     */
-    String[] value();
+public class SLCodeSharingTest {
 
-    /**
-     * A class in the same project (or .jar file) that contains the {@link #value test case
-     * directory}. If the property is not specified, the class that declares the annotation is used,
-     * i.e., the test cases must be in the same project as the test class.
-     */
-    Class<?> testCaseDirectory() default SLTestSuite.class;
+    private static Source createFib() {
+        return Source.newBuilder("sl", "" +
+                        "function fib(n) {\n" +
+                        "  if (n == 1 || n == 2) {\n" +
+                        "    return 1;\n" +
+                        "  }\n" +
+                        "  return fib(n - 1) + fib(n - 2);\n" +
+                        "}\n",
+                        "fib.sl").buildLiteral();
+    }
 
-    /**
-     * The options passed to {@code Context.Builder} to configure the {@code Context} executing the
-     * tests. The options are given as an string array containing an option name followed by an
-     * option value.
-     *
-     * @since 20.0.0
-     */
-    String[] options() default {};
+    @Test
+    public void testFibSharing() throws Exception {
+        Source fib = createFib();
+        try (Engine engine = Engine.create()) {
+            try (Context context = Context.newBuilder().engine(engine).build()) {
+                assertEquals(0, engine.getCachedSources().size());
+                context.eval(fib);
+                assertEquals(1, engine.getCachedSources().size());
+                assertTrue(engine.getCachedSources().contains(fib));
+            }
+            try (Context context = Context.newBuilder().engine(engine).build()) {
+                assertEquals(1, engine.getCachedSources().size());
+                assertTrue(engine.getCachedSources().contains(fib));
+                context.eval(fib);
+                assertEquals(1, engine.getCachedSources().size());
+                assertTrue(engine.getCachedSources().contains(fib));
+            }
+        }
+    }
+
 }
