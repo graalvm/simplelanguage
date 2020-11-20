@@ -47,13 +47,13 @@
 
   local graalvm8 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java8', version: '20.2.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java8', version: '20.3.0', platformspecific: true },
     }
   },
 
   local graalvm11 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java11', version: '20.2.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java11', version: '20.3.0', platformspecific: true },
     }
   },
 
