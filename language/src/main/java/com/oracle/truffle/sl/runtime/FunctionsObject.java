@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -112,9 +112,14 @@ final class FunctionsObject implements TruffleObject {
     }
 
     @ExportMessage
+    boolean isScope() {
+        return true;
+    }
+
+    @ExportMessage
     @TruffleBoundary
     Object toDisplayString(@SuppressWarnings("unused") boolean allowSideEffects) {
-        return functions.toString();
+        return "global";
     }
 
     public static boolean isInstance(TruffleObject obj) {
