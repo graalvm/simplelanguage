@@ -67,14 +67,52 @@ public static Map<String, RootCallTarget> parseSL( SLLanguage language, Source s
 
 // parser
 
-tcl	:	proc_statement modulo_ppal ;
+tcl	:	procs_statement modulo_ppal EOF;
 
-proc_statement	:	'proc' IDENTIFIER '{' args_statement '}' '{' body_statement '}' proc_statement |  ;
-args_statement	:	'{' IDENTIFIER '}' args_statement |  ;
+procs_statement  : proc_statement* ;
+proc_statement	:
+'proc'
+IDENTIFIER
+s='{'
+                                            { factory.startFunction($IDENTIFIER, $s); }
+    args_statement
+'}'
+    body=body_statement                     { factory.finishFunction($body.result); }
+;
+args_statement	:	'{'
+IDENTIFIER                                  { factory.addFormalParameter($IDENTIFIER); }
+ '}' args_statement |  ;
 
-body_statement	:	set body_statement | puts body_statement | gets ';' body_statement | if_statement body_statement
-				| for_statement body_statement | while_statement body_statement | switch_statement body_statement
-				| r_return body_statement | agroup ';' body_statement |  ;
+body_statement returns [SLStatementNode result]:
+                                            { factory.startBlock();
+                                            List<SLStatementNode> body = new ArrayList<>(); }
+s='{'
+(
+    statement                               { body.add($statement.result); }
+)*
+e='}'
+                                            { $result = factory.finishBlock(body, $s.getStartIndex(), $e.getStopIndex() - $s.getStartIndex() + 1); }
+;
+
+statement returns [SLStatementNode result]:
+set                                         { $result = $set.result; }
+|
+puts                                        { $result = $puts.result; }
+|
+gets ';'                                    { $result = $gets.result; }
+|
+if_statement                                { $result = $if_statement.result; }
+|
+for_statement                               { $result = $for_statement.result; }
+|
+while_statement                             { $result = $while_statement.result; }
+|
+switch_statement                            { $result = $switch_statement.result; }
+|
+r_return                                    { $result = $r_return.result; }
+|
+agroup                                      { $result = $agroup.result; }
+';';
 
 if_statement	:	start_if body_statement '}' elseif_statement  ;
 elseif_statement	:	start_elseif body_statement '}' elseif_statement | else_statement  ;
