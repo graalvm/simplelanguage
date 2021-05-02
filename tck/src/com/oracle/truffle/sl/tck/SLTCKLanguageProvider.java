@@ -38,7 +38,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.tck;
+package com.oracle.truffle.tcl.tck;
 
 import java.io.IOException;
 import java.io.InputStreamReader;

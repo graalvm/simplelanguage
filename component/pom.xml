@@ -44,7 +44,7 @@
   <artifactId>simplelanguage-graalvm-component</artifactId>
   <parent>
     <groupId>com.oracle</groupId>
-    <artifactId>simplelanguage-parent</artifactId>
+    <artifactId>tcl-parent</artifactId>
     <version>${graalvm.version}</version>
   </parent>
   <packaging>pom</packaging>

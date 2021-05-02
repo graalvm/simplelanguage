@@ -43,7 +43,7 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.oracle</groupId>
-    <artifactId>simplelanguage-parent</artifactId>
+    <artifactId>tcl-parent</artifactId>
     <version>${graalvm.version}</version>
   </parent>
   <artifactId>launcher</artifactId>
