@@ -67,111 +67,111 @@ public static Map<String, RootCallTarget> parseSL( SLLanguage language, Source s
 
 // parser
 
-tcl	:	declaracion_funcion modulo_ppal ;
+tcl	:	proc_statement modulo_ppal ;
 
-declaracion_funcion	:	'proc' IDENTIFICADOR '{' args_funcion '}' '{' cuerpo_funcion '}' declaracion_funcion |  ;
-args_funcion	:	'{' IDENTIFICADOR '}' args_funcion |  ;
+proc_statement	:	'proc' IDENTIFIER '{' args_statement '}' '{' body_statement '}' proc_statement |  ;
+args_statement	:	'{' IDENTIFIER '}' args_statement |  ;
 
-cuerpo_funcion	:	declaracion cuerpo_funcion | puts cuerpo_funcion | gets ';' cuerpo_funcion | if_funcion cuerpo_funcion
-				| for_funcion cuerpo_funcion | while_funcion cuerpo_funcion | switch_funcion cuerpo_funcion
-				| r_return cuerpo_funcion | agrup ';' cuerpo_funcion |  ;
+body_statement	:	set body_statement | puts body_statement | gets ';' body_statement | if_statement body_statement
+				| for_statement body_statement | while_statement body_statement | switch_statement body_statement
+				| r_return body_statement | agroup ';' body_statement |  ;
 
-if_funcion	:	inicio_if cuerpo_funcion '}' elseif_funcion  ;
-elseif_funcion	:	inicio_elseif cuerpo_funcion '}' elseif_funcion | else_funcion  ;
-else_funcion	:	inicio_else cuerpo_funcion '}' |  ;
+if_statement	:	start_if body_statement '}' elseif_statement  ;
+elseif_statement	:	start_elseif body_statement '}' elseif_statement | else_statement  ;
+else_statement	:	start_else body_statement '}' |  ;
 
-switch_funcion	:	inicio_switch case_funcion '}'  ;
-case_funcion	:	inicio_case cuerpo_funcion '}' case2_funcion  ;
-case2_funcion	:	inicio_case cuerpo_funcion '}' case2_funcion | default_funcion  ;
-default_funcion	:	inicio_default cuerpo_funcion '}' |  ;
+switch_statement	:	start_switch case_statement '}'  ;
+case_statement	:	start_case body_statement '}' case2_statement  ;
+case2_statement	:	start_case body_statement '}' case2_statement | default_statement  ;
+default_statement	:	start_default body_statement '}' |  ;
 
-for_funcion	:	inicio_for cuerpo_loop_func '}'  ;
-while_funcion	:	inicio_while cuerpo_loop_func '}'  ;
+for_statement	:	start_for body_loop_func '}'  ;
+while_statement	:	start_while body_loop_func '}'  ;
 
-cuerpo_loop_func	:	r_break cuerpo_loop_func | r_continue cuerpo_loop_func | declaracion cuerpo_loop_func
-					| gets ';' cuerpo_loop_func | puts cuerpo_loop_func | r_return cuerpo_loop_func
-					| if_loop_func cuerpo_loop_func | switch_loop_func cuerpo_loop_func | for_funcion cuerpo_loop_func
-					| while_funcion cuerpo_loop_func | agrup ';' cuerpo_loop_func |  ;
+body_loop_func	:	r_break body_loop_func | r_continue body_loop_func | set body_loop_func
+					| gets ';' body_loop_func | puts body_loop_func | r_return body_loop_func
+					| if_loop_func body_loop_func | switch_loop_func body_loop_func | for_statement body_loop_func
+					| while_statement body_loop_func | agroup ';' body_loop_func |  ;
 
-if_loop_func	:	inicio_if cuerpo_loop_func '}' elseif_loop_func  ;
-elseif_loop_func	:	inicio_elseif cuerpo_loop_func '}' elseif_loop_func | else_loop_func  ;
-else_loop_func	:	inicio_else cuerpo_loop_func '}' |  ;
+if_loop_func	:	start_if body_loop_func '}' elseif_loop_func  ;
+elseif_loop_func	:	start_elseif body_loop_func '}' elseif_loop_func | else_loop_func  ;
+else_loop_func	:	start_else body_loop_func '}' |  ;
 
-switch_loop_func	:	inicio_switch case_loop_func '}'  ;
-case_loop_func	:	inicio_case cuerpo_loop_func '}' case2_loop_func  ;
-case2_loop_func	:	inicio_case cuerpo_loop_func '}' case2_loop_func | default_loop_func  ;
-default_loop_func	:	inicio_default cuerpo_loop_func '}' |  ;
+switch_loop_func	:	start_switch case_loop_func '}'  ;
+case_loop_func	:	start_case body_loop_func '}' case2_loop_func  ;
+case2_loop_func	:	start_case body_loop_func '}' case2_loop_func | default_loop_func  ;
+default_loop_func	:	start_default body_loop_func '}' |  ;
 
-modulo_ppal	:	declaracion modulo_ppal | r_for modulo_ppal | gets ';' modulo_ppal | r_if modulo_ppal
-			| puts modulo_ppal | r_while modulo_ppal | r_switch modulo_ppal | agrup ';' modulo_ppal |  ;
+modulo_ppal	:	set modulo_ppal | r_for modulo_ppal | gets ';' modulo_ppal | r_if modulo_ppal
+			| puts modulo_ppal | r_while modulo_ppal | r_switch modulo_ppal | agroup ';' modulo_ppal |  ;
 
-r_if	:	inicio_if cuerpo_inst '}' elseif  ;
-elseif	:	inicio_elseif cuerpo_inst '}' elseif | r_else  ;
-r_else	:	inicio_else cuerpo_inst '}' |  ;
+r_if	:	start_if body_inst '}' elseif  ;
+elseif	:	start_elseif body_inst '}' elseif | r_else  ;
+r_else	:	start_else body_inst '}' |  ;
 
-r_switch	:	inicio_switch r_case '}'  ;
-r_case	:	inicio_case cuerpo_inst '}' case2  ;
-case2	:	inicio_case cuerpo_inst '}' case2 | r_default  ;
-r_default	:	inicio_default cuerpo_inst '}' |  ;
+r_switch	:	start_switch r_case '}'  ;
+r_case	:	start_case body_inst '}' case2  ;
+case2	:	start_case body_inst '}' case2 | r_default  ;
+r_default	:	start_default body_inst '}' |  ;
 
-cuerpo_inst	:	declaracion cuerpo_inst | r_for cuerpo_inst | gets ';' cuerpo_inst | r_if cuerpo_inst
-			| puts cuerpo_inst | r_while cuerpo_inst | r_switch cuerpo_inst | agrup ';' cuerpo_inst |  ;
+body_inst	:	set body_inst | r_for body_inst | gets ';' body_inst | r_if body_inst
+			| puts body_inst | r_while body_inst | r_switch body_inst | agroup ';' body_inst |  ;
 
-r_for	:	inicio_for cuerpo_loop '}'  ;
-r_while	:	inicio_while cuerpo_loop '}'  ;
+r_for	:	start_for body_loop '}'  ;
+r_while	:	start_while body_loop '}'  ;
 
-cuerpo_loop	:	declaracion cuerpo_loop | r_for cuerpo_loop | gets ';' cuerpo_loop | if_loop cuerpo_loop
-			| puts cuerpo_loop | r_while cuerpo_loop | switch_loop cuerpo_loop | r_break cuerpo_loop
-			| r_continue cuerpo_loop | agrup ';' cuerpo_loop |  ;
+body_loop	:	set body_loop | r_for body_loop | gets ';' body_loop | if_loop body_loop
+			| puts body_loop | r_while body_loop | switch_loop body_loop | r_break body_loop
+			| r_continue body_loop | agroup ';' body_loop |  ;
 
-if_loop	:	inicio_if cuerpo_loop '}' elseif_loop  ;
-elseif_loop	:	inicio_elseif cuerpo_loop '}' elseif_loop | else_loop  ;
-else_loop	:	inicio_else cuerpo_loop '}' |  ;
+if_loop	:	start_if body_loop '}' elseif_loop  ;
+elseif_loop	:	start_elseif body_loop '}' elseif_loop | else_loop  ;
+else_loop	:	start_else body_loop '}' |  ;
 
-switch_loop	:	inicio_switch case_loop '}'  ;
-case_loop	:	inicio_case cuerpo_loop '}' case2_loop  ;
-case2_loop	:	inicio_case cuerpo_loop '}' case2_loop | default_loop  ;
-default_loop	:	inicio_default cuerpo_loop '}' |  ;
+switch_loop	:	start_switch case_loop '}'  ;
+case_loop	:	start_case body_loop '}' case2_loop  ;
+case2_loop	:	start_case body_loop '}' case2_loop | default_loop  ;
+default_loop	:	start_default body_loop '}' |  ;
 
-puts	:	'puts' asignacion ';'  ;
+puts	:	'puts' assignment ';'  ;
 gets	:	'gets' 'stdin'  ;
-declaracion	:	'set' IDENTIFICADOR indice asignacion ';'  ;
+set	:	'set' IDENTIFIER index assignment ';'  ;
 
-agrup	:	'[' aux_agrup  ;
-aux_agrup	:	expr ']' | IDENTIFICADOR param_func ']' | gets ']' | 'array' aux_array  ;
-aux_array	:	'size' IDENTIFICADOR ']' | 'exists' IDENTIFICADOR ']'  ;
+agroup	:	'[' aux_agroup  ;
+aux_agroup	:	expr ']' | IDENTIFIER param_func ']' | gets ']' | 'array' aux_array  ;
+aux_array	:	'size' IDENTIFIER ']' | 'exists' IDENTIFIER ']'  ;
 
 param_func	:	'{' aux_param |  ;
-aux_param	:	asignacion '}' param_func | expr '}' param_func  ;
+aux_param	:	assignment '}' param_func | expr '}' param_func  ;
 
-asignacion	:	valor | '$' IDENTIFICADOR indice | agrup  ;
+assignment	:	value | '$' IDENTIFIER index | agroup  ;
 
-indice	:	'(' val_indice ')' |  ;
-val_indice	:	valor | agrup | '$' IDENTIFICADOR indice ;
+index	:	'(' val_index ')' |  ;
+val_index	:	value | agroup | '$' IDENTIFIER index ;
 
-valor	:	VALOR_STRING | VALOR_ENTERO | VALOR_DOUBLE  ;
+value	:	VALUE_STRING | VALUE_INTEGER | VALUE_DOUBLE  ;
 
-incremento	:	VALOR_ENTERO |  ;
+increment	:	VALUE_INTEGER |  ;
 
 r_break	:	'break' ';'  ;
 r_continue	:	'continue' ';'  ;
 r_return	:	'return' value_return ';'  ;
-value_return	:	asignacion |  ;
+value_return	:	assignment |  ;
 
 expr	:	'expr' '{' expresion '}'  ;
-asig_for	:	VALOR_ENTERO | '$' IDENTIFICADOR indice | expr  ;
+asig_for	:	VALUE_INTEGER | '$' IDENTIFIER index | expr  ;
 
-inicio_if	:	'if' '{' expresion '}' 'then' '{'  ;
-inicio_elseif	:	'elseif' '{' expresion '}' 'then' '{'  ;
-inicio_else	:	'else' '{'  ;
-inicio_switch	:	'switch' '$' IDENTIFICADOR indice '{'  ;
-inicio_case	:	'case' VALOR_ENTERO '{'  ;
-inicio_default	:	'default' '{'  ;
+start_if	:	'if' '{' expresion '}' 'then' '{'  ;
+start_elseif	:	'elseif' '{' expresion '}' 'then' '{'  ;
+start_else	:	'else' '{'  ;
+start_switch	:	'switch' '$' IDENTIFIER index '{'  ;
+start_case	:	'case' VALUE_INTEGER '{'  ;
+start_default	:	'default' '{'  ;
 
-inicio_for	:	'for' '{' dec_for '}' '{' expresion '}' '{' 'incr' IDENTIFICADOR incremento '}' '{'  ;
-dec_for : 'set' IDENTIFICADOR asig_for ;
+start_for	:	'for' '{' dec_for '}' '{' expresion '}' '{' 'incr' IDENTIFIER increment '}' '{'  ;
+dec_for : 'set' IDENTIFIER asig_for ;
 
-inicio_while	:	'while' '{' expresion '}' '{'  ;
+start_while	:	'while' '{' expresion '}' '{'  ;
 
 expresion	:	exp_or  ;
 exp_or	:	exp_or '||' exp_and | exp_and  ;
@@ -182,7 +182,7 @@ exp_add	:	exp_add op_add exp_mul | exp_mul  ;
 exp_mul	:	exp_mul op_mul exp_pot | exp_pot  ;
 exp_pot	:	exp_pot '**' exp_una | exp_una  ;
 exp_una	:	op_una exp_una | term  ;
-term	:	'$' IDENTIFICADOR indice | agrup | valor | '(' exp_or ')'  ;
+term	:	'$' IDENTIFIER index | agroup | value | '(' exp_or ')'  ;
 
 
 op_ig	:	'eq' | '==' | 'ne' | '!='  ;
@@ -192,10 +192,10 @@ op_mul	:	'*' | '/' | '%'  ;
 op_una	:	'-' | '!'  ;
 
 
-IDENTIFICADOR	:	[a-zA-Z_][a-zA-Z0-9_]*  ;
-VALOR_ENTERO	:	'-'?[0-9]+  ;
-VALOR_DOUBLE	:	[0-9]+ '.' [0-9]+  ;
-VALOR_STRING	:	'"' ~[\r\n"]* '"'  ;
+IDENTIFIER	:	[a-zA-Z_][a-zA-Z0-9_]*  ;
+VALUE_INTEGER	:	'-'?[0-9]+  ;
+VALUE_DOUBLE	:	[0-9]+ '.' [0-9]+  ;
+VALUE_STRING	:	'"' ~[\r\n"]* '"'  ;
 WS	:	[ \t\r\n]+	->	skip  ;
 COMMENT	:	'#' ~[\r\n]*	->	skip  ;
 

@@ -36,48 +36,48 @@ public class TclParser extends Parser {
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
 		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
 		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45, 
-		T__45=46, T__46=47, IDENTIFICADOR=48, VALOR_ENTERO=49, VALOR_DOUBLE=50, 
-		VALOR_STRING=51, WS=52, COMMENT=53;
+		T__45=46, T__46=47, IDENTIFIER=48, VALUE_INTEGER=49, VALUE_DOUBLE=50, 
+		VALUE_STRING=51, WS=52, COMMENT=53;
 	public static final int
-		RULE_tcl = 0, RULE_declaracion_funcion = 1, RULE_args_funcion = 2, RULE_cuerpo_funcion = 3, 
-		RULE_if_funcion = 4, RULE_elseif_funcion = 5, RULE_else_funcion = 6, RULE_switch_funcion = 7, 
-		RULE_case_funcion = 8, RULE_case2_funcion = 9, RULE_default_funcion = 10, 
-		RULE_for_funcion = 11, RULE_while_funcion = 12, RULE_cuerpo_loop_func = 13, 
-		RULE_if_loop_func = 14, RULE_elseif_loop_func = 15, RULE_else_loop_func = 16, 
-		RULE_switch_loop_func = 17, RULE_case_loop_func = 18, RULE_case2_loop_func = 19, 
-		RULE_default_loop_func = 20, RULE_modulo_ppal = 21, RULE_r_if = 22, RULE_elseif = 23, 
-		RULE_r_else = 24, RULE_r_switch = 25, RULE_r_case = 26, RULE_case2 = 27, 
-		RULE_r_default = 28, RULE_cuerpo_inst = 29, RULE_r_for = 30, RULE_r_while = 31, 
-		RULE_cuerpo_loop = 32, RULE_if_loop = 33, RULE_elseif_loop = 34, RULE_else_loop = 35, 
-		RULE_switch_loop = 36, RULE_case_loop = 37, RULE_case2_loop = 38, RULE_default_loop = 39, 
-		RULE_puts = 40, RULE_gets = 41, RULE_declaracion = 42, RULE_agrup = 43, 
-		RULE_aux_agrup = 44, RULE_aux_array = 45, RULE_param_func = 46, RULE_aux_param = 47, 
-		RULE_asignacion = 48, RULE_indice = 49, RULE_val_indice = 50, RULE_valor = 51, 
-		RULE_incremento = 52, RULE_r_break = 53, RULE_r_continue = 54, RULE_r_return = 55, 
-		RULE_value_return = 56, RULE_expr = 57, RULE_asig_for = 58, RULE_inicio_if = 59, 
-		RULE_inicio_elseif = 60, RULE_inicio_else = 61, RULE_inicio_switch = 62, 
-		RULE_inicio_case = 63, RULE_inicio_default = 64, RULE_inicio_for = 65, 
-		RULE_dec_for = 66, RULE_inicio_while = 67, RULE_expresion = 68, RULE_exp_or = 69, 
-		RULE_exp_and = 70, RULE_exp_ig = 71, RULE_exp_rel = 72, RULE_exp_add = 73, 
-		RULE_exp_mul = 74, RULE_exp_pot = 75, RULE_exp_una = 76, RULE_term = 77, 
-		RULE_op_ig = 78, RULE_op_rel = 79, RULE_op_add = 80, RULE_op_mul = 81, 
+		RULE_tcl = 0, RULE_proc_statement = 1, RULE_args_statement = 2, RULE_body_statement = 3, 
+		RULE_if_statement = 4, RULE_elseif_statement = 5, RULE_else_statement = 6, 
+		RULE_switch_statement = 7, RULE_case_statement = 8, RULE_case2_statement = 9, 
+		RULE_default_statement = 10, RULE_for_statement = 11, RULE_while_statement = 12, 
+		RULE_body_loop_func = 13, RULE_if_loop_func = 14, RULE_elseif_loop_func = 15, 
+		RULE_else_loop_func = 16, RULE_switch_loop_func = 17, RULE_case_loop_func = 18, 
+		RULE_case2_loop_func = 19, RULE_default_loop_func = 20, RULE_modulo_ppal = 21, 
+		RULE_r_if = 22, RULE_elseif = 23, RULE_r_else = 24, RULE_r_switch = 25, 
+		RULE_r_case = 26, RULE_case2 = 27, RULE_r_default = 28, RULE_body_inst = 29, 
+		RULE_r_for = 30, RULE_r_while = 31, RULE_body_loop = 32, RULE_if_loop = 33, 
+		RULE_elseif_loop = 34, RULE_else_loop = 35, RULE_switch_loop = 36, RULE_case_loop = 37, 
+		RULE_case2_loop = 38, RULE_default_loop = 39, RULE_puts = 40, RULE_gets = 41, 
+		RULE_set = 42, RULE_agroup = 43, RULE_aux_agroup = 44, RULE_aux_array = 45, 
+		RULE_param_func = 46, RULE_aux_param = 47, RULE_assignment = 48, RULE_index = 49, 
+		RULE_val_index = 50, RULE_value = 51, RULE_increment = 52, RULE_r_break = 53, 
+		RULE_r_continue = 54, RULE_r_return = 55, RULE_value_return = 56, RULE_expr = 57, 
+		RULE_asig_for = 58, RULE_start_if = 59, RULE_start_elseif = 60, RULE_start_else = 61, 
+		RULE_start_switch = 62, RULE_start_case = 63, RULE_start_default = 64, 
+		RULE_start_for = 65, RULE_dec_for = 66, RULE_start_while = 67, RULE_expresion = 68, 
+		RULE_exp_or = 69, RULE_exp_and = 70, RULE_exp_ig = 71, RULE_exp_rel = 72, 
+		RULE_exp_add = 73, RULE_exp_mul = 74, RULE_exp_pot = 75, RULE_exp_una = 76, 
+		RULE_term = 77, RULE_op_ig = 78, RULE_op_rel = 79, RULE_op_add = 80, RULE_op_mul = 81, 
 		RULE_op_una = 82;
 	public static final String[] ruleNames = {
-		"tcl", "declaracion_funcion", "args_funcion", "cuerpo_funcion", "if_funcion", 
-		"elseif_funcion", "else_funcion", "switch_funcion", "case_funcion", "case2_funcion", 
-		"default_funcion", "for_funcion", "while_funcion", "cuerpo_loop_func", 
-		"if_loop_func", "elseif_loop_func", "else_loop_func", "switch_loop_func", 
-		"case_loop_func", "case2_loop_func", "default_loop_func", "modulo_ppal", 
-		"r_if", "elseif", "r_else", "r_switch", "r_case", "case2", "r_default", 
-		"cuerpo_inst", "r_for", "r_while", "cuerpo_loop", "if_loop", "elseif_loop", 
-		"else_loop", "switch_loop", "case_loop", "case2_loop", "default_loop", 
-		"puts", "gets", "declaracion", "agrup", "aux_agrup", "aux_array", "param_func", 
-		"aux_param", "asignacion", "indice", "val_indice", "valor", "incremento", 
-		"r_break", "r_continue", "r_return", "value_return", "expr", "asig_for", 
-		"inicio_if", "inicio_elseif", "inicio_else", "inicio_switch", "inicio_case", 
-		"inicio_default", "inicio_for", "dec_for", "inicio_while", "expresion", 
-		"exp_or", "exp_and", "exp_ig", "exp_rel", "exp_add", "exp_mul", "exp_pot", 
-		"exp_una", "term", "op_ig", "op_rel", "op_add", "op_mul", "op_una"
+		"tcl", "proc_statement", "args_statement", "body_statement", "if_statement", 
+		"elseif_statement", "else_statement", "switch_statement", "case_statement", 
+		"case2_statement", "default_statement", "for_statement", "while_statement", 
+		"body_loop_func", "if_loop_func", "elseif_loop_func", "else_loop_func", 
+		"switch_loop_func", "case_loop_func", "case2_loop_func", "default_loop_func", 
+		"modulo_ppal", "r_if", "elseif", "r_else", "r_switch", "r_case", "case2", 
+		"r_default", "body_inst", "r_for", "r_while", "body_loop", "if_loop", 
+		"elseif_loop", "else_loop", "switch_loop", "case_loop", "case2_loop", 
+		"default_loop", "puts", "gets", "set", "agroup", "aux_agroup", "aux_array", 
+		"param_func", "aux_param", "assignment", "index", "val_index", "value", 
+		"increment", "r_break", "r_continue", "r_return", "value_return", "expr", 
+		"asig_for", "start_if", "start_elseif", "start_else", "start_switch", 
+		"start_case", "start_default", "start_for", "dec_for", "start_while", 
+		"expresion", "exp_or", "exp_and", "exp_ig", "exp_rel", "exp_add", "exp_mul", 
+		"exp_pot", "exp_una", "term", "op_ig", "op_rel", "op_add", "op_mul", "op_una"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -93,8 +93,7 @@ public class TclParser extends Parser {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		"IDENTIFICADOR", "VALOR_ENTERO", "VALOR_DOUBLE", "VALOR_STRING", "WS", 
-		"COMMENT"
+		"IDENTIFIER", "VALUE_INTEGER", "VALUE_DOUBLE", "VALUE_STRING", "WS", "COMMENT"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
@@ -186,8 +185,8 @@ public class TclParser extends Parser {
 		_interp = new ParserATNSimulator(this,_ATN,_decisionToDFA,_sharedContextCache);
 	}
 	public static class TclContext extends ParserRuleContext {
-		public Declaracion_funcionContext declaracion_funcion() {
-			return getRuleContext(Declaracion_funcionContext.class,0);
+		public Proc_statementContext proc_statement() {
+			return getRuleContext(Proc_statementContext.class,0);
 		}
 		public Modulo_ppalContext modulo_ppal() {
 			return getRuleContext(Modulo_ppalContext.class,0);
@@ -205,7 +204,7 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(166);
-			declaracion_funcion();
+			proc_statement();
 			setState(167);
 			modulo_ppal();
 			}
@@ -221,26 +220,26 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Declaracion_funcionContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public Args_funcionContext args_funcion() {
-			return getRuleContext(Args_funcionContext.class,0);
+	public static class Proc_statementContext extends ParserRuleContext {
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public Args_statementContext args_statement() {
+			return getRuleContext(Args_statementContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
-		public Declaracion_funcionContext declaracion_funcion() {
-			return getRuleContext(Declaracion_funcionContext.class,0);
+		public Proc_statementContext proc_statement() {
+			return getRuleContext(Proc_statementContext.class,0);
 		}
-		public Declaracion_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Proc_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_declaracion_funcion; }
+		@Override public int getRuleIndex() { return RULE_proc_statement; }
 	}
 
-	public final Declaracion_funcionContext declaracion_funcion() throws RecognitionException {
-		Declaracion_funcionContext _localctx = new Declaracion_funcionContext(_ctx, getState());
-		enterRule(_localctx, 2, RULE_declaracion_funcion);
+	public final Proc_statementContext proc_statement() throws RecognitionException {
+		Proc_statementContext _localctx = new Proc_statementContext(_ctx, getState());
+		enterRule(_localctx, 2, RULE_proc_statement);
 		try {
 			setState(180);
 			_errHandler.sync(this);
@@ -251,21 +250,21 @@ public class TclParser extends Parser {
 				setState(169);
 				match(T__0);
 				setState(170);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(171);
 				match(T__1);
 				setState(172);
-				args_funcion();
+				args_statement();
 				setState(173);
 				match(T__2);
 				setState(174);
 				match(T__1);
 				setState(175);
-				cuerpo_funcion();
+				body_statement();
 				setState(176);
 				match(T__2);
 				setState(177);
-				declaracion_funcion();
+				proc_statement();
 				}
 				break;
 			case EOF:
@@ -296,20 +295,20 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Args_funcionContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public Args_funcionContext args_funcion() {
-			return getRuleContext(Args_funcionContext.class,0);
+	public static class Args_statementContext extends ParserRuleContext {
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public Args_statementContext args_statement() {
+			return getRuleContext(Args_statementContext.class,0);
 		}
-		public Args_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Args_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_args_funcion; }
+		@Override public int getRuleIndex() { return RULE_args_statement; }
 	}
 
-	public final Args_funcionContext args_funcion() throws RecognitionException {
-		Args_funcionContext _localctx = new Args_funcionContext(_ctx, getState());
-		enterRule(_localctx, 4, RULE_args_funcion);
+	public final Args_statementContext args_statement() throws RecognitionException {
+		Args_statementContext _localctx = new Args_statementContext(_ctx, getState());
+		enterRule(_localctx, 4, RULE_args_statement);
 		try {
 			setState(187);
 			_errHandler.sync(this);
@@ -320,11 +319,11 @@ public class TclParser extends Parser {
 				setState(182);
 				match(T__1);
 				setState(183);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(184);
 				match(T__2);
 				setState(185);
-				args_funcion();
+				args_statement();
 				}
 				break;
 			case T__2:
@@ -347,12 +346,12 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Cuerpo_funcionContext extends ParserRuleContext {
-		public DeclaracionContext declaracion() {
-			return getRuleContext(DeclaracionContext.class,0);
+	public static class Body_statementContext extends ParserRuleContext {
+		public SetContext set() {
+			return getRuleContext(SetContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
 		public PutsContext puts() {
 			return getRuleContext(PutsContext.class,0);
@@ -360,33 +359,33 @@ public class TclParser extends Parser {
 		public GetsContext gets() {
 			return getRuleContext(GetsContext.class,0);
 		}
-		public If_funcionContext if_funcion() {
-			return getRuleContext(If_funcionContext.class,0);
+		public If_statementContext if_statement() {
+			return getRuleContext(If_statementContext.class,0);
 		}
-		public For_funcionContext for_funcion() {
-			return getRuleContext(For_funcionContext.class,0);
+		public For_statementContext for_statement() {
+			return getRuleContext(For_statementContext.class,0);
 		}
-		public While_funcionContext while_funcion() {
-			return getRuleContext(While_funcionContext.class,0);
+		public While_statementContext while_statement() {
+			return getRuleContext(While_statementContext.class,0);
 		}
-		public Switch_funcionContext switch_funcion() {
-			return getRuleContext(Switch_funcionContext.class,0);
+		public Switch_statementContext switch_statement() {
+			return getRuleContext(Switch_statementContext.class,0);
 		}
 		public R_returnContext r_return() {
 			return getRuleContext(R_returnContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
-		public Cuerpo_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Body_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_cuerpo_funcion; }
+		@Override public int getRuleIndex() { return RULE_body_statement; }
 	}
 
-	public final Cuerpo_funcionContext cuerpo_funcion() throws RecognitionException {
-		Cuerpo_funcionContext _localctx = new Cuerpo_funcionContext(_ctx, getState());
-		enterRule(_localctx, 6, RULE_cuerpo_funcion);
+	public final Body_statementContext body_statement() throws RecognitionException {
+		Body_statementContext _localctx = new Body_statementContext(_ctx, getState());
+		enterRule(_localctx, 6, RULE_body_statement);
 		try {
 			setState(219);
 			_errHandler.sync(this);
@@ -395,9 +394,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(189);
-				declaracion();
+				set();
 				setState(190);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__4:
@@ -406,7 +405,7 @@ public class TclParser extends Parser {
 				setState(192);
 				puts();
 				setState(193);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__5:
@@ -417,43 +416,43 @@ public class TclParser extends Parser {
 				setState(196);
 				match(T__3);
 				setState(197);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__20:
 				enterOuterAlt(_localctx, 4);
 				{
 				setState(199);
-				if_funcion();
+				if_statement();
 				setState(200);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__27:
 				enterOuterAlt(_localctx, 5);
 				{
 				setState(202);
-				for_funcion();
+				for_statement();
 				setState(203);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__29:
 				enterOuterAlt(_localctx, 6);
 				{
 				setState(205);
-				while_funcion();
+				while_statement();
 				setState(206);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__24:
 				enterOuterAlt(_localctx, 7);
 				{
 				setState(208);
-				switch_funcion();
+				switch_statement();
 				setState(209);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__18:
@@ -462,18 +461,18 @@ public class TclParser extends Parser {
 				setState(211);
 				r_return();
 				setState(212);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__8:
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(214);
-				agrup();
+				agroup();
 				setState(215);
 				match(T__3);
 				setState(216);
-				cuerpo_funcion();
+				body_statement();
 				}
 				break;
 			case T__2:
@@ -496,36 +495,36 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class If_funcionContext extends ParserRuleContext {
-		public Inicio_ifContext inicio_if() {
-			return getRuleContext(Inicio_ifContext.class,0);
+	public static class If_statementContext extends ParserRuleContext {
+		public Start_ifContext start_if() {
+			return getRuleContext(Start_ifContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
-		public Elseif_funcionContext elseif_funcion() {
-			return getRuleContext(Elseif_funcionContext.class,0);
+		public Elseif_statementContext elseif_statement() {
+			return getRuleContext(Elseif_statementContext.class,0);
 		}
-		public If_funcionContext(ParserRuleContext parent, int invokingState) {
+		public If_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_if_funcion; }
+		@Override public int getRuleIndex() { return RULE_if_statement; }
 	}
 
-	public final If_funcionContext if_funcion() throws RecognitionException {
-		If_funcionContext _localctx = new If_funcionContext(_ctx, getState());
-		enterRule(_localctx, 8, RULE_if_funcion);
+	public final If_statementContext if_statement() throws RecognitionException {
+		If_statementContext _localctx = new If_statementContext(_ctx, getState());
+		enterRule(_localctx, 8, RULE_if_statement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(221);
-			inicio_if();
+			start_if();
 			setState(222);
-			cuerpo_funcion();
+			body_statement();
 			setState(223);
 			match(T__2);
 			setState(224);
-			elseif_funcion();
+			elseif_statement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -539,28 +538,28 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Elseif_funcionContext extends ParserRuleContext {
-		public Inicio_elseifContext inicio_elseif() {
-			return getRuleContext(Inicio_elseifContext.class,0);
+	public static class Elseif_statementContext extends ParserRuleContext {
+		public Start_elseifContext start_elseif() {
+			return getRuleContext(Start_elseifContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
-		public Elseif_funcionContext elseif_funcion() {
-			return getRuleContext(Elseif_funcionContext.class,0);
+		public Elseif_statementContext elseif_statement() {
+			return getRuleContext(Elseif_statementContext.class,0);
 		}
-		public Else_funcionContext else_funcion() {
-			return getRuleContext(Else_funcionContext.class,0);
+		public Else_statementContext else_statement() {
+			return getRuleContext(Else_statementContext.class,0);
 		}
-		public Elseif_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Elseif_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_elseif_funcion; }
+		@Override public int getRuleIndex() { return RULE_elseif_statement; }
 	}
 
-	public final Elseif_funcionContext elseif_funcion() throws RecognitionException {
-		Elseif_funcionContext _localctx = new Elseif_funcionContext(_ctx, getState());
-		enterRule(_localctx, 10, RULE_elseif_funcion);
+	public final Elseif_statementContext elseif_statement() throws RecognitionException {
+		Elseif_statementContext _localctx = new Elseif_statementContext(_ctx, getState());
+		enterRule(_localctx, 10, RULE_elseif_statement);
 		try {
 			setState(232);
 			_errHandler.sync(this);
@@ -569,13 +568,13 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(226);
-				inicio_elseif();
+				start_elseif();
 				setState(227);
-				cuerpo_funcion();
+				body_statement();
 				setState(228);
 				match(T__2);
 				setState(229);
-				elseif_funcion();
+				elseif_statement();
 				}
 				break;
 			case T__2:
@@ -592,7 +591,7 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(231);
-				else_funcion();
+				else_statement();
 				}
 				break;
 			default:
@@ -610,22 +609,22 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Else_funcionContext extends ParserRuleContext {
-		public Inicio_elseContext inicio_else() {
-			return getRuleContext(Inicio_elseContext.class,0);
+	public static class Else_statementContext extends ParserRuleContext {
+		public Start_elseContext start_else() {
+			return getRuleContext(Start_elseContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
-		public Else_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Else_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_else_funcion; }
+		@Override public int getRuleIndex() { return RULE_else_statement; }
 	}
 
-	public final Else_funcionContext else_funcion() throws RecognitionException {
-		Else_funcionContext _localctx = new Else_funcionContext(_ctx, getState());
-		enterRule(_localctx, 12, RULE_else_funcion);
+	public final Else_statementContext else_statement() throws RecognitionException {
+		Else_statementContext _localctx = new Else_statementContext(_ctx, getState());
+		enterRule(_localctx, 12, RULE_else_statement);
 		try {
 			setState(239);
 			_errHandler.sync(this);
@@ -634,9 +633,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(234);
-				inicio_else();
+				start_else();
 				setState(235);
-				cuerpo_funcion();
+				body_statement();
 				setState(236);
 				match(T__2);
 				}
@@ -670,29 +669,29 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Switch_funcionContext extends ParserRuleContext {
-		public Inicio_switchContext inicio_switch() {
-			return getRuleContext(Inicio_switchContext.class,0);
+	public static class Switch_statementContext extends ParserRuleContext {
+		public Start_switchContext start_switch() {
+			return getRuleContext(Start_switchContext.class,0);
 		}
-		public Case_funcionContext case_funcion() {
-			return getRuleContext(Case_funcionContext.class,0);
+		public Case_statementContext case_statement() {
+			return getRuleContext(Case_statementContext.class,0);
 		}
-		public Switch_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Switch_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_switch_funcion; }
+		@Override public int getRuleIndex() { return RULE_switch_statement; }
 	}
 
-	public final Switch_funcionContext switch_funcion() throws RecognitionException {
-		Switch_funcionContext _localctx = new Switch_funcionContext(_ctx, getState());
-		enterRule(_localctx, 14, RULE_switch_funcion);
+	public final Switch_statementContext switch_statement() throws RecognitionException {
+		Switch_statementContext _localctx = new Switch_statementContext(_ctx, getState());
+		enterRule(_localctx, 14, RULE_switch_statement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(241);
-			inicio_switch();
+			start_switch();
 			setState(242);
-			case_funcion();
+			case_statement();
 			setState(243);
 			match(T__2);
 			}
@@ -708,36 +707,36 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Case_funcionContext extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+	public static class Case_statementContext extends ParserRuleContext {
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
-		public Case2_funcionContext case2_funcion() {
-			return getRuleContext(Case2_funcionContext.class,0);
+		public Case2_statementContext case2_statement() {
+			return getRuleContext(Case2_statementContext.class,0);
 		}
-		public Case_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Case_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_case_funcion; }
+		@Override public int getRuleIndex() { return RULE_case_statement; }
 	}
 
-	public final Case_funcionContext case_funcion() throws RecognitionException {
-		Case_funcionContext _localctx = new Case_funcionContext(_ctx, getState());
-		enterRule(_localctx, 16, RULE_case_funcion);
+	public final Case_statementContext case_statement() throws RecognitionException {
+		Case_statementContext _localctx = new Case_statementContext(_ctx, getState());
+		enterRule(_localctx, 16, RULE_case_statement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(245);
-			inicio_case();
+			start_case();
 			setState(246);
-			cuerpo_funcion();
+			body_statement();
 			setState(247);
 			match(T__2);
 			setState(248);
-			case2_funcion();
+			case2_statement();
 			}
 		}
 		catch (RecognitionException re) {
@@ -751,28 +750,28 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Case2_funcionContext extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+	public static class Case2_statementContext extends ParserRuleContext {
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
-		public Case2_funcionContext case2_funcion() {
-			return getRuleContext(Case2_funcionContext.class,0);
+		public Case2_statementContext case2_statement() {
+			return getRuleContext(Case2_statementContext.class,0);
 		}
-		public Default_funcionContext default_funcion() {
-			return getRuleContext(Default_funcionContext.class,0);
+		public Default_statementContext default_statement() {
+			return getRuleContext(Default_statementContext.class,0);
 		}
-		public Case2_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Case2_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_case2_funcion; }
+		@Override public int getRuleIndex() { return RULE_case2_statement; }
 	}
 
-	public final Case2_funcionContext case2_funcion() throws RecognitionException {
-		Case2_funcionContext _localctx = new Case2_funcionContext(_ctx, getState());
-		enterRule(_localctx, 18, RULE_case2_funcion);
+	public final Case2_statementContext case2_statement() throws RecognitionException {
+		Case2_statementContext _localctx = new Case2_statementContext(_ctx, getState());
+		enterRule(_localctx, 18, RULE_case2_statement);
 		try {
 			setState(256);
 			_errHandler.sync(this);
@@ -781,13 +780,13 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(250);
-				inicio_case();
+				start_case();
 				setState(251);
-				cuerpo_funcion();
+				body_statement();
 				setState(252);
 				match(T__2);
 				setState(253);
-				case2_funcion();
+				case2_statement();
 				}
 				break;
 			case T__2:
@@ -795,7 +794,7 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(255);
-				default_funcion();
+				default_statement();
 				}
 				break;
 			default:
@@ -813,22 +812,22 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Default_funcionContext extends ParserRuleContext {
-		public Inicio_defaultContext inicio_default() {
-			return getRuleContext(Inicio_defaultContext.class,0);
+	public static class Default_statementContext extends ParserRuleContext {
+		public Start_defaultContext start_default() {
+			return getRuleContext(Start_defaultContext.class,0);
 		}
-		public Cuerpo_funcionContext cuerpo_funcion() {
-			return getRuleContext(Cuerpo_funcionContext.class,0);
+		public Body_statementContext body_statement() {
+			return getRuleContext(Body_statementContext.class,0);
 		}
-		public Default_funcionContext(ParserRuleContext parent, int invokingState) {
+		public Default_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_default_funcion; }
+		@Override public int getRuleIndex() { return RULE_default_statement; }
 	}
 
-	public final Default_funcionContext default_funcion() throws RecognitionException {
-		Default_funcionContext _localctx = new Default_funcionContext(_ctx, getState());
-		enterRule(_localctx, 20, RULE_default_funcion);
+	public final Default_statementContext default_statement() throws RecognitionException {
+		Default_statementContext _localctx = new Default_statementContext(_ctx, getState());
+		enterRule(_localctx, 20, RULE_default_statement);
 		try {
 			setState(263);
 			_errHandler.sync(this);
@@ -837,9 +836,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(258);
-				inicio_default();
+				start_default();
 				setState(259);
-				cuerpo_funcion();
+				body_statement();
 				setState(260);
 				match(T__2);
 				}
@@ -864,29 +863,29 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class For_funcionContext extends ParserRuleContext {
-		public Inicio_forContext inicio_for() {
-			return getRuleContext(Inicio_forContext.class,0);
+	public static class For_statementContext extends ParserRuleContext {
+		public Start_forContext start_for() {
+			return getRuleContext(Start_forContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
-		public For_funcionContext(ParserRuleContext parent, int invokingState) {
+		public For_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_for_funcion; }
+		@Override public int getRuleIndex() { return RULE_for_statement; }
 	}
 
-	public final For_funcionContext for_funcion() throws RecognitionException {
-		For_funcionContext _localctx = new For_funcionContext(_ctx, getState());
-		enterRule(_localctx, 22, RULE_for_funcion);
+	public final For_statementContext for_statement() throws RecognitionException {
+		For_statementContext _localctx = new For_statementContext(_ctx, getState());
+		enterRule(_localctx, 22, RULE_for_statement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(265);
-			inicio_for();
+			start_for();
 			setState(266);
-			cuerpo_loop_func();
+			body_loop_func();
 			setState(267);
 			match(T__2);
 			}
@@ -902,29 +901,29 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class While_funcionContext extends ParserRuleContext {
-		public Inicio_whileContext inicio_while() {
-			return getRuleContext(Inicio_whileContext.class,0);
+	public static class While_statementContext extends ParserRuleContext {
+		public Start_whileContext start_while() {
+			return getRuleContext(Start_whileContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
-		public While_funcionContext(ParserRuleContext parent, int invokingState) {
+		public While_statementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_while_funcion; }
+		@Override public int getRuleIndex() { return RULE_while_statement; }
 	}
 
-	public final While_funcionContext while_funcion() throws RecognitionException {
-		While_funcionContext _localctx = new While_funcionContext(_ctx, getState());
-		enterRule(_localctx, 24, RULE_while_funcion);
+	public final While_statementContext while_statement() throws RecognitionException {
+		While_statementContext _localctx = new While_statementContext(_ctx, getState());
+		enterRule(_localctx, 24, RULE_while_statement);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(269);
-			inicio_while();
+			start_while();
 			setState(270);
-			cuerpo_loop_func();
+			body_loop_func();
 			setState(271);
 			match(T__2);
 			}
@@ -940,18 +939,18 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Cuerpo_loop_funcContext extends ParserRuleContext {
+	public static class Body_loop_funcContext extends ParserRuleContext {
 		public R_breakContext r_break() {
 			return getRuleContext(R_breakContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
 		public R_continueContext r_continue() {
 			return getRuleContext(R_continueContext.class,0);
 		}
-		public DeclaracionContext declaracion() {
-			return getRuleContext(DeclaracionContext.class,0);
+		public SetContext set() {
+			return getRuleContext(SetContext.class,0);
 		}
 		public GetsContext gets() {
 			return getRuleContext(GetsContext.class,0);
@@ -968,24 +967,24 @@ public class TclParser extends Parser {
 		public Switch_loop_funcContext switch_loop_func() {
 			return getRuleContext(Switch_loop_funcContext.class,0);
 		}
-		public For_funcionContext for_funcion() {
-			return getRuleContext(For_funcionContext.class,0);
+		public For_statementContext for_statement() {
+			return getRuleContext(For_statementContext.class,0);
 		}
-		public While_funcionContext while_funcion() {
-			return getRuleContext(While_funcionContext.class,0);
+		public While_statementContext while_statement() {
+			return getRuleContext(While_statementContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
-		public Cuerpo_loop_funcContext(ParserRuleContext parent, int invokingState) {
+		public Body_loop_funcContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_cuerpo_loop_func; }
+		@Override public int getRuleIndex() { return RULE_body_loop_func; }
 	}
 
-	public final Cuerpo_loop_funcContext cuerpo_loop_func() throws RecognitionException {
-		Cuerpo_loop_funcContext _localctx = new Cuerpo_loop_funcContext(_ctx, getState());
-		enterRule(_localctx, 26, RULE_cuerpo_loop_func);
+	public final Body_loop_funcContext body_loop_func() throws RecognitionException {
+		Body_loop_funcContext _localctx = new Body_loop_funcContext(_ctx, getState());
+		enterRule(_localctx, 26, RULE_body_loop_func);
 		try {
 			setState(309);
 			_errHandler.sync(this);
@@ -996,7 +995,7 @@ public class TclParser extends Parser {
 				setState(273);
 				r_break();
 				setState(274);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__17:
@@ -1005,16 +1004,16 @@ public class TclParser extends Parser {
 				setState(276);
 				r_continue();
 				setState(277);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__7:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(279);
-				declaracion();
+				set();
 				setState(280);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__5:
@@ -1025,7 +1024,7 @@ public class TclParser extends Parser {
 				setState(283);
 				match(T__3);
 				setState(284);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__4:
@@ -1034,7 +1033,7 @@ public class TclParser extends Parser {
 				setState(286);
 				puts();
 				setState(287);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__18:
@@ -1043,7 +1042,7 @@ public class TclParser extends Parser {
 				setState(289);
 				r_return();
 				setState(290);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__20:
@@ -1052,7 +1051,7 @@ public class TclParser extends Parser {
 				setState(292);
 				if_loop_func();
 				setState(293);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__24:
@@ -1061,36 +1060,36 @@ public class TclParser extends Parser {
 				setState(295);
 				switch_loop_func();
 				setState(296);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__27:
 				enterOuterAlt(_localctx, 9);
 				{
 				setState(298);
-				for_funcion();
+				for_statement();
 				setState(299);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__29:
 				enterOuterAlt(_localctx, 10);
 				{
 				setState(301);
-				while_funcion();
+				while_statement();
 				setState(302);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__8:
 				enterOuterAlt(_localctx, 11);
 				{
 				setState(304);
-				agrup();
+				agroup();
 				setState(305);
 				match(T__3);
 				setState(306);
-				cuerpo_loop_func();
+				body_loop_func();
 				}
 				break;
 			case T__2:
@@ -1114,11 +1113,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class If_loop_funcContext extends ParserRuleContext {
-		public Inicio_ifContext inicio_if() {
-			return getRuleContext(Inicio_ifContext.class,0);
+		public Start_ifContext start_if() {
+			return getRuleContext(Start_ifContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
 		public Elseif_loop_funcContext elseif_loop_func() {
 			return getRuleContext(Elseif_loop_funcContext.class,0);
@@ -1136,9 +1135,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(311);
-			inicio_if();
+			start_if();
 			setState(312);
-			cuerpo_loop_func();
+			body_loop_func();
 			setState(313);
 			match(T__2);
 			setState(314);
@@ -1157,11 +1156,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Elseif_loop_funcContext extends ParserRuleContext {
-		public Inicio_elseifContext inicio_elseif() {
-			return getRuleContext(Inicio_elseifContext.class,0);
+		public Start_elseifContext start_elseif() {
+			return getRuleContext(Start_elseifContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
 		public Elseif_loop_funcContext elseif_loop_func() {
 			return getRuleContext(Elseif_loop_funcContext.class,0);
@@ -1186,9 +1185,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(316);
-				inicio_elseif();
+				start_elseif();
 				setState(317);
-				cuerpo_loop_func();
+				body_loop_func();
 				setState(318);
 				match(T__2);
 				setState(319);
@@ -1230,11 +1229,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Else_loop_funcContext extends ParserRuleContext {
-		public Inicio_elseContext inicio_else() {
-			return getRuleContext(Inicio_elseContext.class,0);
+		public Start_elseContext start_else() {
+			return getRuleContext(Start_elseContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
 		public Else_loop_funcContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1253,9 +1252,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(324);
-				inicio_else();
+				start_else();
 				setState(325);
-				cuerpo_loop_func();
+				body_loop_func();
 				setState(326);
 				match(T__2);
 				}
@@ -1292,8 +1291,8 @@ public class TclParser extends Parser {
 	}
 
 	public static class Switch_loop_funcContext extends ParserRuleContext {
-		public Inicio_switchContext inicio_switch() {
-			return getRuleContext(Inicio_switchContext.class,0);
+		public Start_switchContext start_switch() {
+			return getRuleContext(Start_switchContext.class,0);
 		}
 		public Case_loop_funcContext case_loop_func() {
 			return getRuleContext(Case_loop_funcContext.class,0);
@@ -1311,7 +1310,7 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(331);
-			inicio_switch();
+			start_switch();
 			setState(332);
 			case_loop_func();
 			setState(333);
@@ -1330,11 +1329,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Case_loop_funcContext extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
 		public Case2_loop_funcContext case2_loop_func() {
 			return getRuleContext(Case2_loop_funcContext.class,0);
@@ -1352,9 +1351,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(335);
-			inicio_case();
+			start_case();
 			setState(336);
-			cuerpo_loop_func();
+			body_loop_func();
 			setState(337);
 			match(T__2);
 			setState(338);
@@ -1373,11 +1372,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Case2_loop_funcContext extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
 		public Case2_loop_funcContext case2_loop_func() {
 			return getRuleContext(Case2_loop_funcContext.class,0);
@@ -1402,9 +1401,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(340);
-				inicio_case();
+				start_case();
 				setState(341);
-				cuerpo_loop_func();
+				body_loop_func();
 				setState(342);
 				match(T__2);
 				setState(343);
@@ -1435,11 +1434,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Default_loop_funcContext extends ParserRuleContext {
-		public Inicio_defaultContext inicio_default() {
-			return getRuleContext(Inicio_defaultContext.class,0);
+		public Start_defaultContext start_default() {
+			return getRuleContext(Start_defaultContext.class,0);
 		}
-		public Cuerpo_loop_funcContext cuerpo_loop_func() {
-			return getRuleContext(Cuerpo_loop_funcContext.class,0);
+		public Body_loop_funcContext body_loop_func() {
+			return getRuleContext(Body_loop_funcContext.class,0);
 		}
 		public Default_loop_funcContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1458,9 +1457,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(348);
-				inicio_default();
+				start_default();
 				setState(349);
-				cuerpo_loop_func();
+				body_loop_func();
 				setState(350);
 				match(T__2);
 				}
@@ -1486,8 +1485,8 @@ public class TclParser extends Parser {
 	}
 
 	public static class Modulo_ppalContext extends ParserRuleContext {
-		public DeclaracionContext declaracion() {
-			return getRuleContext(DeclaracionContext.class,0);
+		public SetContext set() {
+			return getRuleContext(SetContext.class,0);
 		}
 		public Modulo_ppalContext modulo_ppal() {
 			return getRuleContext(Modulo_ppalContext.class,0);
@@ -1510,8 +1509,8 @@ public class TclParser extends Parser {
 		public R_switchContext r_switch() {
 			return getRuleContext(R_switchContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
 		public Modulo_ppalContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1530,7 +1529,7 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(355);
-				declaracion();
+				set();
 				setState(356);
 				modulo_ppal();
 				}
@@ -1595,7 +1594,7 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(377);
-				agrup();
+				agroup();
 				setState(378);
 				match(T__3);
 				setState(379);
@@ -1623,11 +1622,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class R_ifContext extends ParserRuleContext {
-		public Inicio_ifContext inicio_if() {
-			return getRuleContext(Inicio_ifContext.class,0);
+		public Start_ifContext start_if() {
+			return getRuleContext(Start_ifContext.class,0);
 		}
-		public Cuerpo_instContext cuerpo_inst() {
-			return getRuleContext(Cuerpo_instContext.class,0);
+		public Body_instContext body_inst() {
+			return getRuleContext(Body_instContext.class,0);
 		}
 		public ElseifContext elseif() {
 			return getRuleContext(ElseifContext.class,0);
@@ -1645,9 +1644,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(384);
-			inicio_if();
+			start_if();
 			setState(385);
-			cuerpo_inst();
+			body_inst();
 			setState(386);
 			match(T__2);
 			setState(387);
@@ -1666,11 +1665,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class ElseifContext extends ParserRuleContext {
-		public Inicio_elseifContext inicio_elseif() {
-			return getRuleContext(Inicio_elseifContext.class,0);
+		public Start_elseifContext start_elseif() {
+			return getRuleContext(Start_elseifContext.class,0);
 		}
-		public Cuerpo_instContext cuerpo_inst() {
-			return getRuleContext(Cuerpo_instContext.class,0);
+		public Body_instContext body_inst() {
+			return getRuleContext(Body_instContext.class,0);
 		}
 		public ElseifContext elseif() {
 			return getRuleContext(ElseifContext.class,0);
@@ -1695,9 +1694,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(389);
-				inicio_elseif();
+				start_elseif();
 				setState(390);
-				cuerpo_inst();
+				body_inst();
 				setState(391);
 				match(T__2);
 				setState(392);
@@ -1737,11 +1736,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class R_elseContext extends ParserRuleContext {
-		public Inicio_elseContext inicio_else() {
-			return getRuleContext(Inicio_elseContext.class,0);
+		public Start_elseContext start_else() {
+			return getRuleContext(Start_elseContext.class,0);
 		}
-		public Cuerpo_instContext cuerpo_inst() {
-			return getRuleContext(Cuerpo_instContext.class,0);
+		public Body_instContext body_inst() {
+			return getRuleContext(Body_instContext.class,0);
 		}
 		public R_elseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1760,9 +1759,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(397);
-				inicio_else();
+				start_else();
 				setState(398);
-				cuerpo_inst();
+				body_inst();
 				setState(399);
 				match(T__2);
 				}
@@ -1797,8 +1796,8 @@ public class TclParser extends Parser {
 	}
 
 	public static class R_switchContext extends ParserRuleContext {
-		public Inicio_switchContext inicio_switch() {
-			return getRuleContext(Inicio_switchContext.class,0);
+		public Start_switchContext start_switch() {
+			return getRuleContext(Start_switchContext.class,0);
 		}
 		public R_caseContext r_case() {
 			return getRuleContext(R_caseContext.class,0);
@@ -1816,7 +1815,7 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(404);
-			inicio_switch();
+			start_switch();
 			setState(405);
 			r_case();
 			setState(406);
@@ -1835,11 +1834,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class R_caseContext extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_instContext cuerpo_inst() {
-			return getRuleContext(Cuerpo_instContext.class,0);
+		public Body_instContext body_inst() {
+			return getRuleContext(Body_instContext.class,0);
 		}
 		public Case2Context case2() {
 			return getRuleContext(Case2Context.class,0);
@@ -1857,9 +1856,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(408);
-			inicio_case();
+			start_case();
 			setState(409);
-			cuerpo_inst();
+			body_inst();
 			setState(410);
 			match(T__2);
 			setState(411);
@@ -1878,11 +1877,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Case2Context extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_instContext cuerpo_inst() {
-			return getRuleContext(Cuerpo_instContext.class,0);
+		public Body_instContext body_inst() {
+			return getRuleContext(Body_instContext.class,0);
 		}
 		public Case2Context case2() {
 			return getRuleContext(Case2Context.class,0);
@@ -1907,9 +1906,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(413);
-				inicio_case();
+				start_case();
 				setState(414);
-				cuerpo_inst();
+				body_inst();
 				setState(415);
 				match(T__2);
 				setState(416);
@@ -1940,11 +1939,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class R_defaultContext extends ParserRuleContext {
-		public Inicio_defaultContext inicio_default() {
-			return getRuleContext(Inicio_defaultContext.class,0);
+		public Start_defaultContext start_default() {
+			return getRuleContext(Start_defaultContext.class,0);
 		}
-		public Cuerpo_instContext cuerpo_inst() {
-			return getRuleContext(Cuerpo_instContext.class,0);
+		public Body_instContext body_inst() {
+			return getRuleContext(Body_instContext.class,0);
 		}
 		public R_defaultContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -1963,9 +1962,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(421);
-				inicio_default();
+				start_default();
 				setState(422);
-				cuerpo_inst();
+				body_inst();
 				setState(423);
 				match(T__2);
 				}
@@ -1990,12 +1989,12 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Cuerpo_instContext extends ParserRuleContext {
-		public DeclaracionContext declaracion() {
-			return getRuleContext(DeclaracionContext.class,0);
+	public static class Body_instContext extends ParserRuleContext {
+		public SetContext set() {
+			return getRuleContext(SetContext.class,0);
 		}
-		public Cuerpo_instContext cuerpo_inst() {
-			return getRuleContext(Cuerpo_instContext.class,0);
+		public Body_instContext body_inst() {
+			return getRuleContext(Body_instContext.class,0);
 		}
 		public R_forContext r_for() {
 			return getRuleContext(R_forContext.class,0);
@@ -2015,18 +2014,18 @@ public class TclParser extends Parser {
 		public R_switchContext r_switch() {
 			return getRuleContext(R_switchContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
-		public Cuerpo_instContext(ParserRuleContext parent, int invokingState) {
+		public Body_instContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_cuerpo_inst; }
+		@Override public int getRuleIndex() { return RULE_body_inst; }
 	}
 
-	public final Cuerpo_instContext cuerpo_inst() throws RecognitionException {
-		Cuerpo_instContext _localctx = new Cuerpo_instContext(_ctx, getState());
-		enterRule(_localctx, 58, RULE_cuerpo_inst);
+	public final Body_instContext body_inst() throws RecognitionException {
+		Body_instContext _localctx = new Body_instContext(_ctx, getState());
+		enterRule(_localctx, 58, RULE_body_inst);
 		try {
 			setState(455);
 			_errHandler.sync(this);
@@ -2035,9 +2034,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(428);
-				declaracion();
+				set();
 				setState(429);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__27:
@@ -2046,7 +2045,7 @@ public class TclParser extends Parser {
 				setState(431);
 				r_for();
 				setState(432);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__5:
@@ -2057,7 +2056,7 @@ public class TclParser extends Parser {
 				setState(435);
 				match(T__3);
 				setState(436);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__20:
@@ -2066,7 +2065,7 @@ public class TclParser extends Parser {
 				setState(438);
 				r_if();
 				setState(439);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__4:
@@ -2075,7 +2074,7 @@ public class TclParser extends Parser {
 				setState(441);
 				puts();
 				setState(442);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__29:
@@ -2084,7 +2083,7 @@ public class TclParser extends Parser {
 				setState(444);
 				r_while();
 				setState(445);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__24:
@@ -2093,18 +2092,18 @@ public class TclParser extends Parser {
 				setState(447);
 				r_switch();
 				setState(448);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__8:
 				enterOuterAlt(_localctx, 8);
 				{
 				setState(450);
-				agrup();
+				agroup();
 				setState(451);
 				match(T__3);
 				setState(452);
-				cuerpo_inst();
+				body_inst();
 				}
 				break;
 			case T__2:
@@ -2128,11 +2127,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class R_forContext extends ParserRuleContext {
-		public Inicio_forContext inicio_for() {
-			return getRuleContext(Inicio_forContext.class,0);
+		public Start_forContext start_for() {
+			return getRuleContext(Start_forContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public R_forContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2147,9 +2146,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(457);
-			inicio_for();
+			start_for();
 			setState(458);
-			cuerpo_loop();
+			body_loop();
 			setState(459);
 			match(T__2);
 			}
@@ -2166,11 +2165,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class R_whileContext extends ParserRuleContext {
-		public Inicio_whileContext inicio_while() {
-			return getRuleContext(Inicio_whileContext.class,0);
+		public Start_whileContext start_while() {
+			return getRuleContext(Start_whileContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public R_whileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2185,9 +2184,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(461);
-			inicio_while();
+			start_while();
 			setState(462);
-			cuerpo_loop();
+			body_loop();
 			setState(463);
 			match(T__2);
 			}
@@ -2203,12 +2202,12 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Cuerpo_loopContext extends ParserRuleContext {
-		public DeclaracionContext declaracion() {
-			return getRuleContext(DeclaracionContext.class,0);
+	public static class Body_loopContext extends ParserRuleContext {
+		public SetContext set() {
+			return getRuleContext(SetContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public R_forContext r_for() {
 			return getRuleContext(R_forContext.class,0);
@@ -2234,18 +2233,18 @@ public class TclParser extends Parser {
 		public R_continueContext r_continue() {
 			return getRuleContext(R_continueContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
-		public Cuerpo_loopContext(ParserRuleContext parent, int invokingState) {
+		public Body_loopContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_cuerpo_loop; }
+		@Override public int getRuleIndex() { return RULE_body_loop; }
 	}
 
-	public final Cuerpo_loopContext cuerpo_loop() throws RecognitionException {
-		Cuerpo_loopContext _localctx = new Cuerpo_loopContext(_ctx, getState());
-		enterRule(_localctx, 64, RULE_cuerpo_loop);
+	public final Body_loopContext body_loop() throws RecognitionException {
+		Body_loopContext _localctx = new Body_loopContext(_ctx, getState());
+		enterRule(_localctx, 64, RULE_body_loop);
 		try {
 			setState(498);
 			_errHandler.sync(this);
@@ -2254,9 +2253,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(465);
-				declaracion();
+				set();
 				setState(466);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__27:
@@ -2265,7 +2264,7 @@ public class TclParser extends Parser {
 				setState(468);
 				r_for();
 				setState(469);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__5:
@@ -2276,7 +2275,7 @@ public class TclParser extends Parser {
 				setState(472);
 				match(T__3);
 				setState(473);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__20:
@@ -2285,7 +2284,7 @@ public class TclParser extends Parser {
 				setState(475);
 				if_loop();
 				setState(476);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__4:
@@ -2294,7 +2293,7 @@ public class TclParser extends Parser {
 				setState(478);
 				puts();
 				setState(479);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__29:
@@ -2303,7 +2302,7 @@ public class TclParser extends Parser {
 				setState(481);
 				r_while();
 				setState(482);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__24:
@@ -2312,7 +2311,7 @@ public class TclParser extends Parser {
 				setState(484);
 				switch_loop();
 				setState(485);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__16:
@@ -2321,7 +2320,7 @@ public class TclParser extends Parser {
 				setState(487);
 				r_break();
 				setState(488);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__17:
@@ -2330,18 +2329,18 @@ public class TclParser extends Parser {
 				setState(490);
 				r_continue();
 				setState(491);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__8:
 				enterOuterAlt(_localctx, 10);
 				{
 				setState(493);
-				agrup();
+				agroup();
 				setState(494);
 				match(T__3);
 				setState(495);
-				cuerpo_loop();
+				body_loop();
 				}
 				break;
 			case T__2:
@@ -2365,11 +2364,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class If_loopContext extends ParserRuleContext {
-		public Inicio_ifContext inicio_if() {
-			return getRuleContext(Inicio_ifContext.class,0);
+		public Start_ifContext start_if() {
+			return getRuleContext(Start_ifContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public Elseif_loopContext elseif_loop() {
 			return getRuleContext(Elseif_loopContext.class,0);
@@ -2387,9 +2386,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(500);
-			inicio_if();
+			start_if();
 			setState(501);
-			cuerpo_loop();
+			body_loop();
 			setState(502);
 			match(T__2);
 			setState(503);
@@ -2408,11 +2407,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Elseif_loopContext extends ParserRuleContext {
-		public Inicio_elseifContext inicio_elseif() {
-			return getRuleContext(Inicio_elseifContext.class,0);
+		public Start_elseifContext start_elseif() {
+			return getRuleContext(Start_elseifContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public Elseif_loopContext elseif_loop() {
 			return getRuleContext(Elseif_loopContext.class,0);
@@ -2437,9 +2436,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(505);
-				inicio_elseif();
+				start_elseif();
 				setState(506);
-				cuerpo_loop();
+				body_loop();
 				setState(507);
 				match(T__2);
 				setState(508);
@@ -2480,11 +2479,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Else_loopContext extends ParserRuleContext {
-		public Inicio_elseContext inicio_else() {
-			return getRuleContext(Inicio_elseContext.class,0);
+		public Start_elseContext start_else() {
+			return getRuleContext(Start_elseContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public Else_loopContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2503,9 +2502,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(513);
-				inicio_else();
+				start_else();
 				setState(514);
-				cuerpo_loop();
+				body_loop();
 				setState(515);
 				match(T__2);
 				}
@@ -2541,8 +2540,8 @@ public class TclParser extends Parser {
 	}
 
 	public static class Switch_loopContext extends ParserRuleContext {
-		public Inicio_switchContext inicio_switch() {
-			return getRuleContext(Inicio_switchContext.class,0);
+		public Start_switchContext start_switch() {
+			return getRuleContext(Start_switchContext.class,0);
 		}
 		public Case_loopContext case_loop() {
 			return getRuleContext(Case_loopContext.class,0);
@@ -2560,7 +2559,7 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(520);
-			inicio_switch();
+			start_switch();
 			setState(521);
 			case_loop();
 			setState(522);
@@ -2579,11 +2578,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Case_loopContext extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public Case2_loopContext case2_loop() {
 			return getRuleContext(Case2_loopContext.class,0);
@@ -2601,9 +2600,9 @@ public class TclParser extends Parser {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(524);
-			inicio_case();
+			start_case();
 			setState(525);
-			cuerpo_loop();
+			body_loop();
 			setState(526);
 			match(T__2);
 			setState(527);
@@ -2622,11 +2621,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Case2_loopContext extends ParserRuleContext {
-		public Inicio_caseContext inicio_case() {
-			return getRuleContext(Inicio_caseContext.class,0);
+		public Start_caseContext start_case() {
+			return getRuleContext(Start_caseContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public Case2_loopContext case2_loop() {
 			return getRuleContext(Case2_loopContext.class,0);
@@ -2651,9 +2650,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(529);
-				inicio_case();
+				start_case();
 				setState(530);
-				cuerpo_loop();
+				body_loop();
 				setState(531);
 				match(T__2);
 				setState(532);
@@ -2684,11 +2683,11 @@ public class TclParser extends Parser {
 	}
 
 	public static class Default_loopContext extends ParserRuleContext {
-		public Inicio_defaultContext inicio_default() {
-			return getRuleContext(Inicio_defaultContext.class,0);
+		public Start_defaultContext start_default() {
+			return getRuleContext(Start_defaultContext.class,0);
 		}
-		public Cuerpo_loopContext cuerpo_loop() {
-			return getRuleContext(Cuerpo_loopContext.class,0);
+		public Body_loopContext body_loop() {
+			return getRuleContext(Body_loopContext.class,0);
 		}
 		public Default_loopContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2707,9 +2706,9 @@ public class TclParser extends Parser {
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(537);
-				inicio_default();
+				start_default();
 				setState(538);
-				cuerpo_loop();
+				body_loop();
 				setState(539);
 				match(T__2);
 				}
@@ -2735,8 +2734,8 @@ public class TclParser extends Parser {
 	}
 
 	public static class PutsContext extends ParserRuleContext {
-		public AsignacionContext asignacion() {
-			return getRuleContext(AsignacionContext.class,0);
+		public AssignmentContext assignment() {
+			return getRuleContext(AssignmentContext.class,0);
 		}
 		public PutsContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -2753,7 +2752,7 @@ public class TclParser extends Parser {
 			setState(544);
 			match(T__4);
 			setState(545);
-			asignacion();
+			assignment();
 			setState(546);
 			match(T__3);
 			}
@@ -2799,34 +2798,34 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class DeclaracionContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public IndiceContext indice() {
-			return getRuleContext(IndiceContext.class,0);
+	public static class SetContext extends ParserRuleContext {
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public IndexContext index() {
+			return getRuleContext(IndexContext.class,0);
 		}
-		public AsignacionContext asignacion() {
-			return getRuleContext(AsignacionContext.class,0);
+		public AssignmentContext assignment() {
+			return getRuleContext(AssignmentContext.class,0);
 		}
-		public DeclaracionContext(ParserRuleContext parent, int invokingState) {
+		public SetContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_declaracion; }
+		@Override public int getRuleIndex() { return RULE_set; }
 	}
 
-	public final DeclaracionContext declaracion() throws RecognitionException {
-		DeclaracionContext _localctx = new DeclaracionContext(_ctx, getState());
-		enterRule(_localctx, 84, RULE_declaracion);
+	public final SetContext set() throws RecognitionException {
+		SetContext _localctx = new SetContext(_ctx, getState());
+		enterRule(_localctx, 84, RULE_set);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(551);
 			match(T__7);
 			setState(552);
-			match(IDENTIFICADOR);
+			match(IDENTIFIER);
 			setState(553);
-			indice();
+			index();
 			setState(554);
-			asignacion();
+			assignment();
 			setState(555);
 			match(T__3);
 			}
@@ -2842,26 +2841,26 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class AgrupContext extends ParserRuleContext {
-		public Aux_agrupContext aux_agrup() {
-			return getRuleContext(Aux_agrupContext.class,0);
+	public static class AgroupContext extends ParserRuleContext {
+		public Aux_agroupContext aux_agroup() {
+			return getRuleContext(Aux_agroupContext.class,0);
 		}
-		public AgrupContext(ParserRuleContext parent, int invokingState) {
+		public AgroupContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_agrup; }
+		@Override public int getRuleIndex() { return RULE_agroup; }
 	}
 
-	public final AgrupContext agrup() throws RecognitionException {
-		AgrupContext _localctx = new AgrupContext(_ctx, getState());
-		enterRule(_localctx, 86, RULE_agrup);
+	public final AgroupContext agroup() throws RecognitionException {
+		AgroupContext _localctx = new AgroupContext(_ctx, getState());
+		enterRule(_localctx, 86, RULE_agroup);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(557);
 			match(T__8);
 			setState(558);
-			aux_agrup();
+			aux_agroup();
 			}
 		}
 		catch (RecognitionException re) {
@@ -2875,11 +2874,11 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Aux_agrupContext extends ParserRuleContext {
+	public static class Aux_agroupContext extends ParserRuleContext {
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
 		}
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
 		public Param_funcContext param_func() {
 			return getRuleContext(Param_funcContext.class,0);
 		}
@@ -2889,15 +2888,15 @@ public class TclParser extends Parser {
 		public Aux_arrayContext aux_array() {
 			return getRuleContext(Aux_arrayContext.class,0);
 		}
-		public Aux_agrupContext(ParserRuleContext parent, int invokingState) {
+		public Aux_agroupContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_aux_agrup; }
+		@Override public int getRuleIndex() { return RULE_aux_agroup; }
 	}
 
-	public final Aux_agrupContext aux_agrup() throws RecognitionException {
-		Aux_agrupContext _localctx = new Aux_agrupContext(_ctx, getState());
-		enterRule(_localctx, 88, RULE_aux_agrup);
+	public final Aux_agroupContext aux_agroup() throws RecognitionException {
+		Aux_agroupContext _localctx = new Aux_agroupContext(_ctx, getState());
+		enterRule(_localctx, 88, RULE_aux_agroup);
 		try {
 			setState(572);
 			_errHandler.sync(this);
@@ -2911,11 +2910,11 @@ public class TclParser extends Parser {
 				match(T__9);
 				}
 				break;
-			case IDENTIFICADOR:
+			case IDENTIFIER:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(563);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(564);
 				param_func();
 				setState(565);
@@ -2956,7 +2955,7 @@ public class TclParser extends Parser {
 	}
 
 	public static class Aux_arrayContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
 		public Aux_arrayContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2976,7 +2975,7 @@ public class TclParser extends Parser {
 				setState(574);
 				match(T__11);
 				setState(575);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(576);
 				match(T__9);
 				}
@@ -2987,7 +2986,7 @@ public class TclParser extends Parser {
 				setState(577);
 				match(T__12);
 				setState(578);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(579);
 				match(T__9);
 				}
@@ -3054,8 +3053,8 @@ public class TclParser extends Parser {
 	}
 
 	public static class Aux_paramContext extends ParserRuleContext {
-		public AsignacionContext asignacion() {
-			return getRuleContext(AsignacionContext.class,0);
+		public AssignmentContext assignment() {
+			return getRuleContext(AssignmentContext.class,0);
 		}
 		public Param_funcContext param_func() {
 			return getRuleContext(Param_funcContext.class,0);
@@ -3078,13 +3077,13 @@ public class TclParser extends Parser {
 			switch (_input.LA(1)) {
 			case T__8:
 			case T__13:
-			case VALOR_ENTERO:
-			case VALOR_DOUBLE:
-			case VALOR_STRING:
+			case VALUE_INTEGER:
+			case VALUE_DOUBLE:
+			case VALUE_STRING:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(587);
-				asignacion();
+				assignment();
 				setState(588);
 				match(T__2);
 				setState(589);
@@ -3117,37 +3116,37 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class AsignacionContext extends ParserRuleContext {
-		public ValorContext valor() {
-			return getRuleContext(ValorContext.class,0);
+	public static class AssignmentContext extends ParserRuleContext {
+		public ValueContext value() {
+			return getRuleContext(ValueContext.class,0);
 		}
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public IndiceContext indice() {
-			return getRuleContext(IndiceContext.class,0);
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public IndexContext index() {
+			return getRuleContext(IndexContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
-		public AsignacionContext(ParserRuleContext parent, int invokingState) {
+		public AssignmentContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_asignacion; }
+		@Override public int getRuleIndex() { return RULE_assignment; }
 	}
 
-	public final AsignacionContext asignacion() throws RecognitionException {
-		AsignacionContext _localctx = new AsignacionContext(_ctx, getState());
-		enterRule(_localctx, 96, RULE_asignacion);
+	public final AssignmentContext assignment() throws RecognitionException {
+		AssignmentContext _localctx = new AssignmentContext(_ctx, getState());
+		enterRule(_localctx, 96, RULE_assignment);
 		try {
 			setState(602);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case VALOR_ENTERO:
-			case VALOR_DOUBLE:
-			case VALOR_STRING:
+			case VALUE_INTEGER:
+			case VALUE_DOUBLE:
+			case VALUE_STRING:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(597);
-				valor();
+				value();
 				}
 				break;
 			case T__13:
@@ -3156,16 +3155,16 @@ public class TclParser extends Parser {
 				setState(598);
 				match(T__13);
 				setState(599);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(600);
-				indice();
+				index();
 				}
 				break;
 			case T__8:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(601);
-				agrup();
+				agroup();
 				}
 				break;
 			default:
@@ -3183,19 +3182,19 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class IndiceContext extends ParserRuleContext {
-		public Val_indiceContext val_indice() {
-			return getRuleContext(Val_indiceContext.class,0);
+	public static class IndexContext extends ParserRuleContext {
+		public Val_indexContext val_index() {
+			return getRuleContext(Val_indexContext.class,0);
 		}
-		public IndiceContext(ParserRuleContext parent, int invokingState) {
+		public IndexContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_indice; }
+		@Override public int getRuleIndex() { return RULE_index; }
 	}
 
-	public final IndiceContext indice() throws RecognitionException {
-		IndiceContext _localctx = new IndiceContext(_ctx, getState());
-		enterRule(_localctx, 98, RULE_indice);
+	public final IndexContext index() throws RecognitionException {
+		IndexContext _localctx = new IndexContext(_ctx, getState());
+		enterRule(_localctx, 98, RULE_index);
 		try {
 			setState(609);
 			_errHandler.sync(this);
@@ -3206,7 +3205,7 @@ public class TclParser extends Parser {
 				setState(604);
 				match(T__14);
 				setState(605);
-				val_indice();
+				val_index();
 				setState(606);
 				match(T__15);
 				}
@@ -3229,44 +3228,44 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Val_indiceContext extends ParserRuleContext {
-		public ValorContext valor() {
-			return getRuleContext(ValorContext.class,0);
+	public static class Val_indexContext extends ParserRuleContext {
+		public ValueContext value() {
+			return getRuleContext(ValueContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public IndiceContext indice() {
-			return getRuleContext(IndiceContext.class,0);
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public IndexContext index() {
+			return getRuleContext(IndexContext.class,0);
 		}
-		public Val_indiceContext(ParserRuleContext parent, int invokingState) {
+		public Val_indexContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_val_indice; }
+		@Override public int getRuleIndex() { return RULE_val_index; }
 	}
 
-	public final Val_indiceContext val_indice() throws RecognitionException {
-		Val_indiceContext _localctx = new Val_indiceContext(_ctx, getState());
-		enterRule(_localctx, 100, RULE_val_indice);
+	public final Val_indexContext val_index() throws RecognitionException {
+		Val_indexContext _localctx = new Val_indexContext(_ctx, getState());
+		enterRule(_localctx, 100, RULE_val_index);
 		try {
 			setState(616);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case VALOR_ENTERO:
-			case VALOR_DOUBLE:
-			case VALOR_STRING:
+			case VALUE_INTEGER:
+			case VALUE_DOUBLE:
+			case VALUE_STRING:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(611);
-				valor();
+				value();
 				}
 				break;
 			case T__8:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(612);
-				agrup();
+				agroup();
 				}
 				break;
 			case T__13:
@@ -3275,9 +3274,9 @@ public class TclParser extends Parser {
 				setState(613);
 				match(T__13);
 				setState(614);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(615);
-				indice();
+				index();
 				}
 				break;
 			default:
@@ -3295,26 +3294,26 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class ValorContext extends ParserRuleContext {
-		public TerminalNode VALOR_STRING() { return getToken(TclParser.VALOR_STRING, 0); }
-		public TerminalNode VALOR_ENTERO() { return getToken(TclParser.VALOR_ENTERO, 0); }
-		public TerminalNode VALOR_DOUBLE() { return getToken(TclParser.VALOR_DOUBLE, 0); }
-		public ValorContext(ParserRuleContext parent, int invokingState) {
+	public static class ValueContext extends ParserRuleContext {
+		public TerminalNode VALUE_STRING() { return getToken(TclParser.VALUE_STRING, 0); }
+		public TerminalNode VALUE_INTEGER() { return getToken(TclParser.VALUE_INTEGER, 0); }
+		public TerminalNode VALUE_DOUBLE() { return getToken(TclParser.VALUE_DOUBLE, 0); }
+		public ValueContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_valor; }
+		@Override public int getRuleIndex() { return RULE_value; }
 	}
 
-	public final ValorContext valor() throws RecognitionException {
-		ValorContext _localctx = new ValorContext(_ctx, getState());
-		enterRule(_localctx, 102, RULE_valor);
+	public final ValueContext value() throws RecognitionException {
+		ValueContext _localctx = new ValueContext(_ctx, getState());
+		enterRule(_localctx, 102, RULE_value);
 		int _la;
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(618);
 			_la = _input.LA(1);
-			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << VALOR_ENTERO) | (1L << VALOR_DOUBLE) | (1L << VALOR_STRING))) != 0)) ) {
+			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << VALUE_INTEGER) | (1L << VALUE_DOUBLE) | (1L << VALUE_STRING))) != 0)) ) {
 			_errHandler.recoverInline(this);
 			}
 			else {
@@ -3335,26 +3334,26 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class IncrementoContext extends ParserRuleContext {
-		public TerminalNode VALOR_ENTERO() { return getToken(TclParser.VALOR_ENTERO, 0); }
-		public IncrementoContext(ParserRuleContext parent, int invokingState) {
+	public static class IncrementContext extends ParserRuleContext {
+		public TerminalNode VALUE_INTEGER() { return getToken(TclParser.VALUE_INTEGER, 0); }
+		public IncrementContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_incremento; }
+		@Override public int getRuleIndex() { return RULE_increment; }
 	}
 
-	public final IncrementoContext incremento() throws RecognitionException {
-		IncrementoContext _localctx = new IncrementoContext(_ctx, getState());
-		enterRule(_localctx, 104, RULE_incremento);
+	public final IncrementContext increment() throws RecognitionException {
+		IncrementContext _localctx = new IncrementContext(_ctx, getState());
+		enterRule(_localctx, 104, RULE_increment);
 		try {
 			setState(622);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case VALOR_ENTERO:
+			case VALUE_INTEGER:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(620);
-				match(VALOR_ENTERO);
+				match(VALUE_INTEGER);
 				}
 				break;
 			case T__2:
@@ -3473,8 +3472,8 @@ public class TclParser extends Parser {
 	}
 
 	public static class Value_returnContext extends ParserRuleContext {
-		public AsignacionContext asignacion() {
-			return getRuleContext(AsignacionContext.class,0);
+		public AssignmentContext assignment() {
+			return getRuleContext(AssignmentContext.class,0);
 		}
 		public Value_returnContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
@@ -3491,13 +3490,13 @@ public class TclParser extends Parser {
 			switch (_input.LA(1)) {
 			case T__8:
 			case T__13:
-			case VALOR_ENTERO:
-			case VALOR_DOUBLE:
-			case VALOR_STRING:
+			case VALUE_INTEGER:
+			case VALUE_DOUBLE:
+			case VALUE_STRING:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(634);
-				asignacion();
+				assignment();
 				}
 				break;
 			case T__3:
@@ -3558,10 +3557,10 @@ public class TclParser extends Parser {
 	}
 
 	public static class Asig_forContext extends ParserRuleContext {
-		public TerminalNode VALOR_ENTERO() { return getToken(TclParser.VALOR_ENTERO, 0); }
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public IndiceContext indice() {
-			return getRuleContext(IndiceContext.class,0);
+		public TerminalNode VALUE_INTEGER() { return getToken(TclParser.VALUE_INTEGER, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public IndexContext index() {
+			return getRuleContext(IndexContext.class,0);
 		}
 		public ExprContext expr() {
 			return getRuleContext(ExprContext.class,0);
@@ -3579,11 +3578,11 @@ public class TclParser extends Parser {
 			setState(648);
 			_errHandler.sync(this);
 			switch (_input.LA(1)) {
-			case VALOR_ENTERO:
+			case VALUE_INTEGER:
 				enterOuterAlt(_localctx, 1);
 				{
 				setState(643);
-				match(VALOR_ENTERO);
+				match(VALUE_INTEGER);
 				}
 				break;
 			case T__13:
@@ -3592,9 +3591,9 @@ public class TclParser extends Parser {
 				setState(644);
 				match(T__13);
 				setState(645);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(646);
-				indice();
+				index();
 				}
 				break;
 			case T__19:
@@ -3619,19 +3618,19 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_ifContext extends ParserRuleContext {
+	public static class Start_ifContext extends ParserRuleContext {
 		public ExpresionContext expresion() {
 			return getRuleContext(ExpresionContext.class,0);
 		}
-		public Inicio_ifContext(ParserRuleContext parent, int invokingState) {
+		public Start_ifContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_if; }
+		@Override public int getRuleIndex() { return RULE_start_if; }
 	}
 
-	public final Inicio_ifContext inicio_if() throws RecognitionException {
-		Inicio_ifContext _localctx = new Inicio_ifContext(_ctx, getState());
-		enterRule(_localctx, 118, RULE_inicio_if);
+	public final Start_ifContext start_if() throws RecognitionException {
+		Start_ifContext _localctx = new Start_ifContext(_ctx, getState());
+		enterRule(_localctx, 118, RULE_start_if);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3660,19 +3659,19 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_elseifContext extends ParserRuleContext {
+	public static class Start_elseifContext extends ParserRuleContext {
 		public ExpresionContext expresion() {
 			return getRuleContext(ExpresionContext.class,0);
 		}
-		public Inicio_elseifContext(ParserRuleContext parent, int invokingState) {
+		public Start_elseifContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_elseif; }
+		@Override public int getRuleIndex() { return RULE_start_elseif; }
 	}
 
-	public final Inicio_elseifContext inicio_elseif() throws RecognitionException {
-		Inicio_elseifContext _localctx = new Inicio_elseifContext(_ctx, getState());
-		enterRule(_localctx, 120, RULE_inicio_elseif);
+	public final Start_elseifContext start_elseif() throws RecognitionException {
+		Start_elseifContext _localctx = new Start_elseifContext(_ctx, getState());
+		enterRule(_localctx, 120, RULE_start_elseif);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3701,16 +3700,16 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_elseContext extends ParserRuleContext {
-		public Inicio_elseContext(ParserRuleContext parent, int invokingState) {
+	public static class Start_elseContext extends ParserRuleContext {
+		public Start_elseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_else; }
+		@Override public int getRuleIndex() { return RULE_start_else; }
 	}
 
-	public final Inicio_elseContext inicio_else() throws RecognitionException {
-		Inicio_elseContext _localctx = new Inicio_elseContext(_ctx, getState());
-		enterRule(_localctx, 122, RULE_inicio_else);
+	public final Start_elseContext start_else() throws RecognitionException {
+		Start_elseContext _localctx = new Start_elseContext(_ctx, getState());
+		enterRule(_localctx, 122, RULE_start_else);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3731,20 +3730,20 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_switchContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public IndiceContext indice() {
-			return getRuleContext(IndiceContext.class,0);
+	public static class Start_switchContext extends ParserRuleContext {
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public IndexContext index() {
+			return getRuleContext(IndexContext.class,0);
 		}
-		public Inicio_switchContext(ParserRuleContext parent, int invokingState) {
+		public Start_switchContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_switch; }
+		@Override public int getRuleIndex() { return RULE_start_switch; }
 	}
 
-	public final Inicio_switchContext inicio_switch() throws RecognitionException {
-		Inicio_switchContext _localctx = new Inicio_switchContext(_ctx, getState());
-		enterRule(_localctx, 124, RULE_inicio_switch);
+	public final Start_switchContext start_switch() throws RecognitionException {
+		Start_switchContext _localctx = new Start_switchContext(_ctx, getState());
+		enterRule(_localctx, 124, RULE_start_switch);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3753,9 +3752,9 @@ public class TclParser extends Parser {
 			setState(668);
 			match(T__13);
 			setState(669);
-			match(IDENTIFICADOR);
+			match(IDENTIFIER);
 			setState(670);
-			indice();
+			index();
 			setState(671);
 			match(T__1);
 			}
@@ -3771,24 +3770,24 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_caseContext extends ParserRuleContext {
-		public TerminalNode VALOR_ENTERO() { return getToken(TclParser.VALOR_ENTERO, 0); }
-		public Inicio_caseContext(ParserRuleContext parent, int invokingState) {
+	public static class Start_caseContext extends ParserRuleContext {
+		public TerminalNode VALUE_INTEGER() { return getToken(TclParser.VALUE_INTEGER, 0); }
+		public Start_caseContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_case; }
+		@Override public int getRuleIndex() { return RULE_start_case; }
 	}
 
-	public final Inicio_caseContext inicio_case() throws RecognitionException {
-		Inicio_caseContext _localctx = new Inicio_caseContext(_ctx, getState());
-		enterRule(_localctx, 126, RULE_inicio_case);
+	public final Start_caseContext start_case() throws RecognitionException {
+		Start_caseContext _localctx = new Start_caseContext(_ctx, getState());
+		enterRule(_localctx, 126, RULE_start_case);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
 			setState(673);
 			match(T__25);
 			setState(674);
-			match(VALOR_ENTERO);
+			match(VALUE_INTEGER);
 			setState(675);
 			match(T__1);
 			}
@@ -3804,16 +3803,16 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_defaultContext extends ParserRuleContext {
-		public Inicio_defaultContext(ParserRuleContext parent, int invokingState) {
+	public static class Start_defaultContext extends ParserRuleContext {
+		public Start_defaultContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_default; }
+		@Override public int getRuleIndex() { return RULE_start_default; }
 	}
 
-	public final Inicio_defaultContext inicio_default() throws RecognitionException {
-		Inicio_defaultContext _localctx = new Inicio_defaultContext(_ctx, getState());
-		enterRule(_localctx, 128, RULE_inicio_default);
+	public final Start_defaultContext start_default() throws RecognitionException {
+		Start_defaultContext _localctx = new Start_defaultContext(_ctx, getState());
+		enterRule(_localctx, 128, RULE_start_default);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3834,26 +3833,26 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_forContext extends ParserRuleContext {
+	public static class Start_forContext extends ParserRuleContext {
 		public Dec_forContext dec_for() {
 			return getRuleContext(Dec_forContext.class,0);
 		}
 		public ExpresionContext expresion() {
 			return getRuleContext(ExpresionContext.class,0);
 		}
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public IncrementoContext incremento() {
-			return getRuleContext(IncrementoContext.class,0);
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public IncrementContext increment() {
+			return getRuleContext(IncrementContext.class,0);
 		}
-		public Inicio_forContext(ParserRuleContext parent, int invokingState) {
+		public Start_forContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_for; }
+		@Override public int getRuleIndex() { return RULE_start_for; }
 	}
 
-	public final Inicio_forContext inicio_for() throws RecognitionException {
-		Inicio_forContext _localctx = new Inicio_forContext(_ctx, getState());
-		enterRule(_localctx, 130, RULE_inicio_for);
+	public final Start_forContext start_for() throws RecognitionException {
+		Start_forContext _localctx = new Start_forContext(_ctx, getState());
+		enterRule(_localctx, 130, RULE_start_for);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -3876,9 +3875,9 @@ public class TclParser extends Parser {
 			setState(688);
 			match(T__28);
 			setState(689);
-			match(IDENTIFICADOR);
+			match(IDENTIFIER);
 			setState(690);
-			incremento();
+			increment();
 			setState(691);
 			match(T__2);
 			setState(692);
@@ -3897,7 +3896,7 @@ public class TclParser extends Parser {
 	}
 
 	public static class Dec_forContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
 		public Asig_forContext asig_for() {
 			return getRuleContext(Asig_forContext.class,0);
 		}
@@ -3916,7 +3915,7 @@ public class TclParser extends Parser {
 			setState(694);
 			match(T__7);
 			setState(695);
-			match(IDENTIFICADOR);
+			match(IDENTIFIER);
 			setState(696);
 			asig_for();
 			}
@@ -3932,19 +3931,19 @@ public class TclParser extends Parser {
 		return _localctx;
 	}
 
-	public static class Inicio_whileContext extends ParserRuleContext {
+	public static class Start_whileContext extends ParserRuleContext {
 		public ExpresionContext expresion() {
 			return getRuleContext(ExpresionContext.class,0);
 		}
-		public Inicio_whileContext(ParserRuleContext parent, int invokingState) {
+		public Start_whileContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
-		@Override public int getRuleIndex() { return RULE_inicio_while; }
+		@Override public int getRuleIndex() { return RULE_start_while; }
 	}
 
-	public final Inicio_whileContext inicio_while() throws RecognitionException {
-		Inicio_whileContext _localctx = new Inicio_whileContext(_ctx, getState());
-		enterRule(_localctx, 134, RULE_inicio_while);
+	public final Start_whileContext start_while() throws RecognitionException {
+		Start_whileContext _localctx = new Start_whileContext(_ctx, getState());
+		enterRule(_localctx, 134, RULE_start_while);
 		try {
 			enterOuterAlt(_localctx, 1);
 			{
@@ -4540,9 +4539,9 @@ public class TclParser extends Parser {
 			case T__8:
 			case T__13:
 			case T__14:
-			case VALOR_ENTERO:
-			case VALOR_DOUBLE:
-			case VALOR_STRING:
+			case VALUE_INTEGER:
+			case VALUE_DOUBLE:
+			case VALUE_STRING:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(790);
@@ -4565,15 +4564,15 @@ public class TclParser extends Parser {
 	}
 
 	public static class TermContext extends ParserRuleContext {
-		public TerminalNode IDENTIFICADOR() { return getToken(TclParser.IDENTIFICADOR, 0); }
-		public IndiceContext indice() {
-			return getRuleContext(IndiceContext.class,0);
+		public TerminalNode IDENTIFIER() { return getToken(TclParser.IDENTIFIER, 0); }
+		public IndexContext index() {
+			return getRuleContext(IndexContext.class,0);
 		}
-		public AgrupContext agrup() {
-			return getRuleContext(AgrupContext.class,0);
+		public AgroupContext agroup() {
+			return getRuleContext(AgroupContext.class,0);
 		}
-		public ValorContext valor() {
-			return getRuleContext(ValorContext.class,0);
+		public ValueContext value() {
+			return getRuleContext(ValueContext.class,0);
 		}
 		public Exp_orContext exp_or() {
 			return getRuleContext(Exp_orContext.class,0);
@@ -4597,25 +4596,25 @@ public class TclParser extends Parser {
 				setState(793);
 				match(T__13);
 				setState(794);
-				match(IDENTIFICADOR);
+				match(IDENTIFIER);
 				setState(795);
-				indice();
+				index();
 				}
 				break;
 			case T__8:
 				enterOuterAlt(_localctx, 2);
 				{
 				setState(796);
-				agrup();
+				agroup();
 				}
 				break;
-			case VALOR_ENTERO:
-			case VALOR_DOUBLE:
-			case VALOR_STRING:
+			case VALUE_INTEGER:
+			case VALUE_DOUBLE:
+			case VALUE_STRING:
 				enterOuterAlt(_localctx, 3);
 				{
 				setState(797);
-				valor();
+				value();
 				}
 				break;
 			case T__14:

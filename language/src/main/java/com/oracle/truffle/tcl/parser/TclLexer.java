@@ -26,8 +26,8 @@ public class TclLexer extends Lexer {
 		T__24=25, T__25=26, T__26=27, T__27=28, T__28=29, T__29=30, T__30=31, 
 		T__31=32, T__32=33, T__33=34, T__34=35, T__35=36, T__36=37, T__37=38, 
 		T__38=39, T__39=40, T__40=41, T__41=42, T__42=43, T__43=44, T__44=45, 
-		T__45=46, T__46=47, IDENTIFICADOR=48, VALOR_ENTERO=49, VALOR_DOUBLE=50, 
-		VALOR_STRING=51, WS=52, COMMENT=53;
+		T__45=46, T__46=47, IDENTIFIER=48, VALUE_INTEGER=49, VALUE_DOUBLE=50, 
+		VALUE_STRING=51, WS=52, COMMENT=53;
 	public static String[] channelNames = {
 		"DEFAULT_TOKEN_CHANNEL", "HIDDEN"
 	};
@@ -42,8 +42,8 @@ public class TclLexer extends Lexer {
 		"T__17", "T__18", "T__19", "T__20", "T__21", "T__22", "T__23", "T__24", 
 		"T__25", "T__26", "T__27", "T__28", "T__29", "T__30", "T__31", "T__32", 
 		"T__33", "T__34", "T__35", "T__36", "T__37", "T__38", "T__39", "T__40", 
-		"T__41", "T__42", "T__43", "T__44", "T__45", "T__46", "IDENTIFICADOR", 
-		"VALOR_ENTERO", "VALOR_DOUBLE", "VALOR_STRING", "WS", "COMMENT"
+		"T__41", "T__42", "T__43", "T__44", "T__45", "T__46", "IDENTIFIER", "VALUE_INTEGER", 
+		"VALUE_DOUBLE", "VALUE_STRING", "WS", "COMMENT"
 	};
 
 	private static final String[] _LITERAL_NAMES = {
@@ -59,8 +59,7 @@ public class TclLexer extends Lexer {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		"IDENTIFICADOR", "VALOR_ENTERO", "VALOR_DOUBLE", "VALOR_STRING", "WS", 
-		"COMMENT"
+		"IDENTIFIER", "VALUE_INTEGER", "VALUE_DOUBLE", "VALUE_STRING", "WS", "COMMENT"
 	};
 	public static final Vocabulary VOCABULARY = new VocabularyImpl(_LITERAL_NAMES, _SYMBOLIC_NAMES);
 
