@@ -1,0 +1,3 @@
+# ignore native build result
+/tclnative
+/tclnative.build_artifacts.txt

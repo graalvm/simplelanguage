@@ -132,7 +132,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>simplelanguage</finalName>
+              <finalName>tcl</finalName>
               <artifactSet>
                 <excludes>
                   <exclude>junit:junit</exclude>

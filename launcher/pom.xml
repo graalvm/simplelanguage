@@ -79,7 +79,7 @@
               <goal>shade</goal>
             </goals>
             <configuration>
-              <finalName>sl-launcher</finalName>
+              <finalName>tcl-launcher</finalName>
               <artifactSet>
                 <excludes>
                   <exclude>junit:junit</exclude>
