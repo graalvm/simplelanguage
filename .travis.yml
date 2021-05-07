@@ -9,16 +9,16 @@ jdk:
     - openjdk11
 
 env:
-    - GRAALVM_VERSION="20.3.0" GRAALVM_JAVA_VERSION="8"
-    - GRAALVM_VERSION="20.3.0" GRAALVM_JAVA_VERSION="11"
+    - GRAALVM_VERSION="21.1.0" GRAALVM_JAVA_VERSION="8"
+    - GRAALVM_VERSION="21.1.0" GRAALVM_JAVA_VERSION="11"
     - GRAALVM_VERSION="NONE" SL_BUILD_NATIVE="false"
 
 matrix:
     exclude:
-        - env: GRAALVM_VERSION="20.2.0" GRAALVM_JAVA_VERSION="8"
+        - env: GRAALVM_VERSION="21.1.0" GRAALVM_JAVA_VERSION="8"
           jdk: openjdk11
           os: linux
-        - env: GRAALVM_VERSION="20.3.0" GRAALVM_JAVA_VERSION="11"
+        - env: GRAALVM_VERSION="21.1.0" GRAALVM_JAVA_VERSION="11"
           jdk: openjdk11
           os: linux
           # Travis does not provide an adequate jdk8 on mac (mac versioning issue)
