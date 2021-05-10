@@ -88,7 +88,6 @@
     graalvmBuild + linux + graalvm8  + { name: 'linux-graalvm8' },
     graalvmBuild + linux + graalvm11 + { name: 'linux-graalvm11' },
 
-    graalvmBuild + darwin + fixDarwinJavaHome + graalvm8  + { name: 'darwin-graalvm8' },
     graalvmBuild + darwin + fixDarwinJavaHome + graalvm11 + { name: 'darwin-graalvm11' },
 
     # Blocked by the sl script being unable to find maven repo
