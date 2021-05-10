@@ -67,6 +67,7 @@
     capabilities+: ['linux', 'amd64'],
     packages+: {
       maven: '==3.3.9',
+      devtoolset: "==7",  # GCC 7.3.1, make 4.2.1, binutils 2.28, valgrind 3.13.0
     },
   },
 
