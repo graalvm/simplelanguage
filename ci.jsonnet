@@ -47,13 +47,19 @@
 
   local graalvm8 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java8', version: '20.3.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java8', version: '21.1.0', platformspecific: true },
+    },
+    environment+: {
+      GRAALVM_CATALOG: "https://www.graalvm.org/component-catalog/v2/graal-updater-component-catalog-java8.properties",
     }
   },
 
   local graalvm11 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java11', version: '20.3.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java11', version: '21.1.0', platformspecific: true },
+    },
+    environment+: {
+      GRAALVM_CATALOG: "https://www.graalvm.org/component-catalog/v2/graal-updater-component-catalog-java11.properties",
     }
   },
 
@@ -61,6 +67,7 @@
     capabilities+: ['linux', 'amd64'],
     packages+: {
       maven: '==3.3.9',
+      devtoolset: "==7",  # GCC 7.3.1, make 4.2.1, binutils 2.28, valgrind 3.13.0
     },
   },
 
@@ -81,7 +88,6 @@
     graalvmBuild + linux + graalvm8  + { name: 'linux-graalvm8' },
     graalvmBuild + linux + graalvm11 + { name: 'linux-graalvm11' },
 
-    graalvmBuild + darwin + fixDarwinJavaHome + graalvm8  + { name: 'darwin-graalvm8' },
     graalvmBuild + darwin + fixDarwinJavaHome + graalvm11 + { name: 'darwin-graalvm11' },
 
     # Blocked by the sl script being unable to find maven repo
