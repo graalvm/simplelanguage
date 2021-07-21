@@ -47,7 +47,7 @@
 
   local graalvm8 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java8', version: '21.1.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java8', version: '21.2.0', platformspecific: true },
     },
     environment+: {
       GRAALVM_CATALOG: "https://www.graalvm.org/component-catalog/v2/graal-updater-component-catalog-java8.properties",
@@ -56,7 +56,7 @@
 
   local graalvm11 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java11', version: '21.1.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java11', version: '21.2.0', platformspecific: true },
     },
     environment+: {
       GRAALVM_CATALOG: "https://www.graalvm.org/component-catalog/v2/graal-updater-component-catalog-java11.properties",
