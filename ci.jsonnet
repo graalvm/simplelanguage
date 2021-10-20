@@ -47,13 +47,13 @@
 
   local graalvm8 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java8', version: '21.2.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java8', version: '21.3.0', platformspecific: true },
     },
   },
 
   local graalvm11 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java11', version: '21.2.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java11', version: '21.3.0', platformspecific: true },
     },
   },
 
@@ -79,7 +79,6 @@
   },
 
   builds: [
-    graalvmBuild + linux + graalvm8  + { name: 'linux-graalvm8' },
     graalvmBuild + linux + graalvm11 + { name: 'linux-graalvm11' },
 
     graalvmBuild + darwin + fixDarwinJavaHome + graalvm11 + { name: 'darwin-graalvm11' },

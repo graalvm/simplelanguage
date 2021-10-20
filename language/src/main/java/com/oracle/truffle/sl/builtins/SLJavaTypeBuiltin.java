@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -40,30 +40,33 @@
  */
 package com.oracle.truffle.sl.builtins;
 
-import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
 import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.interop.InteropLibrary;
+import com.oracle.truffle.api.interop.UnsupportedMessageException;
+import com.oracle.truffle.api.library.CachedLibrary;
 import com.oracle.truffle.api.nodes.NodeInfo;
-import com.oracle.truffle.api.source.Source;
-import com.oracle.truffle.sl.SLLanguage;
+import com.oracle.truffle.sl.SLException;
 import com.oracle.truffle.sl.runtime.SLContext;
 
 /**
- * Builtin function to define (or redefine) functions. The provided source code is parsed the same
- * way as the initial source of the script, so the same syntax applies.
+ * Builtin that allows to lookup a Java type.
  */
-@NodeInfo(shortName = "defineFunction")
-public abstract class SLDefineFunctionBuiltin extends SLBuiltinNode {
+@NodeInfo(shortName = "java")
+public abstract class SLJavaTypeBuiltin extends SLBuiltinNode {
 
-    @TruffleBoundary
     @Specialization
-    public String defineFunction(String code) {
-        // @formatter:off
-        Source source = Source.newBuilder(SLLanguage.ID, code, "[defineFunction]").
-            build();
-        // @formatter:on
-        /* The same parsing code as for parsing the initial source. */
-        SLContext.get(this).getFunctionRegistry().register(source);
-
-        return code;
+    public Object doLookup(Object symbolName,
+                    @CachedLibrary(limit = "3") InteropLibrary interop) {
+        try {
+            /*
+             * This is the entry point to Java host interoperability. The return value of
+             * lookupHostSymbol implements the interop contracts. So we can use Java for things that
+             * are expressible also in SL. Like function calls on objects.
+             */
+            return SLContext.get(this).getEnv().lookupHostSymbol(interop.asString(symbolName));
+        } catch (UnsupportedMessageException e) {
+            throw new SLException("The java builtin expected a String argument, but a non-string argument was provided.", this);
+        }
     }
+
 }
