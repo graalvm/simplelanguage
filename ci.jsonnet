@@ -79,7 +79,6 @@
   },
 
   builds: [
-    graalvmBuild + linux + graalvm8  + { name: 'linux-graalvm8' },
     graalvmBuild + linux + graalvm11 + { name: 'linux-graalvm11' },
 
     graalvmBuild + darwin + fixDarwinJavaHome + graalvm11 + { name: 'darwin-graalvm11' },
