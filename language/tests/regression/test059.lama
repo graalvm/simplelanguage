@@ -1,0 +1,22 @@
+fun f (l) {
+  case l of
+    {} -> skip
+  | h : tl -> h (); f (tl)
+  esac
+}
+
+fun a () {
+  write (0)
+}
+
+fun b () {
+  write (1)
+}
+
+fun c () {
+  write (2)
+}
+
+var x = read ();
+
+f ({a, b, c})

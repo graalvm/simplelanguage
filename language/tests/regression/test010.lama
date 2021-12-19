@@ -1,0 +1,20 @@
+var i, s;
+
+i := 0;
+s := 0; 
+
+while i < 100
+do
+    var j = 0;
+
+    while j < 100
+    do   
+      s := s + j;
+      j := j + 1
+    od;
+
+    s := s + i;
+    i := i + 1
+od;
+
+write (s)

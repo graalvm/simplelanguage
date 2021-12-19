@@ -1,0 +1,13 @@
+fun f (a) {
+  fun g (b) {
+    fun h (c) {
+       fun (x) { x + a + b + c}
+    }
+     h (b)
+  }
+   g (a)
+}
+
+var x = read ();
+
+write (f(10)(5))

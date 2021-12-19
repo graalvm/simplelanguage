@@ -1,0 +1,29 @@
+var n, x, i;
+
+fun sort (x) {
+  var i, j, y, n;
+  n := x.length;
+  
+  if n == 0 then  x fi;
+  
+  for i := 0, i<n, i := i+1 do
+    for j := i+1, j<n, j := j+1 do
+      if x[j] < x[i] then
+         y    := x[i];
+	 x[i] := x[j];
+	 x[j] := y
+      fi
+    od
+  od;
+  
+   x
+}
+
+n := read ();
+x := [10, 9, 8, 7, 6, 5];
+
+x := sort (x);
+
+for i:=0, i<x.length, i:=i+1 do
+  write (x[i])
+od

@@ -1,0 +1,21 @@
+var i, n, result;
+
+fun fib (n) {
+  var r;
+  if n <= 1
+  then result := 1
+  else
+    fib (n-1);
+    r := result;
+    fib (n-2);
+    result := result + r
+  fi
+}
+
+n := read ();
+
+for i := n, i >= 1, i := i-1 do
+  fib (i);
+  write (i);
+  write (result)
+od

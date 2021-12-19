@@ -1,0 +1,16 @@
+var x, y, z;
+
+x := read ();
+y := read ();
+z := x < y;
+write (z);
+z := x <= y;
+write (z);
+z := x == y;
+write (z);
+z := x != y;
+write (z);
+z := x >= y;
+write (z);
+z := x > y;
+write (z)

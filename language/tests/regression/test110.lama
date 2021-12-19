@@ -1,0 +1,16 @@
+var x = [0], y = [0];
+
+read ();
+
+write (x[0]);
+write (y[0]);
+
+if 1 then x[0] else y[0] fi := 10;
+
+write (x[0]);
+write (y[0]);
+
+if 0 then x[0] else y[0] fi := 100;
+
+write (x[0]);
+write (y[0])

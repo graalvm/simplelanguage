@@ -1,0 +1,12 @@
+fun a (x) { x + 1}
+fun b (x) { x + 2}
+fun c (x) { x + 3}
+
+(
+  var funs = [a, b, c];
+  var n = read (), i;
+
+  for i := 0, i < 3, i := i+1 do
+    write (funs[i] (n))
+  od
+)

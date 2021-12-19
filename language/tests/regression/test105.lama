@@ -1,0 +1,6 @@
+fun f (x) {write (x)}
+
+var g = eta f, n = read ();
+
+
+g (3)

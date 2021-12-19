@@ -1,0 +1,3 @@
+var x = read (), y = read (), z = x * y * 3;
+
+write (z)

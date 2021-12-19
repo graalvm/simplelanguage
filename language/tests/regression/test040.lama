@@ -1,0 +1,17 @@
+var x;
+
+fun f (x) {
+  case x of
+    A -> write (1)
+  | B -> write (2)
+  | C -> write (3)
+  | _  -> write (4)
+  esac
+}
+
+x := read ();
+
+f (A);
+f (B);
+f (C);
+f (D)

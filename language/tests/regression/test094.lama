@@ -1,0 +1,22 @@
+fun a (x, y) {
+  var a = x + y, b = x - y;
+  (
+   var f = fun () {
+     write (x);
+     write (y);
+     write (a);
+     write (b)
+   };
+
+   a := 100;
+   b := 200;
+   x := 800;
+   y := 1000;
+   
+    f
+  )
+}
+
+var x = read ();
+
+a (5, 7) ()

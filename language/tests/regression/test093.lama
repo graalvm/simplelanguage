@@ -1,0 +1,12 @@
+fun plus (x) {
+  fun f (y) {
+     x + y
+  }
+
+   f
+}
+
+var x = read ();
+
+write (plus(5)(6));
+write (plus(8)(10))

@@ -1,0 +1,39 @@
+var x, y, z;
+
+fun zip (x) {
+  case x of Pair (x, y) ->
+    case x of
+      Nil          ->  Nil
+    | Cons (x, xs) -> case y of
+                         Nil ->  Nil
+  		       | Cons (y, ys) ->  Cons (Pair (x, y), zip (Pair (xs, ys)))
+		       esac
+    esac
+  esac
+}
+
+fun unzip (x) {
+  case x of
+    Nil                    ->  Pair (Nil, Nil)
+  | Cons (Pair (x, y), tl) ->
+       case unzip (tl) of
+         Pair (xs, ys) ->  Pair (Cons (x, xs), Cons (y, ys))
+       esac
+  esac
+}
+
+fun printList (l) {
+  case l of
+    Nil -> skip
+  | Cons (x, xs) -> write (x); printList (xs)
+  esac
+}
+
+z := read ();
+
+x := Cons (1, Cons (2, Cons (3, Nil)));
+y := Cons (100, Cons (200, Cons (300, Nil)));
+
+case unzip (zip (Pair (x, y))) of
+  Pair (x, y) -> printList (x); printList (y)
+esac

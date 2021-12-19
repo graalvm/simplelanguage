@@ -1,0 +1,32 @@
+var n, t;
+
+fun insert (t, x) {
+  case t of
+    Leaf           ->  Node (x, Leaf, Leaf)
+  | Node (y, l, r) -> if x > y
+                          then  Node (y, insert (l, x), r)
+			  else  Node (y, l, insert (r, x))
+		       fi
+  esac
+}
+
+fun find (t, x) {
+  case t of
+    Leaf           ->  0
+  | Node (y, l, r) -> if x == y then  1
+		      elif x > y then  find (l, x)
+		                 else  find (r, x)
+		      fi
+  esac
+}
+
+n := read ();
+
+t := insert (insert (insert (insert (Leaf, 5), 4), 6), 3);
+
+write (find (t, 5));
+write (find (t, 4));
+write (find (t, 6));
+write (find (t, 3));
+write (find (t, 2));
+write (find (t, 1))

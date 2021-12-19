@@ -1,0 +1,9 @@
+fun f (x) {
+  fun g () { x}
+  fun h () { g}
+   g
+}
+
+var n = read ();
+
+write (f(5)())

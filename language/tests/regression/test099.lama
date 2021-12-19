@@ -1,0 +1,19 @@
+fun makeLazy (f) {
+  var flag = 0, value = 0;
+
+   fun () {
+    if flag
+    then  value
+    else
+      value := f ();
+      flag  := 1;
+       value
+    fi
+  }
+}
+
+var l = makeLazy (fun () {write (1);  800});
+var x = read ();
+
+write (l ());
+write (l ())

@@ -1,0 +1,15 @@
+var x;
+
+fun printString (s) {
+  var i;
+  for i := 0, i < s.length, i := i + 1 do
+    write (s[i])
+  od
+}
+
+x := read ();
+printString (1.string);
+printString ("abc".string);
+printString ([].string);
+printString ([1, 2, 3].string);
+printString (Cons (1, Cons (2, Nil)).string)

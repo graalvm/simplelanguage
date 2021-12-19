@@ -1,0 +1,23 @@
+fun map (f, l) {
+  case l of
+    {}     ->  {}
+  | h : tl ->  (f (h) : map (f, tl))
+  esac
+}
+
+fun a (x) { x + 1}
+fun b (x) { x + 2}
+
+fun print_list (x) {
+  case x of
+    {} -> skip
+  | h : tl -> write (h); print_list (tl)
+  esac
+}
+
+var x = read ();
+
+print_list ({1, 2, 3});
+print_list (map (a, {1, 2, 3}));
+print_list (map (b, {1, 2, 3}))
+

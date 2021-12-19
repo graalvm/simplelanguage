@@ -1,0 +1,13 @@
+var x;
+
+fun f (a) {
+  case a of
+    A (x, y, z) -> write (x + y + z)
+  | B (x, y, z) -> write (x + y + z)
+  esac
+}
+
+x := read ();
+
+f (A (100, 200, 300));
+f (B (500, 600, 700))

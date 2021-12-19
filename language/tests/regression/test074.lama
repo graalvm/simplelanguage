@@ -1,0 +1,16 @@
+var x, m, n;
+
+fun ack (m, n) {
+  if m == 0 then  (n+1)
+  elif m > 0 && n == 0 then  ack (m-1, 1)
+  else  ack (m-1, ack (m, n-1))
+  fi
+}
+
+x := read ();
+
+for m := 0, m <= 3, m := m+1 do
+  for n := 0, n <= 8, n := n+1 do    
+    write (ack (m, n))    
+  od
+od

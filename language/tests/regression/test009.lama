@@ -1,0 +1,8 @@
+var n = 2, k = 10;
+
+(var res = 1;
+while k > 0 do
+  res := res * n;
+  k := k - 1
+od;
+write(res))

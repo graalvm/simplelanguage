@@ -1,0 +1,19 @@
+var x, y, i;
+
+fun f (x) {
+  case x of
+    Nil                               -> write (0)
+  | Cons (_, Nil)                     -> write (1)
+  | Cons (_, Cons (_, Nil))           -> write (2)
+  | Cons (_, Cons (_, Cons (_, Nil))) -> write (3)
+  | _                                 -> write (4)
+  esac
+}
+
+x := read ();
+y := Nil;
+
+for i := 0, i < 10, i := i + 1 do
+  f (y);
+  y := Cons (i, y)
+od

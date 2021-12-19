@@ -1,0 +1,5 @@
+infix ++ at + (a, b) { a+b}
+
+var x = read ();
+
+write (infix ++ (2, 3))

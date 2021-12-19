@@ -1,0 +1,16 @@
+var n = read ();
+
+do
+  
+  if n == 1 then write (0)
+elif n == 2 then write (1)
+elif n == 3 then write (2)
+elif n == 4 then write (3)
+            else write (10)
+  fi;
+
+  if n >= 5 then write (11) fi;
+
+  n := n - 1
+
+while n != 0 od

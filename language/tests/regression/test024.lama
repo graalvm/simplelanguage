@@ -1,0 +1,17 @@
+fun test1 () {
+  a := 3
+}
+
+fun test2 (b) {
+  a := b
+}
+
+var x, a, b;
+
+x := read ();
+
+test1 ();
+write (a);
+
+test2 (8);
+write (a)

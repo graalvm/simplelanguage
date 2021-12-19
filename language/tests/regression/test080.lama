@@ -1,0 +1,14 @@
+var x;
+
+fun sum (x) {
+  case x of
+    Nil          ->  0
+  | Cons (x, tl) ->  (x + sum (tl))
+  esac
+}
+
+x := read ();
+
+write (sum (Nil));
+write (sum (Cons (100, Nil)));
+write (sum (Cons (100, Cons (200, Nil))))

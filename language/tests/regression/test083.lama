@@ -1,0 +1,12 @@
+var n, y;
+
+fun test (n, m) {
+  var i, s;
+  write (n);
+  write (m);
+   n
+}
+
+n := read ();
+y := 1 + (2 + (3 + (4 + (5 + (6 + test (7, 7))))));
+write (y)

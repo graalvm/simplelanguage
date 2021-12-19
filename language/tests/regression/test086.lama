@@ -1,0 +1,26 @@
+var n;
+
+fun hd (l) {
+  case l of
+    h : _ ->  h
+  esac  
+}
+
+
+fun tl (l) {
+  case l of
+    _ : tl ->  tl
+  esac
+}
+
+fun print_list (l) {
+  case l of
+    {}    -> skip
+  | h : t -> write (h); print_list (t)
+  esac
+}
+
+n := read ();
+write ({1, 2, 3}.hd);
+print_list ({1, 2, 3}.tl)
+

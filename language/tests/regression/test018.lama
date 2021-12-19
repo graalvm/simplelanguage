@@ -1,0 +1,44 @@
+var n, c, p, q, i, m, d;
+
+n := read ();
+
+c := 1;
+p := 2;
+
+while c do
+
+  var cc = 1;
+
+  while cc do
+    q := 2;
+
+    while q * q <= p && cc do
+      cc := p % q != 0;
+      q := q + 1
+    od;
+
+    if cc then cc := 0 else p := p + 1; cc := 1 fi   
+  od;
+
+  d := p;
+  i := 0;
+
+  q := n / d;
+  m := n % d;
+
+  while q > 0 && m == 0 do
+    i := i + 1;
+    d := d * p;
+    m := n % d;
+    if m == 0 then q := n / d else skip fi
+  od;
+
+  write (p);
+  write (i);
+
+  n := n / (d / p);
+  p := p + 1;
+  c := n != 1
+
+od
+

@@ -1,0 +1,29 @@
+var n;
+
+n := read ();
+
+while n > 0 do
+
+  if n < 1000
+  then
+    if n < 500
+    then
+      if n < 250 
+      then
+        if n < 125
+	then
+	  if n < 63
+	  then
+	    if n < 32
+	    then
+	      write (1)
+	    fi
+	  fi
+	fi
+      fi
+    fi
+  fi;
+
+  n := n - 1
+
+od

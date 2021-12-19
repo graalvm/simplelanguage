@@ -1,0 +1,7 @@
+var x, y;
+
+x := read ();
+y := read ();
+write (x-y);
+write (x/y);
+write (x%y)

@@ -1,0 +1,11 @@
+fun f (x) {
+  fun inner (y) {
+     if y == 0 then 0 else inner (y-1) fi
+  }
+
+   inner (x)
+}
+
+var n = read ();
+
+write (f (5))

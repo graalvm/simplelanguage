@@ -1,0 +1,7 @@
+var n = read ();
+
+case 0 of
+ 0 -> 0 + 0 + 0
+esac;
+
+write (0)

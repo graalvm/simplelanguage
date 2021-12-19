@@ -1,0 +1,33 @@
+var x, a, b, c;
+
+fun test1 (a) {
+  write (a)
+}
+
+fun test2 (b) {
+  write (b)
+}
+
+fun test3 (c) {
+  write (c)
+}
+
+fun print () {
+  write (a);
+  write (b);
+  write (c)
+}
+
+x := read ();
+
+a := 100;
+b := 200;
+c := 300;
+
+test1 (1);
+print ();
+test2 (2);
+print ();
+test3 (3);
+print ()
+

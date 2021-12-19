@@ -1,0 +1,10 @@
+var s, n;
+
+s := 0;
+
+do
+  n := read ();
+  s := s + n
+while n != 0 od;
+
+write (s)  

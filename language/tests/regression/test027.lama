@@ -1,0 +1,32 @@
+var x, a, b, c;
+
+fun print () {
+  write (a);
+  write (b);
+  write (c)
+}
+
+fun test1 (a) {
+  write (a);
+  print ();
+  write (a);
+  if a < 4 then
+     test2 (a+1);
+     print ()
+  fi 
+}
+
+fun test2 (b) {
+  write (b);
+  print ();
+  test1 (b+1);
+  print ()
+}
+
+x := read ();
+
+a := 100;
+b := 200;
+c := 300;
+
+test1 (1)

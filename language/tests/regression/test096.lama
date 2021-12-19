@@ -1,0 +1,23 @@
+fun f () {
+  var x, l = {};
+  fun g () { x}
+  
+  x := 1;
+  l := g : l;
+
+  x := 2;
+  l := g : l;
+
+   l
+}
+
+fun p (l) {
+  case l of
+    {} -> skip
+  | h : tl -> write (h ()); p (tl)
+  esac
+}
+
+var x = read ();
+
+p (f ())

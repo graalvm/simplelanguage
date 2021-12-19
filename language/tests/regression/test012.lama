@@ -1,0 +1,14 @@
+var n;
+
+n := read ();
+while n >= 0 do
+  if n > 1
+  then
+    write (0);
+    if n == 3 then write (0) else write (1) fi
+  else
+    write (1);
+    if n > 0 then write (0) else write (1) fi
+  fi;
+  n := n - 1
+od

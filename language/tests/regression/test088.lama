@@ -1,0 +1,8 @@
+fun len(l) {
+  case l of
+     _ : xs ->  len(xs) + 1
+    |{} ->  0 
+  esac
+}
+write(len({}));
+write(len({1, 2, 3}))

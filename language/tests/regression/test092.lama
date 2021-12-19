@@ -1,0 +1,19 @@
+fun f (l) {
+  infix === at == (a, b) {
+     a == b
+  }
+
+  case l of
+    {}         ->  1
+  | {_}        ->  1
+  | a : b : tl ->  a === b && f (b : tl)
+  esac
+}
+
+var x = read ();
+
+write (f ({}));
+write (f (1:{}));
+write (f ({1, 1}));
+write (f ({1, 1, 1}));
+write (f ({1, 2, 1}))

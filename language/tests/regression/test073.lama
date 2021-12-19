@@ -1,0 +1,16 @@
+var n, i;
+
+fun fact (n) {
+  if n <= 1
+  then  1
+  else
+     (n * fact (n-1))
+  fi
+}
+
+n := read ();
+
+for i := n, i >= 1, i := i-1 do
+  write (i);
+  write (fact (i))
+od

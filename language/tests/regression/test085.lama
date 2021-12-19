@@ -1,0 +1,31 @@
+var n;
+
+fun sum (l) {
+  case l of
+    {}    ->  0
+  | h : t ->  (h + sum (t))
+  esac 
+}
+
+fun print_list (l) {
+  case l of
+    {}    -> skip
+  | h : t -> write (h); print_list (t)
+  esac
+}
+
+fun array_to_list (a) {
+  var l, i;
+  l := {};
+  for i := a.length, i > 0, i := i-1 do
+    l := a[i-1] : l
+  od;
+   l
+}
+
+n := read ();
+write (sum ({}));
+write (sum ({1, 2, 3, 4, 5}));
+write (sum (1:2:3:4:5:{}));
+print_list (array_to_list ([1, 2, 3, 4, 5]))
+

@@ -1,0 +1,9 @@
+fun f (_) {write (1)}
+fun g (h : tl) {
+  write (h)
+}
+
+var n = read ();
+
+f (1);
+g ({2, 3})

@@ -1,0 +1,17 @@
+var n, fib_1, fib_2, fib, i;
+
+n := read ();
+
+i     := 2;
+fib_1 := 1;
+fib_2 := 1;
+fib   := 1;
+
+while i < n do
+      fib   := fib_1 + fib_2;
+      fib_2 := fib_1;
+      fib_1 := fib;
+      i     := i+1
+od;
+
+write (fib)
