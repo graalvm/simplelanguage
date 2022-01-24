@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, 2021, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,33 +38,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl;
+package com.oracle.truffle.sl.builtins;
 
-import com.oracle.truffle.api.frame.FrameDescriptor;
-import com.oracle.truffle.api.frame.MaterializedFrame;
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.RootNode;
+import com.oracle.truffle.api.CompilerDirectives;
+import com.oracle.truffle.api.TruffleFile;
+import com.oracle.truffle.api.TruffleLanguage;
+import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.nodes.NodeInfo;
+import com.oracle.truffle.sl.runtime.SLContext;
+import com.oracle.truffle.sl.runtime.SLNull;
 
-final class SLEvaluateLocalNode extends RootNode {
+/**
+ * Builtin function that performs context exit.
+ */
+@NodeInfo(shortName = "addToHostClassPath")
+public abstract class SLAddToHostClassPathBuiltin extends SLBuiltinNode {
 
-    private final String variable;
-    private final MaterializedFrame inspectFrame;
-
-    SLEvaluateLocalNode(SLLanguage language, String variableName, MaterializedFrame frame) {
-        super(language);
-        this.variable = variableName;
-        this.inspectFrame = frame;
+    @Specialization
+    protected Object execute(String classPath) {
+        addToHostClassPath(classPath);
+        return SLNull.SINGLETON;
     }
 
-    @Override
-    public Object execute(VirtualFrame currentFrame) {
-        FrameDescriptor frameDescriptor = inspectFrame.getFrameDescriptor();
-
-        for (int i = 0; i < frameDescriptor.getNumberOfSlots(); i++) {
-            if (variable.equals(frameDescriptor.getSlotName(i))) {
-                return inspectFrame.getValue(i);
-            }
-        }
-        return null;
+    @CompilerDirectives.TruffleBoundary
+    private void addToHostClassPath(String classPath) {
+        TruffleLanguage.Env env = SLContext.get(this).getEnv();
+        TruffleFile file = env.getPublicTruffleFile(classPath);
+        env.addToHostClassPath(file);
     }
 }
