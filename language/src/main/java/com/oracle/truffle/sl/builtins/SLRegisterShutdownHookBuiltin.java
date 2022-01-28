@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2020, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,33 +38,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl;
+package com.oracle.truffle.sl.builtins;
 
-import com.oracle.truffle.api.frame.FrameDescriptor;
-import com.oracle.truffle.api.frame.MaterializedFrame;
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.RootNode;
+import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.nodes.NodeInfo;
+import com.oracle.truffle.sl.runtime.SLContext;
+import com.oracle.truffle.sl.runtime.SLFunction;
+import com.oracle.truffle.sl.runtime.SLNull;
 
-final class SLEvaluateLocalNode extends RootNode {
+/**
+ * Builtin function that registers a function as a shutdown hook. Only no-parameter functions are
+ * supported.
+ */
+@NodeInfo(shortName = "registerShutdownHook")
+public abstract class SLRegisterShutdownHookBuiltin extends SLBuiltinNode {
 
-    private final String variable;
-    private final MaterializedFrame inspectFrame;
-
-    SLEvaluateLocalNode(SLLanguage language, String variableName, MaterializedFrame frame) {
-        super(language);
-        this.variable = variableName;
-        this.inspectFrame = frame;
-    }
-
-    @Override
-    public Object execute(VirtualFrame currentFrame) {
-        FrameDescriptor frameDescriptor = inspectFrame.getFrameDescriptor();
-
-        for (int i = 0; i < frameDescriptor.getNumberOfSlots(); i++) {
-            if (variable.equals(frameDescriptor.getSlotName(i))) {
-                return inspectFrame.getValue(i);
-            }
-        }
-        return null;
+    @Specialization
+    protected Object execute(SLFunction shutdownHook) {
+        SLContext.get(this).registerShutdownHook(shutdownHook);
+        return SLNull.SINGLETON;
     }
 }

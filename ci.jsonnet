@@ -45,15 +45,9 @@
     }
   },
 
-  local graalvm8 = {
-    downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java8', version: '21.3.0', platformspecific: true },
-    },
-  },
-
   local graalvm11 = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java11', version: '21.3.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-ce-java11', version: '22.0.0.2', platformspecific: true },
     },
   },
 
