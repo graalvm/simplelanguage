@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014, 2019, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -50,7 +50,6 @@ import com.oracle.truffle.api.frame.FrameDescriptor;
 import com.oracle.truffle.api.frame.FrameInstance;
 import com.oracle.truffle.api.frame.FrameInstance.FrameAccess;
 import com.oracle.truffle.api.frame.FrameInstanceVisitor;
-import com.oracle.truffle.api.frame.FrameSlot;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.nodes.RootNode;
 
@@ -83,7 +82,7 @@ public abstract class SLStackTraceBuiltin extends SLBuiltinNode {
                 Frame frame = frameInstance.getFrame(FrameAccess.READ_ONLY);
                 RootNode rn = ((RootCallTarget) callTarget).getRootNode();
                 // ignore internal or interop stack frames
-                if (rn.getLanguageInfo() == null) {
+                if (rn.isInternal() || rn.getLanguageInfo() == null) {
                     return 1;
                 }
                 if (str.length() > 0) {
@@ -91,8 +90,9 @@ public abstract class SLStackTraceBuiltin extends SLBuiltinNode {
                 }
                 str.append("Frame: ").append(rn.toString());
                 FrameDescriptor frameDescriptor = frame.getFrameDescriptor();
-                for (FrameSlot s : frameDescriptor.getSlots()) {
-                    str.append(", ").append(s.getIdentifier()).append("=").append(frame.getValue(s));
+                int count = frameDescriptor.getNumberOfSlots();
+                for (int i = 0; i < count; i++) {
+                    str.append(", ").append(frameDescriptor.getSlotName(i)).append("=").append(frame.getValue(i));
                 }
                 return null;
             }

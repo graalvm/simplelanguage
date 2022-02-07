@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -41,9 +41,9 @@
 package com.oracle.truffle.sl.nodes.expression;
 
 import com.oracle.truffle.api.CallTarget;
+import com.oracle.truffle.api.CompilerAsserts;
 import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.CompilerDirectives.CompilationFinal;
-import com.oracle.truffle.api.TruffleLanguage.ContextReference;
 import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.sl.SLLanguage;
@@ -72,22 +72,37 @@ public final class SLFunctionLiteralNode extends SLExpressionNode {
      */
     @CompilationFinal private SLFunction cachedFunction;
 
-    private final ContextReference<SLContext> reference;
-
-    public SLFunctionLiteralNode(SLLanguage language, String functionName) {
+    public SLFunctionLiteralNode(String functionName) {
         this.functionName = functionName;
-        this.reference = language.getContextReference();
     }
 
     @Override
     public SLFunction executeGeneric(VirtualFrame frame) {
-        if (cachedFunction == null) {
-            /* We are about to change a @CompilationFinal field. */
-            CompilerDirectives.transferToInterpreterAndInvalidate();
-            /* First execution of the node: lookup the function in the function registry. */
-            cachedFunction = reference.get().getFunctionRegistry().lookup(functionName, true);
+        SLLanguage l = SLLanguage.get(this);
+        CompilerAsserts.partialEvaluationConstant(l);
+
+        SLFunction function;
+        if (l.isSingleContext()) {
+            function = this.cachedFunction;
+            if (function == null) {
+                /* We are about to change a @CompilationFinal field. */
+                CompilerDirectives.transferToInterpreterAndInvalidate();
+                /* First execution of the node: lookup the function in the function registry. */
+                this.cachedFunction = function = SLContext.get(this).getFunctionRegistry().lookup(functionName, true);
+            }
+        } else {
+            /*
+             * We need to rest the cached function otherwise it might cause a memory leak.
+             */
+            if (this.cachedFunction != null) {
+                CompilerDirectives.transferToInterpreterAndInvalidate();
+                this.cachedFunction = null;
+            }
+            // in the multi-context case we are not allowed to store
+            // SLFunction objects in the AST. Instead we always perform the lookup in the hash map.
+            function = SLContext.get(this).getFunctionRegistry().lookup(functionName, true);
         }
-        return cachedFunction;
+        return function;
     }
 
 }

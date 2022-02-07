@@ -1,48 +1,101 @@
 #!/usr/bin/env bash
+#
+# Copyright (c) 2020, Oracle and/or its affiliates. All rights reserved.
+# DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
+#
+# The Universal Permissive License (UPL), Version 1.0
+#
+# Subject to the condition set forth below, permission is hereby granted to any
+# person obtaining a copy of this software, associated documentation and/or
+# data (collectively the "Software"), free of charge and under any and all
+# copyright rights in the Software, and any and all patent rights owned or
+# freely licensable by each licensor hereunder covering either (i) the
+# unmodified Software as contributed to or provided by such licensor, or (ii)
+# the Larger Works (as defined below), to deal in both
+#
+# (a) the Software, and
+#
+# (b) any piece of software and/or hardware listed in the lrgrwrks.txt file if
+# one is included with the Software each a "Larger Work" to which the Software
+# is contributed by such licensors),
+#
+# without restriction, including without limitation the rights to copy, create
+# derivative works of, display, perform, and distribute the Software and make,
+# use, sell, offer for sale, import, export, have made, and have sold the
+# Software and the Larger Work(s), and to sublicense the foregoing rights on
+# either these or other terms.
+#
+# This license is subject to the following condition:
+#
+# The above copyright notice and either this complete permission notice or at a
+# minimum a reference to the UPL must be included in all copies or substantial
+# portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+#
 
-VERSION="19.1.1"
+# If you update this number make sure the graalvm.version value in ./pom.xml matches
+VERSION="22.0.0.2"
 
 MAIN_CLASS="com.oracle.truffle.sl.launcher.SLMain"
 SCRIPT_HOME="$(cd "$(dirname "$0")" && pwd -P)"
+
+function extractGraalVMVersion() {
+    local -r releasePath="${1:?Path to relese file is a required parameter}"
+    grep "GRAALVM_VERSION" "$releasePath" 2> /dev/null \
+        | awk 'BEGIN {FS="="} {print $2}' \
+        | sed 's/"//g'
+}
+
+function versionCheck() {
+    local -r message="${1:-Wrong GraalVM version.}"
+    if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
+        fail "$message"
+    fi
+}
+
+function fail() {
+    local -r message="${1:-Unknown error}"
+    local -r exitCode="${2:-1}"
+    >&2 echo "$message"
+    exit "$exitCode"
+}
 
 #######################################################################
 # Locations of the language and launcher jars as well as the java command are
 # different if I'm running from the repository or as a component in GraalVM
 #######################################################################
-GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$SCRIPT_HOME/../release" 2> /dev/null)
+GRAALVM_VERSION=$(extractGraalVMVersion "$SCRIPT_HOME/../release")
 if [[ "$GRAALVM_VERSION" != "" ]]; then
     LANGUAGE_PATH=""
-    LAUNCHER_PATH="$SCRIPT_HOME/../jre/languages/sl/launcher/sl-launcher.jar"
+    # contains paths for both jdk8 and jdk11
+    LAUNCHER_PATH="$SCRIPT_HOME/../jre/languages/sl/launcher/sl-launcher.jar:$SCRIPT_HOME/../languages/sl/launcher/sl-launcher.jar"
     JAVACMD="$SCRIPT_HOME/java"
-    GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
-    if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
-        echo "Installed in wrong version of GraalVM. Expected: $VERSION, found $GRAALVM_VERSION"
-        exit 1
-    fi
+    versionCheck "Installed in wrong version of GraalVM. Expected: $VERSION, found $GRAALVM_VERSION"
 else
     LANGUAGE_PATH="$SCRIPT_HOME/language/target/simplelanguage.jar"
-    LAUNCHER_PATH="$SCRIPT_HOME/launcher/target/launcher-$VERSION-SNAPSHOT.jar"
+    LAUNCHER_PATH="$SCRIPT_HOME/launcher/target/launcher-$VERSION.jar"
     # Check the GraalVM version in JAVA_HOME
     if [[ "$JAVA_HOME" != "" ]]; then
-        GRAALVM_VERSION=$(grep "GRAALVM_VERSION" "$JAVA_HOME"/release)
+        GRAALVM_VERSION=$(extractGraalVMVersion "$JAVA_HOME"/release)
         if [[ "$GRAALVM_VERSION" != "" ]]; then
-            GRAALVM_VERSION=$(echo "$GRAALVM_VERSION" | awk 'BEGIN {FS="="} {print $2}')
-            if [[ "$GRAALVM_VERSION" != "$VERSION" ]]; then
-                echo "Wrong version of GraalVM in \$JAVA_HOME. Expected: $VERSION, found $GRAALVM_VERSION"
-                exit 1
-            fi
+            versionCheck "Wrong version of GraalVM in \$JAVA_HOME. Expected: $VERSION, found $GRAALVM_VERSION"
         fi
         JAVACMD=${JAVACMD:=$JAVA_HOME/bin/java}
         if [[ ! -f $LANGUAGE_PATH ]]; then
-            echo "Could not find language on $LANGUAGE_PATH. Did you run mvn package?"
-            exit 1
+            fail "Could not find language on $LANGUAGE_PATH. Did you run mvn package?"
         fi
         if [[ ! -f $LAUNCHER_PATH ]]; then
-            echo "Could not find launcher on $LAUNCHER_PATH. Did you run mvn package?"
-            exit 1
+            fail "Could not find launcher on $LAUNCHER_PATH. Did you run mvn package?"
         fi
     else
-        echo "JAVA_HOME is not set"
+        fail "JAVA_HOME is not set"
         exit 1
     fi
 fi
@@ -60,9 +113,9 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
         -debug)
             JAVA_ARGS+=("-Xdebug" "-Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y") ;;
         -dump)
-            JAVA_ARGS+=("-Dgraal.Dump=Truffle:1" "-Dgraal.TruffleBackgroundCompilation=false" "-Dgraal.TraceTruffleCompilation=true" "-Dgraal.TraceTruffleCompilationDetails=true") ;;
+            JAVA_ARGS+=("-Dpolyglot.engine.AllowExperimentalOptions=true" "-Dgraal.Dump=Truffle:1" "-Dpolyglot.engine.BackgroundCompilation=false" "-Dpolyglot.engine.TraceCompilation=true" "-Dpolyglot.engine.TraceCompilationDetails=true") ;;
         -disassemble)
-            JAVA_ARGS+=("-XX:CompileCommand=print,*OptimizedCallTarget.callRoot" "-XX:CompileCommand=exclude,*OptimizedCallTarget.callRoot" "-Dgraal.TruffleBackgroundCompilation=false" "-Dgraal.TraceTruffleCompilation=true" "-Dgraal.TraceTruffleCompilationDetails=true") ;;
+            JAVA_ARGS+=("-Dpolyglot.engine.AllowExperimentalOptions=true" "-XX:CompileCommand=print,*OptimizedCallTarget.profiledPERoot" "-XX:CompileCommand=exclude,*OptimizedCallTarget.profiledPERoot" "-Dpolyglot.engine.BackgroundCompilation=false" "-Dpolyglot.engine.TraceCompilation=true" "-Dpolyglot.engine.TraceCompilationDetails=true") ;;
         -J*)
             opt=${opt:2}
             JAVA_ARGS+=("$opt") ;;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -42,31 +42,30 @@ package com.oracle.truffle.sl;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
+import java.util.concurrent.ConcurrentHashMap;
 
+import com.oracle.truffle.api.Assumption;
 import com.oracle.truffle.api.CallTarget;
-import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.RootCallTarget;
-import com.oracle.truffle.api.Scope;
 import com.oracle.truffle.api.Truffle;
 import com.oracle.truffle.api.TruffleLanguage;
 import com.oracle.truffle.api.TruffleLanguage.ContextPolicy;
 import com.oracle.truffle.api.debug.DebuggerTags;
 import com.oracle.truffle.api.dsl.NodeFactory;
-import com.oracle.truffle.api.frame.Frame;
+import com.oracle.truffle.api.frame.FrameDescriptor;
+import com.oracle.truffle.api.instrumentation.AllocationReporter;
 import com.oracle.truffle.api.instrumentation.ProvidedTags;
 import com.oracle.truffle.api.instrumentation.StandardTags;
 import com.oracle.truffle.api.interop.InteropLibrary;
-import com.oracle.truffle.api.interop.TruffleObject;
-import com.oracle.truffle.api.interop.UnsupportedMessageException;
 import com.oracle.truffle.api.nodes.Node;
+import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.nodes.RootNode;
 import com.oracle.truffle.api.object.DynamicObject;
+import com.oracle.truffle.api.object.DynamicObjectLibrary;
+import com.oracle.truffle.api.object.Shape;
 import com.oracle.truffle.api.source.Source;
-import com.oracle.truffle.api.source.SourceSection;
 import com.oracle.truffle.sl.builtins.SLBuiltinNode;
 import com.oracle.truffle.sl.builtins.SLDefineFunctionBuiltin;
 import com.oracle.truffle.sl.builtins.SLNanoTimeBuiltin;
@@ -74,7 +73,10 @@ import com.oracle.truffle.sl.builtins.SLPrintlnBuiltin;
 import com.oracle.truffle.sl.builtins.SLReadlnBuiltin;
 import com.oracle.truffle.sl.builtins.SLStackTraceBuiltin;
 import com.oracle.truffle.sl.nodes.SLEvalRootNode;
+import com.oracle.truffle.sl.nodes.SLExpressionNode;
+import com.oracle.truffle.sl.nodes.SLRootNode;
 import com.oracle.truffle.sl.nodes.SLTypes;
+import com.oracle.truffle.sl.nodes.SLUndefinedFunctionRootNode;
 import com.oracle.truffle.sl.nodes.controlflow.SLBlockNode;
 import com.oracle.truffle.sl.nodes.controlflow.SLBreakNode;
 import com.oracle.truffle.sl.nodes.controlflow.SLContinueNode;
@@ -97,7 +99,7 @@ import com.oracle.truffle.sl.nodes.expression.SLReadPropertyNode;
 import com.oracle.truffle.sl.nodes.expression.SLStringLiteralNode;
 import com.oracle.truffle.sl.nodes.expression.SLSubNode;
 import com.oracle.truffle.sl.nodes.expression.SLWritePropertyNode;
-import com.oracle.truffle.sl.nodes.local.SLLexicalScope;
+import com.oracle.truffle.sl.nodes.local.SLReadArgumentNode;
 import com.oracle.truffle.sl.nodes.local.SLReadLocalVariableNode;
 import com.oracle.truffle.sl.nodes.local.SLWriteLocalVariableNode;
 import com.oracle.truffle.sl.parser.SLNodeFactory;
@@ -107,7 +109,9 @@ import com.oracle.truffle.sl.runtime.SLBigNumber;
 import com.oracle.truffle.sl.runtime.SLContext;
 import com.oracle.truffle.sl.runtime.SLFunction;
 import com.oracle.truffle.sl.runtime.SLFunctionRegistry;
+import com.oracle.truffle.sl.runtime.SLLanguageView;
 import com.oracle.truffle.sl.runtime.SLNull;
+import com.oracle.truffle.sl.runtime.SLObject;
 
 /**
  * SL is a simple language to demonstrate and showcase features of Truffle. The implementation is as
@@ -157,9 +161,9 @@ import com.oracle.truffle.sl.runtime.SLNull;
  * {@link DebuggerTags#AlwaysHalt} tag to halt the execution when run under the debugger.
  * <li>Function calls: {@link SLInvokeNode invocations} are efficiently implemented with
  * {@link SLDispatchNode polymorphic inline caches}.
- * <li>Object access: {@link SLReadPropertyNode} uses {@link SLReadPropertyCacheNode} as the
- * polymorphic inline cache for property reads. {@link SLWritePropertyNode} uses
- * {@link SLWritePropertyCacheNode} as the polymorphic inline cache for property writes.
+ * <li>Object access: {@link SLReadPropertyNode} and {@link SLWritePropertyNode} use a cached
+ * {@link DynamicObjectLibrary} as the polymorphic inline cache for property reads and writes,
+ * respectively.
  * </ul>
  *
  * <p>
@@ -191,20 +195,104 @@ import com.oracle.truffle.sl.runtime.SLNull;
  * </ul>
  */
 @TruffleLanguage.Registration(id = SLLanguage.ID, name = "SL", defaultMimeType = SLLanguage.MIME_TYPE, characterMimeTypes = SLLanguage.MIME_TYPE, contextPolicy = ContextPolicy.SHARED, fileTypeDetectors = SLFileDetector.class)
-@ProvidedTags({StandardTags.CallTag.class, StandardTags.StatementTag.class, StandardTags.RootTag.class, StandardTags.ExpressionTag.class, DebuggerTags.AlwaysHalt.class})
+@ProvidedTags({StandardTags.CallTag.class, StandardTags.StatementTag.class, StandardTags.RootTag.class, StandardTags.RootBodyTag.class, StandardTags.ExpressionTag.class, DebuggerTags.AlwaysHalt.class,
+                StandardTags.ReadVariableTag.class, StandardTags.WriteVariableTag.class})
 public final class SLLanguage extends TruffleLanguage<SLContext> {
     public static volatile int counter;
 
     public static final String ID = "sl";
     public static final String MIME_TYPE = "application/x-sl";
+    private static final Source BUILTIN_SOURCE = Source.newBuilder(SLLanguage.ID, "", "SL builtin").build();
+
+    private final Assumption singleContext = Truffle.getRuntime().createAssumption("Single SL context.");
+
+    private final Map<NodeFactory<? extends SLBuiltinNode>, RootCallTarget> builtinTargets = new ConcurrentHashMap<>();
+    private final Map<String, RootCallTarget> undefinedFunctions = new ConcurrentHashMap<>();
+
+    private final Shape rootShape;
 
     public SLLanguage() {
         counter++;
+        this.rootShape = Shape.newBuilder().layout(SLObject.class).build();
     }
 
     @Override
     protected SLContext createContext(Env env) {
         return new SLContext(this, env, new ArrayList<>(EXTERNAL_BUILTINS));
+    }
+
+    @Override
+    protected boolean patchContext(SLContext context, Env newEnv) {
+        context.patchContext(newEnv);
+        return true;
+    }
+
+    public RootCallTarget getOrCreateUndefinedFunction(String name) {
+        RootCallTarget target = undefinedFunctions.get(name);
+        if (target == null) {
+            target = new SLUndefinedFunctionRootNode(this, name).getCallTarget();
+            RootCallTarget other = undefinedFunctions.putIfAbsent(name, target);
+            if (other != null) {
+                target = other;
+            }
+        }
+        return target;
+    }
+
+    public RootCallTarget lookupBuiltin(NodeFactory<? extends SLBuiltinNode> factory) {
+        RootCallTarget target = builtinTargets.get(factory);
+        if (target != null) {
+            return target;
+        }
+
+        /*
+         * The builtin node factory is a class that is automatically generated by the Truffle DSL.
+         * The signature returned by the factory reflects the signature of the @Specialization
+         *
+         * methods in the builtin classes.
+         */
+        int argumentCount = factory.getExecutionSignature().size();
+        SLExpressionNode[] argumentNodes = new SLExpressionNode[argumentCount];
+        /*
+         * Builtin functions are like normal functions, i.e., the arguments are passed in as an
+         * Object[] array encapsulated in SLArguments. A SLReadArgumentNode extracts a parameter
+         * from this array.
+         */
+        for (int i = 0; i < argumentCount; i++) {
+            argumentNodes[i] = new SLReadArgumentNode(i);
+        }
+        /* Instantiate the builtin node. This node performs the actual functionality. */
+        SLBuiltinNode builtinBodyNode = factory.createNode((Object) argumentNodes);
+        builtinBodyNode.addRootTag();
+        /* The name of the builtin function is specified via an annotation on the node class. */
+        String name = lookupNodeInfo(builtinBodyNode.getClass()).shortName();
+        builtinBodyNode.setUnavailableSourceSection();
+
+        /* Wrap the builtin in a RootNode. Truffle requires all AST to start with a RootNode. */
+        SLRootNode rootNode = new SLRootNode(this, new FrameDescriptor(), builtinBodyNode, BUILTIN_SOURCE.createUnavailableSection(), name);
+
+        /*
+         * Register the builtin function in the builtin registry. Call targets for builtins may be
+         * reused across multiple contexts.
+         */
+        RootCallTarget newTarget = rootNode.getCallTarget();
+        RootCallTarget oldTarget = builtinTargets.putIfAbsent(factory, newTarget);
+        if (oldTarget != null) {
+            return oldTarget;
+        }
+        return newTarget;
+    }
+
+    public static NodeInfo lookupNodeInfo(Class<?> clazz) {
+        if (clazz == null) {
+            return null;
+        }
+        NodeInfo info = clazz.getAnnotation(NodeInfo.class);
+        if (info != null) {
+            return info;
+        } else {
+            return lookupNodeInfo(clazz.getSuperclass());
+        }
     }
 
     @Override
@@ -218,7 +306,6 @@ public final class SLLanguage extends TruffleLanguage<SLContext> {
         if (request.getArgumentNames().isEmpty()) {
             functions = SimpleLanguageParser.parseSL(this, source);
         } else {
-            Source requestedSource = request.getSource();
             StringBuilder sb = new StringBuilder();
             sb.append("function main(");
             String sep = "";
@@ -228,10 +315,10 @@ public final class SLLanguage extends TruffleLanguage<SLContext> {
                 sep = ",";
             }
             sb.append(") { return ");
-            sb.append(request.getSource().getCharacters());
+            sb.append(source.getCharacters());
             sb.append(";}");
-            String language = requestedSource.getLanguage() == null ? ID : requestedSource.getLanguage();
-            Source decoratedSource = Source.newBuilder(language, sb.toString(), request.getSource().getName()).build();
+            String language = source.getLanguage() == null ? ID : source.getLanguage();
+            Source decoratedSource = Source.newBuilder(language, sb.toString(), source.getName()).build();
             functions = SimpleLanguageParser.parseSL(this, decoratedSource);
         }
 
@@ -252,17 +339,39 @@ public final class SLLanguage extends TruffleLanguage<SLContext> {
              */
             evalMain = new SLEvalRootNode(this, null, functions);
         }
-        return Truffle.getRuntime().createCallTarget(evalMain);
+        return evalMain.getCallTarget();
     }
 
-    /*
-     * Still necessary for the old SL TCK to pass. We should remove with the old TCK. New language
-     * should not override this.
+    /**
+     * SLLanguage specifies the {@link ContextPolicy#SHARED} in
+     * {@link Registration#contextPolicy()}. This means that a single {@link TruffleLanguage}
+     * instance can be reused for multiple language contexts. Before this happens the Truffle
+     * framework notifies the language by invoking {@link #initializeMultipleContexts()}. This
+     * allows the language to invalidate certain assumptions taken for the single context case. One
+     * assumption SL takes for single context case is located in {@link SLEvalRootNode}. There
+     * functions are only tried to be registered once in the single context case, but produce a
+     * boundary call in the multi context case, as function registration is expected to happen more
+     * than once.
+     *
+     * Value identity caches should be avoided and invalidated for the multiple contexts case as no
+     * value will be the same. Instead, in multi context case, a language should only use types,
+     * shapes and code to speculate.
+     *
+     * For a new language it is recommended to start with {@link ContextPolicy#EXCLUSIVE} and as the
+     * language gets more mature switch to {@link ContextPolicy#SHARED}.
      */
-    @SuppressWarnings("deprecation")
     @Override
-    protected Object findExportedSymbol(SLContext context, String globalName, boolean onlyExplicit) {
-        return context.getFunctionRegistry().lookup(globalName, false);
+    protected void initializeMultipleContexts() {
+        singleContext.invalidate();
+    }
+
+    public boolean isSingleContext() {
+        return singleContext.isValid();
+    }
+
+    @Override
+    protected Object getLanguageView(SLContext context, Object value) {
+        return SLLanguageView.create(value);
     }
 
     @Override
@@ -271,131 +380,29 @@ public final class SLLanguage extends TruffleLanguage<SLContext> {
     }
 
     @Override
-    protected boolean isObjectOfLanguage(Object object) {
-        if (!(object instanceof TruffleObject)) {
-            return false;
-        } else if (object instanceof SLBigNumber || object instanceof SLFunction || object instanceof SLNull) {
-            return true;
-        } else if (SLContext.isSLObject(object)) {
-            return true;
-        } else {
-            return false;
-        }
+    protected Object getScope(SLContext context) {
+        return context.getFunctionRegistry().getFunctionsObject();
     }
 
-    @Override
-    protected String toString(SLContext context, Object value) {
-        return toString(value);
+    public Shape getRootShape() {
+        return rootShape;
     }
 
-    public static String toString(Object value) {
-        try {
-            if (value == null) {
-                return "ANY";
-            }
-            InteropLibrary interop = InteropLibrary.getFactory().getUncached(value);
-            if (interop.fitsInLong(value)) {
-                return Long.toString(interop.asLong(value));
-            } else if (interop.isBoolean(value)) {
-                return Boolean.toString(interop.asBoolean(value));
-            } else if (interop.isString(value)) {
-                return interop.asString(value);
-            } else if (interop.isNull(value)) {
-                return "NULL";
-            } else if (interop.isExecutable(value)) {
-                if (value instanceof SLFunction) {
-                    return ((SLFunction) value).getName();
-                } else {
-                    return "Function";
-                }
-            } else if (interop.hasMembers(value)) {
-                return "Object";
-            } else if (value instanceof SLBigNumber) {
-                return value.toString();
-            } else {
-                return "Unsupported";
-            }
-        } catch (UnsupportedMessageException e) {
-            CompilerDirectives.transferToInterpreter();
-            throw new AssertionError();
-        }
+    /**
+     * Allocate an empty object. All new objects initially have no properties. Properties are added
+     * when they are first stored, i.e., the store triggers a shape change of the object.
+     */
+    public SLObject createObject(AllocationReporter reporter) {
+        reporter.onEnter(null, 0, AllocationReporter.SIZE_UNKNOWN);
+        SLObject object = new SLObject(rootShape);
+        reporter.onReturnValue(object, 0, AllocationReporter.SIZE_UNKNOWN);
+        return object;
     }
 
-    @Override
-    protected Object findMetaObject(SLContext context, Object value) {
-        return getMetaObject(value);
-    }
+    private static final LanguageReference<SLLanguage> REFERENCE = LanguageReference.create(SLLanguage.class);
 
-    public static String getMetaObject(Object value) {
-        if (value == null) {
-            return "ANY";
-        }
-        InteropLibrary interop = InteropLibrary.getFactory().getUncached(value);
-        if (interop.isNumber(value) || value instanceof SLBigNumber) {
-            return "Number";
-        } else if (interop.isBoolean(value)) {
-            return "Boolean";
-        } else if (interop.isString(value)) {
-            return "String";
-        } else if (interop.isNull(value)) {
-            return "NULL";
-        } else if (interop.isExecutable(value)) {
-            return "Function";
-        } else if (interop.hasMembers(value)) {
-            return "Object";
-        } else {
-            return "Unsupported";
-        }
-    }
-
-    @Override
-    protected SourceSection findSourceLocation(SLContext context, Object value) {
-        if (value instanceof SLFunction) {
-            return ((SLFunction) value).getDeclaredLocation();
-        }
-        return null;
-    }
-
-    @Override
-    public Iterable<Scope> findLocalScopes(SLContext context, Node node, Frame frame) {
-        final SLLexicalScope scope = SLLexicalScope.createScope(node);
-        return new Iterable<Scope>() {
-            @Override
-            public Iterator<Scope> iterator() {
-                return new Iterator<Scope>() {
-                    private SLLexicalScope previousScope;
-                    private SLLexicalScope nextScope = scope;
-
-                    @Override
-                    public boolean hasNext() {
-                        if (nextScope == null) {
-                            nextScope = previousScope.findParent();
-                        }
-                        return nextScope != null;
-                    }
-
-                    @Override
-                    public Scope next() {
-                        if (!hasNext()) {
-                            throw new NoSuchElementException();
-                        }
-                        Scope vscope = Scope.newBuilder(nextScope.getName(), nextScope.getVariables(frame)).node(nextScope.getNode()).arguments(nextScope.getArguments(frame)).build();
-                        previousScope = nextScope;
-                        nextScope = null;
-                        return vscope;
-                    }
-                };
-            }
-        };
-    }
-
-    @Override
-    protected Iterable<Scope> findTopScopes(SLContext context) {
-        return context.getTopScopes();
-    }
-
-    public static SLContext getCurrentContext() {
-        return getCurrentContext(SLLanguage.class);
+    public static SLLanguage get(Node node) {
+        return REFERENCE.get(node);
     }
 
     private static final List<NodeFactory<? extends SLBuiltinNode>> EXTERNAL_BUILTINS = Collections.synchronizedList(new ArrayList<>());
@@ -404,4 +411,12 @@ public final class SLLanguage extends TruffleLanguage<SLContext> {
         EXTERNAL_BUILTINS.add(builtin);
     }
 
+    @Override
+    protected void exitContext(SLContext context, ExitMode exitMode, int exitCode) {
+        /*
+         * Runs shutdown hooks during explicit exit triggered by TruffleContext#closeExit(Node, int)
+         * or natural exit triggered during natural context close.
+         */
+        context.runShutdownHooks();
+    }
 }

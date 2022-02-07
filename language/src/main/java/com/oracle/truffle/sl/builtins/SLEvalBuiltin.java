@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -43,43 +43,42 @@ package com.oracle.truffle.sl.builtins;
 import com.oracle.truffle.api.CallTarget;
 import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
 import com.oracle.truffle.api.dsl.Cached;
-import com.oracle.truffle.api.dsl.CachedContext;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.DirectCallNode;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.source.Source;
-import com.oracle.truffle.sl.SLLanguage;
 import com.oracle.truffle.sl.runtime.SLContext;
 
 /**
  * Builtin function to evaluate source code in any supported language.
  * <p>
- * The call target is cached against the mime type and the source code, so that if they are the same
- * each time then a direct call will be made to a cached AST, allowing it to be compiled and
+ * The call target is cached against the language id and the source code, so that if they are the
+ * same each time then a direct call will be made to a cached AST, allowing it to be compiled and
  * possibly inlined.
  */
 @NodeInfo(shortName = "eval")
 @SuppressWarnings("unused")
 public abstract class SLEvalBuiltin extends SLBuiltinNode {
 
-    @Specialization(guards = {"stringsEqual(cachedId, id)", "stringsEqual(cachedCode, code)"})
+    static final int LIMIT = 2;
+
+    @Specialization(guards = {"stringsEqual(cachedId, id)", "stringsEqual(cachedCode, code)"}, limit = "LIMIT")
     public Object evalCached(String id, String code,
                     @Cached("id") String cachedId,
                     @Cached("code") String cachedCode,
-                    @CachedContext(SLLanguage.class) SLContext context,
-                    @Cached("create(parse(id, code, context))") DirectCallNode callNode) {
+                    @Cached("create(parse(id, code))") DirectCallNode callNode) {
         return callNode.call(new Object[]{});
     }
 
     @TruffleBoundary
     @Specialization(replaces = "evalCached")
-    public Object evalUncached(String id, String code, @CachedContext(SLLanguage.class) SLContext context) {
-        return parse(id, code, context).call();
+    public Object evalUncached(String id, String code) {
+        return parse(id, code).call();
     }
 
-    protected CallTarget parse(String id, String code, SLContext context) {
+    protected CallTarget parse(String id, String code) {
         final Source source = Source.newBuilder(id, code, "(eval)").build();
-        return context.parse(source);
+        return SLContext.get(this).parse(source);
     }
 
     /* Work around findbugs warning in generate code. */

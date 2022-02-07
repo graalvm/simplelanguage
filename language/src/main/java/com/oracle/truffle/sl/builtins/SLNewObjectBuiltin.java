@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -41,7 +41,7 @@
 package com.oracle.truffle.sl.builtins;
 
 import com.oracle.truffle.api.dsl.Cached;
-import com.oracle.truffle.api.dsl.CachedContext;
+import com.oracle.truffle.api.dsl.ImportStatic;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.instrumentation.AllocationReporter;
 import com.oracle.truffle.api.interop.ArityException;
@@ -59,13 +59,18 @@ import com.oracle.truffle.sl.runtime.SLUndefinedNameException;
  * Built-in function to create a new object. Objects in SL are simply made up of name/value pairs.
  */
 @NodeInfo(shortName = "new")
+@ImportStatic(SLContext.class)
 public abstract class SLNewObjectBuiltin extends SLBuiltinNode {
 
     @Specialization
     @SuppressWarnings("unused")
-    public Object newObject(SLNull o, @CachedContext(SLLanguage.class) SLContext context,
-                    @Cached("context.getAllocationReporter()") AllocationReporter reporter) {
-        return context.createObject(reporter);
+    public Object newObject(SLNull o,
+                    @Cached("lookup()") AllocationReporter reporter) {
+        return SLLanguage.get(this).createObject(reporter);
+    }
+
+    final AllocationReporter lookup() {
+        return SLContext.get(this).getAllocationReporter();
     }
 
     @Specialization(guards = "!values.isNull(obj)", limit = "3")

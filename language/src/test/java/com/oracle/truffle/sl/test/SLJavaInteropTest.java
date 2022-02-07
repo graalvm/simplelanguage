@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2019, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -43,9 +43,11 @@ package com.oracle.truffle.sl.test;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertSame;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.io.ByteArrayOutputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -81,7 +83,7 @@ public class SLJavaInteropTest {
         Runnable runnable = main.as(Runnable.class);
         runnable.run();
 
-        assertEquals("Called!\n", os.toString("UTF-8"));
+        assertEquals("Called!\n", toUnixString(os));
     }
 
     private Value lookup(String symbol) {
@@ -98,7 +100,7 @@ public class SLJavaInteropTest {
         PassInValues valuesIn = fn.as(PassInValues.class);
         valuesIn.call("OK", "Fine");
 
-        assertEquals("Called with OK and Fine\n", os.toString("UTF-8"));
+        assertEquals("Called with OK and Fine\n", toUnixString(os));
     }
 
     private static void assertNumber(double exp, Object real) {
@@ -123,7 +125,7 @@ public class SLJavaInteropTest {
         Value fn = lookup("values");
         PassInArray valuesIn = fn.as(PassInArray.class);
         valuesIn.call(new Object[]{"OK", "Fine"});
-        assertEquals("Called with OKFine and NULL\n", os.toString("UTF-8"));
+        assertEquals("Called with OKFine and NULL\n", toUnixString(os));
     }
 
     @Test
@@ -136,7 +138,7 @@ public class SLJavaInteropTest {
         PassInVarArg valuesIn = fn.as(PassInVarArg.class);
 
         valuesIn.call("OK", "Fine");
-        assertEquals("Called with OK and Fine\n", os.toString("UTF-8"));
+        assertEquals("Called with OK and Fine\n", toUnixString(os));
     }
 
     @Test
@@ -149,7 +151,7 @@ public class SLJavaInteropTest {
         PassInArgAndVarArg valuesIn = fn.as(PassInArgAndVarArg.class);
 
         valuesIn.call("OK", "Fine", "Well");
-        assertEquals("Called with OK and FineWell\n", os.toString("UTF-8"));
+        assertEquals("Called with OK and FineWell\n", toUnixString(os));
     }
 
     @Test
@@ -358,6 +360,52 @@ public class SLJavaInteropTest {
         assertNumber(33L, c);
     }
 
+    @Test
+    public void testMemberAssignment() {
+        Integer hostObject = 6;
+        context.eval("sl", "function createNewObject() {\n" +
+                        "  return new();\n" +
+                        "}\n" +
+                        "\n" +
+                        "function assignObjectMemberFoo(obj, member) {\n" +
+                        "  obj.foo = member;\n" +
+                        "  return obj;\n" +
+                        "}\n");
+        Value bindings = context.getBindings("sl");
+        Value obj = bindings.getMember("createNewObject").execute();
+        bindings.getMember("assignObjectMemberFoo").execute(obj, hostObject);
+        assertTrue(obj.hasMember("foo"));
+        assertEquals(hostObject.intValue(), obj.getMember("foo").asInt());
+    }
+
+    @Test
+    public void testCallback() {
+        TestObject hostObject = new TestObject();
+        context.eval("sl", "function createNewObject() {\n" +
+                        "  return new();\n" +
+                        "}\n" +
+                        "\n" +
+                        "function callMemberCallback(obj, memberName) {\n" +
+                        "  return obj[memberName].callback(\"test\");\n" +
+                        "}\n");
+        Value bindings = context.getBindings("sl");
+        Value obj = bindings.getMember("createNewObject").execute();
+        obj.putMember("hostObject", hostObject);
+        Value v = bindings.getMember("callMemberCallback").execute(obj, "hostObject");
+        assertEquals("test", v.asString());
+    }
+
+    /**
+     * Converts a {@link ByteArrayOutputStream} content into UTF-8 String with UNIX line ends.
+     */
+    static String toUnixString(ByteArrayOutputStream stream) {
+        try {
+            return stream.toString("UTF-8").replace("\r\n", "\n");
+        } catch (UnsupportedEncodingException e) {
+            throw new IllegalStateException(e);
+        }
+    }
+
     @FunctionalInterface
     public interface Values {
         Sum values(Sum sum, String key, int value);
@@ -466,6 +514,13 @@ public class SLJavaInteropTest {
 
             sumArray(pairs.get("two"));
             sumArray(pairs.get("one"));
+        }
+    }
+
+    public static class TestObject {
+
+        public String callback(String msg) {
+            return msg;
         }
     }
 }

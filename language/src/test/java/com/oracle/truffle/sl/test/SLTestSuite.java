@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -61,4 +61,13 @@ public @interface SLTestSuite {
      * i.e., the test cases must be in the same project as the test class.
      */
     Class<?> testCaseDirectory() default SLTestSuite.class;
+
+    /**
+     * The options passed to {@code Context.Builder} to configure the {@code Context} executing the
+     * tests. The options are given as an string array containing an option name followed by an
+     * option value.
+     *
+     * @since 20.0.0
+     */
+    String[] options() default {};
 }

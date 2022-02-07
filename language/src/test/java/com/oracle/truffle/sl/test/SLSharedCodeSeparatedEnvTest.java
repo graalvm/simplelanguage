@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017, 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2017, 2019, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -40,6 +40,7 @@
  */
 package com.oracle.truffle.sl.test;
 
+import static com.oracle.truffle.sl.test.SLJavaInteropTest.toUnixString;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -52,6 +53,7 @@ import org.graalvm.polyglot.Instrument;
 import org.graalvm.polyglot.PolyglotAccess;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.oracle.truffle.api.instrumentation.EventBinding;
@@ -59,6 +61,11 @@ import com.oracle.truffle.api.instrumentation.TruffleInstrument;
 import com.oracle.truffle.sl.SLLanguage;
 
 public class SLSharedCodeSeparatedEnvTest {
+
+    @BeforeClass
+    public static void runWithWeakEncapsulationOnly() {
+        TruffleTestAssumptions.assumeWeakEncapsulation();
+    }
 
     private ByteArrayOutputStream osRuntime;
     private ByteArrayOutputStream os1;
@@ -101,12 +108,12 @@ public class SLSharedCodeSeparatedEnvTest {
         // @formatter:on
 
         e1.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
-        assertEquals("", os2.toString("UTF-8"));
+        assertEquals("Ahoj1\n", toUnixString(os1));
+        assertEquals("", toUnixString(os2));
 
         e2.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
-        assertEquals("Ahoj2\n", os2.toString("UTF-8"));
+        assertEquals("Ahoj1\n", toUnixString(os1));
+        assertEquals("Ahoj2\n", toUnixString(os2));
     }
 
     @Test
@@ -121,12 +128,12 @@ public class SLSharedCodeSeparatedEnvTest {
         // @formatter:on
 
         e1.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
-        assertEquals("", os2.toString("UTF-8"));
+        assertEquals("Ahoj1\n", toUnixString(os1));
+        assertEquals("", toUnixString(os2));
 
         e2.eval("sl", sayHello);
-        assertEquals("Ahoj1\n", os1.toString("UTF-8"));
-        assertEquals("Ahoj2\n", os2.toString("UTF-8"));
+        assertEquals("Ahoj1\n", toUnixString(os1));
+        assertEquals("Ahoj2\n", toUnixString(os2));
 
         engine.close();
 
@@ -135,11 +142,11 @@ public class SLSharedCodeSeparatedEnvTest {
                                         "Ahoj1\n" +
                                         "Ahoj2\n" +
                                         "endOfOutputCapture\n",
-                        outConsumer.toString("UTF-8"));
+                        toUnixString(outConsumer));
 
         assertEquals("Output of instrument goes not to os runtime if specified otherwise",
                         "initializingOutputCapture\n" + "endOfOutputCapture\n",
-                        osRuntime.toString("UTF-8"));
+                        toUnixString(osRuntime));
     }
 
     @TruffleInstrument.Registration(id = "captureOutput", services = ByteArrayOutputStream.class)

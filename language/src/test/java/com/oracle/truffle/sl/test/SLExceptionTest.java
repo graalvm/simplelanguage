@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2018, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2018, 2020, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -44,17 +44,19 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertSame;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.function.Function;
 
 import org.graalvm.polyglot.Context;
+import org.graalvm.polyglot.HostAccess.Export;
 import org.graalvm.polyglot.PolyglotException;
 import org.graalvm.polyglot.PolyglotException.StackFrame;
 import org.graalvm.polyglot.Source;
@@ -63,9 +65,15 @@ import org.graalvm.polyglot.proxy.ProxyExecutable;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 public class SLExceptionTest {
+
+    @BeforeClass
+    public static void runWithWeakEncapsulationOnly() {
+        TruffleTestAssumptions.assumeWeakEncapsulation();
+    }
 
     private Context ctx;
 
@@ -261,26 +269,28 @@ public class SLExceptionTest {
         }
     }
 
-    private static void assertHostFrame(Iterator<StackFrame> frames, String className, String methodName) {
+    static void assertHostFrame(Iterator<StackFrame> frames, String className, String methodName) {
         assertTrue(frames.hasNext());
         StackFrame frame = frames.next();
-        assertTrue(frame.isHostFrame());
-        assertFalse(frame.isGuestFrame());
-        assertEquals("host", frame.getLanguage().getId());
-        assertEquals("Host", frame.getLanguage().getName());
-        assertEquals(className + "." + methodName, frame.getRootName());
-        assertNull(frame.getSourceLocation());
+        String info = frame.toString();
+        assertTrue(info, frame.isHostFrame());
+        assertFalse(info, frame.isGuestFrame());
+        assertEquals(info, "host", frame.getLanguage().getId());
+        assertEquals(info, "Host", frame.getLanguage().getName());
+        assertEquals(info, className + "." + methodName, frame.getRootName());
+        assertNull(info, frame.getSourceLocation());
         assertNotNull(frame.toString());
 
         StackTraceElement hostFrame = frame.toHostFrame();
-        assertEquals(className, hostFrame.getClassName());
-        assertEquals(methodName, hostFrame.getMethodName());
+        info = hostFrame.toString();
+        assertEquals(info, className, hostFrame.getClassName());
+        assertEquals(info, methodName, hostFrame.getMethodName());
         assertNotNull(hostFrame.toString());
-        assertTrue(hostFrame.equals(hostFrame));
+        assertTrue(info, hostFrame.equals(hostFrame));
         assertNotEquals(0, hostFrame.hashCode());
     }
 
-    private static void assertGuestFrame(Iterator<StackFrame> frames, String languageId, String rootName, String fileName, int charIndex, int endIndex) {
+    static void assertGuestFrame(Iterator<StackFrame> frames, String languageId, String rootName, String fileName, int charIndex, int endIndex) {
         assertTrue(frames.hasNext());
         StackFrame frame = frames.next();
         assertTrue(frame.toString(), frame.isGuestFrame());
@@ -301,4 +311,58 @@ public class SLExceptionTest {
         assertTrue(hostFrame.equals(hostFrame));
         assertNotEquals(0, hostFrame.hashCode());
     }
+
+    static void assertGuestFrame(Iterator<StackFrame> frames, String languageId, String rootName) {
+        assertTrue(frames.hasNext());
+        StackFrame frame = frames.next();
+        assertTrue(frame.toString(), frame.isGuestFrame());
+        assertEquals(languageId, frame.getLanguage().getId());
+        assertEquals(rootName, frame.getRootName());
+
+        StackTraceElement hostFrame = frame.toHostFrame();
+        assertEquals("<" + languageId + ">", hostFrame.getClassName());
+        assertEquals(rootName, hostFrame.getMethodName());
+        assertNotNull(hostFrame.toString());
+        assertTrue(hostFrame.equals(hostFrame));
+        assertNotEquals(0, hostFrame.hashCode());
+    }
+
+    @Export
+    public String methodThatTakesFunction(Function<String, String> s) {
+        return s.apply("t");
+    }
+
+    @Test
+    public void testGuestOverHostPropagation() {
+        Context context = Context.newBuilder("sl").allowAllAccess(true).build();
+        String code = "" +
+                        "function other(x) {" +
+                        "   return invalidFunction();" +
+                        "}" +
+                        "" +
+                        "function f(test) {" +
+                        "test.methodThatTakesFunction(other);" +
+                        "}";
+
+        context.eval("sl", code);
+        try {
+            context.getBindings("sl").getMember("f").execute(this);
+            fail();
+        } catch (PolyglotException e) {
+            assertFalse(e.isHostException());
+            assertTrue(e.isGuestException());
+            Iterator<StackFrame> frames = e.getPolyglotStackTrace().iterator();
+            assertTrue(frames.next().isGuestFrame());
+            assertGuestFrame(frames, "sl", "other", "Unnamed", 29, 46);
+            assertHostFrame(frames, "com.oracle.truffle.polyglot.PolyglotFunction", "apply");
+            assertHostFrame(frames, "com.oracle.truffle.sl.test.SLExceptionTest", "methodThatTakesFunction");
+            assertGuestFrame(frames, "sl", "f", "Unnamed", 66, 101);
+
+            // rest is just unit test host frames
+            while (frames.hasNext()) {
+                assertTrue(frames.next().isHostFrame());
+            }
+        }
+    }
+
 }
