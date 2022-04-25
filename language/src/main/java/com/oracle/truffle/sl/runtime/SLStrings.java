@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, 2022, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,27 +38,49 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.nodes.expression;
+package com.oracle.truffle.sl.runtime;
 
-import com.oracle.truffle.api.frame.VirtualFrame;
-import com.oracle.truffle.api.nodes.NodeInfo;
+import com.oracle.truffle.api.CompilerDirectives;
+import com.oracle.truffle.api.nodes.RootNode;
 import com.oracle.truffle.api.strings.TruffleString;
-import com.oracle.truffle.sl.nodes.SLExpressionNode;
+import com.oracle.truffle.sl.SLLanguage;
+import com.oracle.truffle.sl.nodes.SLEvalRootNode;
+import com.oracle.truffle.sl.nodes.SLRootNode;
 
-/**
- * Constant literal for a String value.
- */
-@NodeInfo(shortName = "const")
-public final class SLStringLiteralNode extends SLExpressionNode {
+public final class SLStrings {
 
-    private final TruffleString value;
+    public static final TruffleString EMPTY_STRING = constant("");
+    public static final TruffleString NULL = constant("NULL");
+    public static final TruffleString NULL_LC = constant("null");
+    public static final TruffleString MAIN = constant("main");
+    public static final TruffleString HELLO = constant("hello");
+    public static final TruffleString WORLD = constant("world");
 
-    public SLStringLiteralNode(TruffleString value) {
-        this.value = value;
+    public static TruffleString constant(String s) {
+        return fromJavaString(s);
     }
 
-    @Override
-    public TruffleString executeGeneric(VirtualFrame frame) {
-        return value;
+    public static TruffleString fromJavaString(String s) {
+        return TruffleString.fromJavaStringUncached(s, SLLanguage.STRING_ENCODING);
+    }
+
+    public static TruffleString fromObject(Object o) {
+        if (o == null) {
+            return NULL_LC;
+        }
+        if (o instanceof TruffleString) {
+            return (TruffleString) o;
+        }
+        return fromJavaString(o.toString());
+    }
+
+    public static TruffleString getSLRootName(RootNode rootNode) {
+        if (rootNode instanceof SLRootNode) {
+            return ((SLRootNode) rootNode).getTSName();
+        } else if (rootNode instanceof SLEvalRootNode) {
+            return SLEvalRootNode.getTSName();
+        } else {
+            throw CompilerDirectives.shouldNotReachHere();
+        }
     }
 }
