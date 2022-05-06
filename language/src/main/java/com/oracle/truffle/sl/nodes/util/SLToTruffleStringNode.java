@@ -42,30 +42,43 @@ package com.oracle.truffle.sl.nodes.util;
 
 import static com.oracle.truffle.api.CompilerDirectives.shouldNotReachHere;
 
+import com.oracle.truffle.api.CompilerDirectives.TruffleBoundary;
 import com.oracle.truffle.api.dsl.Cached;
-import com.oracle.truffle.api.dsl.NodeChild;
+import com.oracle.truffle.api.dsl.GenerateUncached;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.dsl.TypeSystemReference;
 import com.oracle.truffle.api.interop.InteropLibrary;
 import com.oracle.truffle.api.interop.UnsupportedMessageException;
 import com.oracle.truffle.api.library.CachedLibrary;
+import com.oracle.truffle.api.nodes.Node;
 import com.oracle.truffle.api.strings.TruffleString;
 import com.oracle.truffle.sl.SLLanguage;
-import com.oracle.truffle.sl.nodes.SLExpressionNode;
 import com.oracle.truffle.sl.nodes.SLTypes;
 import com.oracle.truffle.sl.runtime.SLBigNumber;
 import com.oracle.truffle.sl.runtime.SLFunction;
 import com.oracle.truffle.sl.runtime.SLNull;
+import com.oracle.truffle.sl.runtime.SLStrings;
 
 /**
  * The node to normalize any value to an SL value. This is useful to reduce the number of values
  * expression nodes need to expect.
  */
 @TypeSystemReference(SLTypes.class)
-@NodeChild
-public abstract class SLUnboxNode extends SLExpressionNode {
+@GenerateUncached
+public abstract class SLToTruffleStringNode extends Node {
 
     static final int LIMIT = 5;
+
+    private static final TruffleString TRUE = SLStrings.constant("true");
+    private static final TruffleString FALSE = SLStrings.constant("false");
+    private static final TruffleString FOREIGN_OBJECT = SLStrings.constant("[foreign object]");
+
+    public abstract TruffleString execute(Object value);
+
+    @Specialization
+    protected static TruffleString fromNull(@SuppressWarnings("unused") SLNull value) {
+        return SLStrings.NULL;
+    }
 
     @Specialization
     protected static TruffleString fromString(String value,
@@ -79,47 +92,53 @@ public abstract class SLUnboxNode extends SLExpressionNode {
     }
 
     @Specialization
-    protected static boolean fromBoolean(boolean value) {
-        return value;
+    protected static TruffleString fromBoolean(boolean value) {
+        return value ? TRUE : FALSE;
     }
 
     @Specialization
-    protected static long fromLong(long value) {
-        return value;
+    @TruffleBoundary
+    protected static TruffleString fromLong(long value,
+                    @Cached TruffleString.FromLongNode fromLongNode) {
+        return fromLongNode.execute(value, SLLanguage.STRING_ENCODING, true);
     }
 
     @Specialization
-    protected static SLBigNumber fromBigNumber(SLBigNumber value) {
-        return value;
+    @TruffleBoundary
+    protected static TruffleString fromBigNumber(SLBigNumber value,
+                    @Cached TruffleString.FromJavaStringNode fromJavaStringNode) {
+        return fromJavaStringNode.execute(value.toString(), SLLanguage.STRING_ENCODING);
     }
 
     @Specialization
-    protected static SLFunction fromFunction(SLFunction value) {
-        return value;
-    }
-
-    @Specialization
-    protected static SLNull fromFunction(SLNull value) {
-        return value;
+    protected static TruffleString fromFunction(SLFunction value) {
+        return value.getName();
     }
 
     @Specialization(limit = "LIMIT")
-    public static Object fromForeign(Object value, @CachedLibrary("value") InteropLibrary interop) {
+    protected static TruffleString fromInterop(Object value,
+                    @CachedLibrary("value") InteropLibrary interop,
+                    @Cached TruffleString.FromLongNode fromLongNode,
+                    @Cached TruffleString.FromJavaStringNode fromJavaStringNode) {
         try {
             if (interop.fitsInLong(value)) {
-                return interop.asLong(value);
-            } else if (interop.fitsInDouble(value)) {
-                return (long) interop.asDouble(value);
+                return fromLongNode.execute(interop.asLong(value), SLLanguage.STRING_ENCODING, true);
             } else if (interop.isString(value)) {
-                return interop.asTruffleString(value);
-            } else if (interop.isBoolean(value)) {
-                return interop.asBoolean(value);
+                return fromJavaStringNode.execute(interop.asString(value), SLLanguage.STRING_ENCODING);
+            } else if (interop.isNumber(value) && value instanceof SLBigNumber) {
+                return fromJavaStringNode.execute(bigNumberToString((SLBigNumber) value), SLLanguage.STRING_ENCODING);
+            } else if (interop.isNull(value)) {
+                return SLStrings.NULL_LC;
             } else {
-                return value;
+                return FOREIGN_OBJECT;
             }
         } catch (UnsupportedMessageException e) {
             throw shouldNotReachHere(e);
         }
     }
 
+    @TruffleBoundary
+    private static String bigNumberToString(SLBigNumber value) {
+        return value.toString();
+    }
 }
