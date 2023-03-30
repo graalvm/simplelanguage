@@ -112,7 +112,7 @@ if [[ "$GRAALVM_VERSION" != "" ]]; then
         -debug)
             JAVA_ARGS+=("-Xdebug" "-Xrunjdwp:transport=dt_socket,server=y,address=8000,suspend=y") ;;
         -dump)
-            JAVA_ARGS+=("-Dpolyglot.engine.AllowExperimentalOptions=true" "-Dgraal.Dump=Truffle:1" "-Dpolyglot.engine.BackgroundCompilation=false" "-Dpolyglot.engine.TraceCompilation=true" "-Dpolyglot.engine.TraceCompilationDetails=true") ;;
+            JAVA_ARGS+=("-Dpolyglot.engine.AllowExperimentalOptions=true" "-Dgraal.Dump=Truffle:1" "-Dgraal.PrintGraph=Network" "-Dpolyglot.engine.BackgroundCompilation=false" "-Dpolyglot.engine.TraceCompilation=true" "-Dpolyglot.engine.TraceCompilationDetails=true") ;;
         -disassemble)
             JAVA_ARGS+=("-Dpolyglot.engine.AllowExperimentalOptions=true" "-XX:CompileCommand=print,*OptimizedCallTarget.profiledPERoot" "-XX:CompileCommand=exclude,*OptimizedCallTarget.profiledPERoot" "-Dpolyglot.engine.BackgroundCompilation=false" "-Dpolyglot.engine.TraceCompilation=true" "-Dpolyglot.engine.TraceCompilationDetails=true") ;;
         -J*)
