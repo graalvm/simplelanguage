@@ -14,3 +14,4 @@ graalvm/
 component/sl-component.jar
 language/dependency-reduced-pom.xml
 native/slnative
+antlr-4.9.2-complete.jar

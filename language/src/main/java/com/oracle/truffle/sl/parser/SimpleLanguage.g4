@@ -158,6 +158,8 @@ statement [boolean inLoop] returns [SLStatementNode result]
 |
     for_statement                               { $result = $for_statement.result;  }
 |
+    pfor_statement                              { $result = $pfor_statement.result; }
+|
     b='break'                                   { if (inLoop) { $result = factory.createBreak($b); } else { SemErr($b, "break used outside of loop"); } }
     ';'
 |
@@ -198,6 +200,20 @@ body=block[true, stepNode]                      { SLStatementNode loopNode = fac
                                                     $result = loopNode;
                                                   }
                                                  }
+;
+
+
+pfor_statement returns [SLStatementNode result]
+:
+f='pfor'
+o='('
+IDENTIFIER
+'='
+start=arithmetic
+':'
+end=arithmetic
+c=')'
+body=block[true, null]                           { $result = factory.createPFor($f, $body.result, factory.createStringLiteral($IDENTIFIER, false), $start.result, $end.result); }
 ;
 
 
