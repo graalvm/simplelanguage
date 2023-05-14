@@ -45,6 +45,7 @@ import com.oracle.truffle.api.dsl.Cached;
 import com.oracle.truffle.api.dsl.Fallback;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
+import com.oracle.truffle.api.strings.AbstractTruffleString;
 import com.oracle.truffle.api.strings.TruffleString;
 import com.oracle.truffle.sl.SLException;
 import com.oracle.truffle.sl.SLLanguage;
@@ -52,11 +53,14 @@ import com.oracle.truffle.sl.nodes.SLBinaryNode;
 import com.oracle.truffle.sl.nodes.util.SLToTruffleStringNode;
 import com.oracle.truffle.sl.runtime.SLBigNumber;
 
+import static com.oracle.truffle.api.strings.TruffleString.fromNativePointerUncached;
+
 /**
  * This class is similar to the extensively documented {@link SLAddNode}.
  */
 @NodeInfo(shortName = "*")
 public abstract class SLMulNode extends SLBinaryNode {
+
 
     @Specialization(rewriteOn = ArithmeticException.class)
     protected long mul(long left, long right) {
@@ -69,14 +73,14 @@ public abstract class SLMulNode extends SLBinaryNode {
         return new SLBigNumber(left.getValue().multiply(right.getValue()));
     }
 
+    @Specialization
     @TruffleBoundary
-    @Specialization(guards = "isString(left)")
-    protected TruffleString mul(Object left, long right) {
+    protected TruffleString mul(TruffleString left, long right) {
         StringBuilder newString = new StringBuilder();
         for (long i = 0; i < right; i++) {
             newString.append(left.toString());
         }
-        return TruffleString.fromJavaStringUncached(newString.toString(), TruffleString.Encoding.UTF_8);
+        return TruffleString.fromJavaStringUncached(newString.toString(), TruffleString.Encoding.UTF_16LE);
     }
     protected boolean isString(Object a) {
         return a instanceof TruffleString;
