@@ -192,7 +192,7 @@ public class SLNodeFactory {
             methodNodes.add(bodyNode);
             final int bodyEndPos = bodyNode.getSourceEndIndex();
             final SourceSection functionSrc = source.createSection(functionStartPos, bodyEndPos - functionStartPos);
-            final SLStatementNode methodBlock = finishBlock(methodNodes, parameterCount, functionBodyStartPos, bodyEndPos - functionBodyStartPos);
+            final SLStatementNode methodBlock = finishBlock(methodNodes, parameterCount, functionBodyStartPos, bodyEndPos - functionBodyStartPos, true);
             assert lexicalScope == null : "Wrong scoping of blocks in parser";
 
             final SLFunctionBodyNode functionBodyNode = new SLFunctionBodyNode(methodBlock);
@@ -214,12 +214,14 @@ public class SLNodeFactory {
         lexicalScope = new LexicalScope(lexicalScope);
     }
 
-    public SLStatementNode finishBlock(List<SLStatementNode> bodyNodes, int startPos, int length) {
-        return finishBlock(bodyNodes, 0, startPos, length);
+    public SLStatementNode finishBlock(List<SLStatementNode> bodyNodes, int startPos, int length, boolean scope) {
+        return finishBlock(bodyNodes, 0, startPos, length, scope);
     }
 
-    public SLStatementNode finishBlock(List<SLStatementNode> bodyNodes, int skipCount, int startPos, int length) {
-        lexicalScope = lexicalScope.outer;
+    public SLStatementNode finishBlock(List<SLStatementNode> bodyNodes, int skipCount, int startPos, int length, boolean scope) {
+        if (scope) {
+            lexicalScope = lexicalScope.outer;
+        }
 
         if (containsNull(bodyNodes)) {
             return null;

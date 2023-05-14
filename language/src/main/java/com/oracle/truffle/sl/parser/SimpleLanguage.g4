@@ -53,12 +53,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import com.oracle.truffle.api.RootCallTarget;
 import com.oracle.truffle.api.source.Source;
-import com.oracle.truffle.api.strings.TruffleString;
+import com.oracle.truffle.api.RootCallTarget;
 import com.oracle.truffle.sl.SLLanguage;
 import com.oracle.truffle.sl.nodes.SLExpressionNode;
+import com.oracle.truffle.sl.nodes.SLRootNode;
 import com.oracle.truffle.sl.nodes.SLStatementNode;
+import com.oracle.truffle.sl.parser.SLParseError;
 }
 
 @lexer::header
@@ -94,7 +95,7 @@ private static void throwParseError(Source source, int line, int charPositionInL
     throw new SLParseError(source, line, col, length, String.format("Error(s) parsing script:%n" + location + message));
 }
 
-public static Map<TruffleString, RootCallTarget> parseSL(SLLanguage language, Source source) {
+public static Map<String, RootCallTarget> parseSL(SLLanguage language, Source source) {
     SimpleLanguageLexer lexer = new SimpleLanguageLexer(CharStreams.fromString(source.getCharacters().toString()));
     SimpleLanguageParser parser = new SimpleLanguageParser(new CommonTokenStream(lexer));
     lexer.removeErrorListeners();
@@ -110,9 +111,6 @@ public static Map<TruffleString, RootCallTarget> parseSL(SLLanguage language, So
 }
 
 // parser
-
-
-
 
 simplelanguage
 :
@@ -134,20 +132,22 @@ s='('
     )*
 )?
 ')'
-body=block[false]                               { factory.finishFunction($body.result); }
+body=block[false, null]                               { factory.finishFunction($body.result); }
 ;
 
 
 
-block [boolean inLoop] returns [SLStatementNode result]
+block [boolean inLoop, SLStatementNode step] returns [SLStatementNode result]
 :                                               { factory.startBlock();
                                                   List<SLStatementNode> body = new ArrayList<>(); }
 s='{'
 (
     statement[inLoop]                           { body.add($statement.result); }
 )*
-e='}'
-                                                { $result = factory.finishBlock(body, $s.getStartIndex(), $e.getStopIndex() - $s.getStartIndex() + 1); }
+e='}'                                           { if (step != null) {
+                                                    body.add(step);
+                                                  }
+                                                  $result = factory.finishBlock(body, $s.getStartIndex(), $e.getStopIndex() - $s.getStartIndex() + 1, true); }
 ;
 
 
@@ -155,6 +155,8 @@ statement [boolean inLoop] returns [SLStatementNode result]
 :
 (
     while_statement                             { $result = $while_statement.result; }
+|
+    for_statement                               { $result = $for_statement.result;  }
 |
     b='break'                                   { if (inLoop) { $result = factory.createBreak($b); } else { SemErr($b, "break used outside of loop"); } }
     ';'
@@ -173,6 +175,31 @@ statement [boolean inLoop] returns [SLStatementNode result]
 )
 ;
 
+for_statement returns [SLStatementNode result]
+:
+f='for'                                         { SLStatementNode assignmentNode = null;
+                                                  SLStatementNode stepNode = null; }
+o='('
+(
+    initialization=expression                   { assignmentNode = $initialization.result; }
+)?
+';' condition=expression ';'
+(
+    step=expression                             { stepNode = $step.result; }
+)?
+c=')'
+body=block[true, stepNode]                      { SLStatementNode loopNode = factory.createWhile($f, $condition.result, $body.result);
+                                                  if (assignmentNode != null) {
+                                                    List<SLStatementNode> forNode = new ArrayList<>();
+                                                    forNode.add(assignmentNode);
+                                                    forNode.add(loopNode);
+                                                    $result = factory.finishBlock(forNode, $o.getStartIndex(), $body.result.getSourceEndIndex() - $o.getStartIndex() + 1, false);
+                                                  } else {
+                                                    $result = loopNode;
+                                                  }
+                                                 }
+;
+
 
 while_statement returns [SLStatementNode result]
 :
@@ -180,7 +207,7 @@ w='while'
 '('
 condition=expression
 ')'
-body=block[true]                                { $result = factory.createWhile($w, $condition.result, $body.result); }
+body=block[true, null]                          { $result = factory.createWhile($w, $condition.result, $body.result); }
 ;
 
 
@@ -190,10 +217,10 @@ i='if'
 '('
 condition=expression
 ')'
-then=block[inLoop]                              { SLStatementNode elsePart = null; }
+then=block[inLoop, null]                        { SLStatementNode elsePart = null; }
 (
     'else'
-    block[inLoop]                               { elsePart = $block.result; }
+    block[inLoop, null]                         { elsePart = $block.result; }
 )?                                              { $result = factory.createIf($i, $condition.result, $then.result, elsePart); }
 ;
 
@@ -339,9 +366,8 @@ fragment HEX_DIGIT : [0-9] | [a-f] | [A-F];
 fragment OCT_DIGIT : [0-7];
 fragment BINARY_DIGIT : '0' | '1';
 fragment TAB : '\t';
-fragment STRING_CHAR : ~('"' | '\r' | '\n');
+fragment STRING_CHAR : ~('"' | '\\' | '\r' | '\n');
 
 IDENTIFIER : LETTER (LETTER | DIGIT)*;
 STRING_LITERAL : '"' STRING_CHAR* '"';
 NUMERIC_LITERAL : '0' | NON_ZERO_DIGIT DIGIT*;
-
