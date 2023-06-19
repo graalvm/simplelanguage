@@ -33,21 +33,9 @@
     ]
   },
 
-  local java8 = {
+  local graalvm20 = {
     downloads+: {
-      JAVA_HOME: {"name": "oraclejdk", "version": "8u261+33-jvmci-20.2-b03", "platformspecific": true },
-    }
-  },
-
-  local java11 = {
-    downloads+: {
-      JAVA_HOME: {"name": "oraclejdk", "version": "11.0.6+8", "platformspecific": true },
-    }
-  },
-
-  local graalvm11 = {
-    downloads+: {
-      JAVA_HOME: { name: 'graalvm-ce-java11', version: '22.3.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-community-java20', version: '23.0.0', platformspecific: true },
     },
   },
 
@@ -77,15 +65,10 @@
   },
 
   builds: [
-    graalvmBuild + linux + graalvm11 + { name: 'linux-graalvm11' },
+    graalvmBuild + linux + graalvm20 + { name: 'linux-graalvm20' },
 
-    graalvmBuild + darwin + fixDarwinJavaHome + graalvm11 + { name: 'darwin-graalvm11' },
+    graalvmBuild + darwin + fixDarwinJavaHome + graalvm20 + { name: 'darwin-graalvm20' },
 
     # Blocked by the sl script being unable to find maven repo
-    # javaBuild + linux + java8  + { name: 'linux-java8' },
-    # javaBuild + linux + java11 + { name: 'linux-java11' },
-
-    # javaBuild + darwin + java8  + { name: 'darwin-java8' },
-    # javaBuild + darwin + java11 + { name: 'darwin-java11' },
   ],
 }
