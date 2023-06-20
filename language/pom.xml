@@ -118,7 +118,7 @@
                   <exclude>org.graalvm.truffle:truffle-api</exclude>
                   <exclude>org.graalvm.truffle:truffle-dsl-processor</exclude>
                   <exclude>org.graalvm.truffle:truffle-tck</exclude>
-                  <exclude>org.graalvm:graal-sdk</exclude>
+                  <exclude>org.graalvm.sdk:graal-sdk</exclude>
                 </excludes>
               </artifactSet>
             </configuration>
