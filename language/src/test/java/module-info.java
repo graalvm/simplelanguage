@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2023, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,21 +38,23 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.test;
+open module org.graalvm.sl.test {
+  requires java.logging;
+  requires jdk.unsupported;
+  requires org.graalvm.polyglot;
+  requires junit;
+  requires org.graalvm.truffle;
+  requires org.graalvm.sl;
+  exports com.oracle.truffle.sl.test;
+  
+  provides com.oracle.truffle.api.provider.TruffleLanguageProvider 
+      with com.oracle.truffle.sl.test.SLParseInContextTestEvalLangProvider;
 
-import org.graalvm.polyglot.Engine;
-import org.junit.Assume;
-
-public class TruffleTestAssumptions {
-    private static final boolean spawnIsolate = "true".equals(System.getProperty("polyglot.engine.SpawnIsolate"));
-
-    public static void assumeWeakEncapsulation() {
-        Assume.assumeFalse(spawnIsolate);
-        // with engine being in an unnamed module means we are running with class loader isolation
-        Assume.assumeTrue(Engine.class.getModule().isNamed());
-    }
-
-    public static boolean isWeakEncapsulation() {
-        return !spawnIsolate;
-    }
+  provides com.oracle.truffle.api.instrumentation.provider.TruffleInstrumentProvider 
+      with com.oracle.truffle.sl.test.SLInstrumentTestEarlyReturnInstrumentProvider,
+           com.oracle.truffle.sl.test.SLInstrumentTestEnvironmentHandlerInstrumentProvider,
+           com.oracle.truffle.sl.test.SLInstrumentTestIncreaseArgOnErrorInstrumentProvider,
+           com.oracle.truffle.sl.test.SLInstrumentTestNewReplacedInstrumentProvider,
+           com.oracle.truffle.sl.test.SLInstrumentTestTestRedoIOProvider,
+           com.oracle.truffle.sl.test.SLSharedCodeSeparatedEnvTestCaptureOutputProvider;
 }
