@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2015, 2018, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -38,21 +38,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
  * SOFTWARE.
  */
-package com.oracle.truffle.sl.test;
+package com.oracle.truffle.sl.builtins;
 
-import org.graalvm.polyglot.Engine;
-import org.junit.Assume;
+import com.oracle.truffle.api.TruffleOptions;
+import com.oracle.truffle.api.dsl.Specialization;
+import com.oracle.truffle.api.nodes.NodeInfo;
 
-public class TruffleTestAssumptions {
-    private static final boolean spawnIsolate = "true".equals(System.getProperty("polyglot.engine.SpawnIsolate"));
+/**
+ * Built-in function that returns true if in a native-image builtin.
+ */
+@NodeInfo(shortName = "inNativeImage")
+public abstract class SLInNativeImageBuiltin extends SLBuiltinNode {
 
-    public static void assumeWeakEncapsulation() {
-        Assume.assumeFalse(spawnIsolate);
-        // with engine being in an unnamed module means we are running with class loader isolation
-        Assume.assumeTrue(Engine.class.getModule().isNamed());
-    }
-
-    public static boolean isWeakEncapsulation() {
-        return !spawnIsolate;
+    @Specialization
+    public boolean isExecutable() {
+        return TruffleOptions.AOT;
     }
 }
