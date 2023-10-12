@@ -17,7 +17,7 @@ For instructions on how to get started please refer to [our website](http://www.
 Build the project with `mvn package`.
 To run simple language using a JDK from JAVA_HOME run `./sl`.
 
-# Building native
+# Building a Native Image
 
 Build the project with `mvn package -Pnative`.
-To run simple language using a JDK from JAVA_HOME run `./slnative`.
+To run simple language natively run `./standalone/target/slnative`.
