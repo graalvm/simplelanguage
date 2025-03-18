@@ -46,7 +46,7 @@
     <parent>
         <groupId>com.oracle</groupId>
         <artifactId>simplelanguage-parent</artifactId>
-        <version>${graalvm.version}</version>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
     <artifactId>standalone</artifactId>
     <packaging>pom</packaging>
@@ -139,7 +139,7 @@
         <dependency>
             <groupId>com.oracle</groupId>
             <artifactId>launcher</artifactId>
-            <version>${graalvm.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

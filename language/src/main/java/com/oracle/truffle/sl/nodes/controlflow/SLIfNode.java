@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2012, 2024, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -40,13 +40,14 @@
  */
 package com.oracle.truffle.sl.nodes.controlflow;
 
+import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.frame.VirtualFrame;
 import com.oracle.truffle.api.nodes.NodeInfo;
 import com.oracle.truffle.api.nodes.UnexpectedResultException;
 import com.oracle.truffle.api.profiles.CountingConditionProfile;
-import com.oracle.truffle.sl.SLException;
 import com.oracle.truffle.sl.nodes.SLExpressionNode;
 import com.oracle.truffle.sl.nodes.SLStatementNode;
+import com.oracle.truffle.sl.nodes.util.SLToBooleanNodeGen;
 import com.oracle.truffle.sl.nodes.util.SLUnboxNodeGen;
 
 @NodeInfo(shortName = "if", description = "The node implementing a condional statement")
@@ -75,7 +76,8 @@ public final class SLIfNode extends SLStatementNode {
     private final CountingConditionProfile condition = CountingConditionProfile.create();
 
     public SLIfNode(SLExpressionNode conditionNode, SLStatementNode thenPartNode, SLStatementNode elsePartNode) {
-        this.conditionNode = SLUnboxNodeGen.create(conditionNode);
+        this.conditionNode = SLToBooleanNodeGen.create(SLUnboxNodeGen.create(conditionNode));
+        this.conditionNode.setSourceSection(conditionNode.getSourceCharIndex(), conditionNode.getSourceLength());
         this.thenPartNode = thenPartNode;
         this.elsePartNode = elsePartNode;
     }
@@ -105,11 +107,7 @@ public final class SLIfNode extends SLStatementNode {
              */
             return conditionNode.executeBoolean(frame);
         } catch (UnexpectedResultException ex) {
-            /*
-             * The condition evaluated to a non-boolean result. This is a type error in the SL
-             * program.
-             */
-            throw SLException.typeError(this, ex.getResult());
+            throw CompilerDirectives.shouldNotReachHere(ex);
         }
     }
 }

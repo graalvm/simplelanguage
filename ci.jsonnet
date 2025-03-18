@@ -13,9 +13,9 @@
     ]
   },
 
-  local graalvm21 = {
+  local graalvm = {
     downloads+: {
-      JAVA_HOME: { name: 'graalvm-community-java21', version: '23.1.0', platformspecific: true },
+      JAVA_HOME: { name: 'graalvm-community-java24', version: '24.2.0', platformspecific: true },
     },
   },
 
@@ -32,7 +32,10 @@
   },
 
   local darwin = {
-    capabilities+: ['darwin_sierra', 'amd64'],
+    capabilities+: ["darwin", "!darwin_sierra", "!darwin_mojave", "!darwin_catalina", "aarch64"],
+    packages+: {
+      maven: '==3.3.9',
+    },
     environment+: {
       MACOSX_DEPLOYMENT_TARGET: '10.11',
     },
@@ -45,9 +48,9 @@
   },
 
   builds: [
-    graalvmBuild + linux + graalvm21 + { name: 'linux-graalvm21' },
+    graalvmBuild + linux + graalvm + { name: 'linux-graalvm' },
 
-    graalvmBuild + darwin + fixDarwinJavaHome + graalvm21 + { name: 'darwin-graalvm21' },
+    graalvmBuild + darwin + fixDarwinJavaHome + graalvm + { name: 'darwin-graalvm' },
 
     # Blocked by the sl script being unable to find maven repo
   ],
