@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, 2024, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -43,6 +43,7 @@ package com.oracle.truffle.sl.builtins;
 import com.oracle.truffle.api.CompilerDirectives;
 import com.oracle.truffle.api.TruffleFile;
 import com.oracle.truffle.api.TruffleLanguage;
+import com.oracle.truffle.api.dsl.Bind;
 import com.oracle.truffle.api.dsl.Cached;
 import com.oracle.truffle.api.dsl.Specialization;
 import com.oracle.truffle.api.nodes.NodeInfo;
@@ -58,14 +59,15 @@ public abstract class SLAddToHostClassPathBuiltin extends SLBuiltinNode {
 
     @Specialization
     protected Object doDefault(TruffleString classPath,
-                    @Cached TruffleString.ToJavaStringNode toJavaStringNode) {
-        addToHostClassPath(toJavaStringNode.execute(classPath));
+                    @Cached TruffleString.ToJavaStringNode toJavaStringNode,
+                    @Bind SLContext context) {
+        addToHostClassPath(context, toJavaStringNode.execute(classPath));
         return SLNull.SINGLETON;
     }
 
     @CompilerDirectives.TruffleBoundary
-    private void addToHostClassPath(String classPath) {
-        TruffleLanguage.Env env = SLContext.get(this).getEnv();
+    private static void addToHostClassPath(SLContext context, String classPath) {
+        TruffleLanguage.Env env = context.getEnv();
         TruffleFile file = env.getPublicTruffleFile(classPath);
         env.addToHostClassPath(file);
     }

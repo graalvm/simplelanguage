@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, 2024, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -75,7 +75,7 @@ public abstract class NodeObjectDescriptor implements TruffleObject {
         return new WriteDescriptor(name, sourceSection);
     }
 
-    Object readMember(String member, @Bind("$node") Node node, @Cached InlinedBranchProfile error) throws UnknownIdentifierException {
+    Object readMember(String member, @Bind Node node, @Cached InlinedBranchProfile error) throws UnknownIdentifierException {
         if (isMemberReadable(member)) {
             return name;
         } else {
@@ -115,7 +115,7 @@ public abstract class NodeObjectDescriptor implements TruffleObject {
 
         @Override
         @ExportMessage
-        Object readMember(String member, @Bind("$node") Node node, @Cached InlinedBranchProfile error) throws UnknownIdentifierException {
+        Object readMember(String member, @Bind Node node, @Cached InlinedBranchProfile error) throws UnknownIdentifierException {
             return super.readMember(member, node, error);
         }
 
@@ -153,7 +153,7 @@ public abstract class NodeObjectDescriptor implements TruffleObject {
 
         @Override
         @ExportMessage
-        Object readMember(String member, @Bind("$node") Node node, @Cached InlinedBranchProfile error) throws UnknownIdentifierException {
+        Object readMember(String member, @Bind Node node, @Cached InlinedBranchProfile error) throws UnknownIdentifierException {
             super.readMember(member, node, error); // To verify readability
             return nameSymbol;
         }
