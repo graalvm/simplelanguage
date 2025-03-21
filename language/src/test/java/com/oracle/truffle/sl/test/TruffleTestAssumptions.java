@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2021, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2021, 2024, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -45,14 +45,23 @@ import org.junit.Assume;
 
 public class TruffleTestAssumptions {
     private static final boolean spawnIsolate = "true".equals(System.getProperty("polyglot.engine.SpawnIsolate"));
+    private static Boolean optimizingRuntimeUsed;
 
     public static void assumeWeakEncapsulation() {
         Assume.assumeFalse(spawnIsolate);
-        // with engine being in an unnamed module means we are running with class loader isolation
-        Assume.assumeTrue(Engine.class.getModule().isNamed());
     }
 
     public static boolean isWeakEncapsulation() {
         return !spawnIsolate;
+    }
+
+    public static boolean isOptimizingRuntime() {
+        Boolean optimizing = optimizingRuntimeUsed;
+        if (optimizing == null) {
+            try (Engine e = Engine.create()) {
+                optimizingRuntimeUsed = optimizing = !e.getImplementationName().equals("Interpreted");
+            }
+        }
+        return optimizing;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2022, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2014, 2024, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -63,6 +63,7 @@ import com.oracle.truffle.api.strings.TruffleString;
 import com.oracle.truffle.api.utilities.CyclicAssumption;
 import com.oracle.truffle.api.utilities.TriState;
 import com.oracle.truffle.sl.SLLanguage;
+import com.oracle.truffle.sl.nodes.SLRootNode;
 import com.oracle.truffle.sl.nodes.SLUndefinedFunctionRootNode;
 
 /**
@@ -164,7 +165,7 @@ public final class SLFunction implements TruffleObject {
     @ExportMessage
     @TruffleBoundary
     SourceSection getSourceLocation() {
-        return getCallTarget().getRootNode().getSourceSection();
+        return ((SLRootNode) getCallTarget().getRootNode()).ensureSourceSection();
     }
 
     @SuppressWarnings("static-method")
@@ -226,7 +227,7 @@ public final class SLFunction implements TruffleObject {
      * Since invocations are potentially expensive (result in an indirect call, which is expensive
      * by itself but also limits function inlining which can hinder other optimisations) if the node
      * turns megamorphic (i.e. cache limit is exceeded) we annotate it with
-     * {@ReportPolymorphism}. This ensures that the runtime is notified when this node turns
+     * {@link ReportPolymorphism}. This ensures that the runtime is notified when this node turns
      * polymorphic. This, in turn, may, under certain conditions, cause the runtime to attempt to
      * make node monomorphic again by duplicating the entire AST containing that node and
      * specialising it for a particular call site.

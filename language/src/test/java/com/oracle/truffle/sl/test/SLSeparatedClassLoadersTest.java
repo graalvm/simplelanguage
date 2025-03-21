@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2019, Oracle and/or its affiliates. All rights reserved.
+ * Copyright (c) 2019, 2024, Oracle and/or its affiliates. All rights reserved.
  * DO NOT ALTER OR REMOVE COPYRIGHT NOTICES OR THIS FILE HEADER.
  *
  * The Universal Permissive License (UPL), Version 1.0
@@ -40,18 +40,22 @@
  */
 package com.oracle.truffle.sl.test;
 
-import com.oracle.truffle.api.Truffle;
-import com.oracle.truffle.sl.SLLanguage;
+import static org.junit.Assert.assertNotNull;
+
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.security.ProtectionDomain;
 import java.util.Map;
+
 import org.graalvm.polyglot.Engine;
+import org.graalvm.word.WordFactory;
 import org.junit.After;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
+
+import com.oracle.truffle.api.Truffle;
+import com.oracle.truffle.sl.SLLanguage;
 
 public class SLSeparatedClassLoadersTest {
     private ClassLoader loader;
@@ -63,11 +67,20 @@ public class SLSeparatedClassLoadersTest {
 
     @Test
     public void sdkAndTruffleLanguageAPIAndSLInSeparateClassLoaders() throws Exception {
-        final ProtectionDomain sdkDomain = Engine.class.getProtectionDomain();
-        Assume.assumeNotNull(sdkDomain);
-        Assume.assumeNotNull(sdkDomain.getCodeSource());
-        URL sdkURL = sdkDomain.getCodeSource().getLocation();
-        Assume.assumeNotNull(sdkURL);
+        final ProtectionDomain polyglotDomain = Engine.class.getProtectionDomain();
+        Assume.assumeNotNull(polyglotDomain);
+        Assume.assumeNotNull(polyglotDomain.getCodeSource());
+        URL polyglotURL = polyglotDomain.getCodeSource().getLocation();
+        Assume.assumeNotNull(polyglotURL);
+
+        URL collectionsURL = Class.forName("org.graalvm.collections.EconomicMap").getProtectionDomain().getCodeSource().getLocation();
+        Assume.assumeNotNull(collectionsURL);
+
+        URL wordURL = WordFactory.class.getProtectionDomain().getCodeSource().getLocation();
+        Assume.assumeNotNull(wordURL);
+
+        URL nativeURL = Class.forName("org.graalvm.nativeimage.ImageInfo").getProtectionDomain().getCodeSource().getLocation();
+        Assume.assumeNotNull(nativeURL);
 
         URL truffleURL = Truffle.class.getProtectionDomain().getCodeSource().getLocation();
         Assume.assumeNotNull(truffleURL);
@@ -77,7 +90,7 @@ public class SLSeparatedClassLoadersTest {
 
         ClassLoader parent = Engine.class.getClassLoader().getParent();
 
-        URLClassLoader sdkLoader = new URLClassLoader(new URL[]{sdkURL}, parent);
+        URLClassLoader sdkLoader = new URLClassLoader(new URL[]{collectionsURL, wordURL, nativeURL, polyglotURL}, parent);
         boolean sdkLoaderLoadsTruffleLanguage;
         try {
             Class.forName("com.oracle.truffle.api.TruffleLanguage", false, sdkLoader);
